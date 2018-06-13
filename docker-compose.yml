@@ -26,7 +26,7 @@ services:
     - MYSQL_USER=vtigercrm
     - MYSQL_PASSWORD=vtigercrm
     volumes:
-    - ./mysql/volume:/var/lib/mysql:rw
+    - ./mysql/db:/var/lib/mysql:rw
     - ./mysql/dumps:/dumps:rw
     restart: "no"
 
