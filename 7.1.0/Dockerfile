@@ -42,6 +42,9 @@ RUN a2enmod ssl
 COPY setup /usr/local/bin/
 COPY extends /usr/local/bin/
 
+## Scripts
+COPY dbcheck.php /var/www/html/
+
 ## Running
 COPY foreground.sh /usr/local/bin/
 CMD ["foreground.sh"]

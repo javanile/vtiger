@@ -1,10 +1,5 @@
 .env
 .idea/
 node_modules/
+7.1.0/mysql/
 npm-debug.log
-test/templates_c/
-!test/templates_c/.gitkeep
-devops/mysql/volume/
-!devops/mysql/volume/.gitkeep
-/cache/*
-!cache/.gitkeep

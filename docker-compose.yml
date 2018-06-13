@@ -2,37 +2,31 @@ version: '2'
 
 services:
 
-  vtiger:
+  vtiger710:
     build: 7.1.0
     environment:
-    - VT_DB_HOST=mysql
-    - VT_DB_PORT=3306
-    - VT_DB_NAME=vtigercrm
-    - VT_DB_USERNAME=vtigercrm
-    - VT_DB_PASSWORD=vtigercrm
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
-    - .:/var/www/html:rw
+      - .:/var/www/html:rw
     ports:
-    - "8080:80"
+      - "20710:80"
     links:
-    - mysql
+      - mysql710
     restart: "no"
 
-  mysql:
+  mysql710:
     image: mysql:5.5
     environment:
-    - MYSQL_ROOT_PASSWORD=vtigercrm
-    - MYSQL_DATABASE=vtigercrm
-    - MYSQL_USER=vtigercrm
-    - MYSQL_PASSWORD=vtigercrm
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
-    - ./mysql/db:/var/lib/mysql:rw
-    - ./mysql/dumps:/dumps:rw
+      - ./7.1.0/mysql:/var/lib/mysql:rw
+      - ./7.1.0:/vtiger:rw
     restart: "no"
 
   adminer:
     image: adminer
     ports:
-    - "8090:8080"
+      - "8090:8080"
     links:
-    - mysql
+      - mysql710
+    restart: "no"

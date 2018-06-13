@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##
+DBCHECK=$(php dbcheck.php)
+
 ## run cron
 cron
 
