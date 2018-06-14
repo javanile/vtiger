@@ -45,6 +45,9 @@ COPY extends /usr/local/bin/
 ## Scripts
 COPY dbcheck.php /var/www/html/
 
+## Database
+COPY db.sql /var/www/html/
+
 ## Running
 COPY foreground.sh /usr/local/bin/
 CMD ["foreground.sh"]

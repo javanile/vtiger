@@ -5,9 +5,8 @@ services:
   vtiger710:
     build: 7.1.0
     environment:
+      - MYSQL_HOST=mysql710
       - MYSQL_ROOT_PASSWORD=root
-    volumes:
-      - .:/var/www/html:rw
     ports:
       - "20710:80"
     links:
