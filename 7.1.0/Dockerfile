@@ -45,6 +45,9 @@ COPY extends /usr/local/bin/
 ## Scripts
 COPY dbcheck.php /var/www/html/
 
+## Configs
+COPY config.inc.php /var/www/html/vtigercrm
+
 ## Database
 COPY db.sql /var/www/html/
 

@@ -16,7 +16,7 @@ if (!$link) {
     die('ERROR_MYSQL_CONNECT_'.$error);
 }
 
-$db = mysqli_fetch_assoc(mysqli_query($link, "SHOW DATABASES LIKE '{$MYSQL_DATABASE}'"));
+$db = @mysqli_fetch_assoc(@mysqli_query($link, "SHOW DATABASES LIKE '{$MYSQL_DATABASE}'"));
 if (!$db) {
     if (!mysqli_query($link, "CREATE DATABASE {$MYSQL_DATABASE}")) {
         die('ERROR_MYSQL_QUERY_'.mysqli_errno($link));
@@ -25,7 +25,7 @@ if (!$db) {
     }
 }
 
-$table = mysqli_fetch_assoc(mysqli_query($link, "SHOW TABLES LIKE 'vtiger_users'"));
+$table = @mysqli_fetch_assoc(@mysqli_query($link, "SHOW TABLES LIKE 'vtiger_users'"));
 if (!$table) {
     die('IMPORT_DB');
 }
