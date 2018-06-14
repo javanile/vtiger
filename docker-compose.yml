@@ -9,6 +9,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - "20710:80"
+
     links:
       - mysql710
     restart: "no"

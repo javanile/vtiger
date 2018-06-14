@@ -2,7 +2,7 @@ FROM php:5.6.30-apache
 WORKDIR /var/www/html
 
 ## Fetch Vtiger
-RUN curl -o vtigercrm.tar.gz -SL http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.1.0%20RC/Core%20Product/vtigercrm7.1.0rc.tar.gz
+RUN curl -o vtigercrm.tar.gz -SL http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
 RUN tar -xzf vtigercrm.tar.gz && rm vtigercrm.tar.gz && chmod -R 775 vtigercrm && chown -R www-data:www-data vtigercrm
 
 ## Extend PHP
