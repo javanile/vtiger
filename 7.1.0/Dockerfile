@@ -35,7 +35,20 @@ COPY install-mysql.sh install-mysql.sh
 RUN ./install-mysql.sh
 COPY install-database.sh install-database.sh
 RUN ./install-database.sh
+COPY install-cleanup.sh install-cleanup.sh
+RUN ./install-cleanup.sh
 
+## Command-line utils
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet && \
+    rm composer-setup.php
+
+COPY install-client.sh install-client.sh
+RUN ./install-client.sh
+
+COPY install.php install.php
+COPY install-client2.sh install-client2.sh
+RUN ./install-client2.sh
 
 
 
