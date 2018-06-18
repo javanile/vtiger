@@ -51,15 +51,14 @@ COPY cleanup.sh cleanup.sh
 RUN ./cleanup.sh && rm cleanup.sh
 
 ## Commands
-COPY setup /usr/local/bin/
 COPY extends /usr/local/bin/
 
 ## Scripts
-COPY dbcheck.php /var/www/html/
 
 ## Configs
 COPY config.inc.php /var/www/html/vtigercrm
 
 ## Running
 COPY foreground.sh /usr/local/bin/
+COPY foreground-check.php foreground-check.php
 CMD ["foreground.sh"]

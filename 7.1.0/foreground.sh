@@ -9,7 +9,7 @@ case ${CHECK} in
     READY)
         echo 'vtiger is ready' ;;
     *)
-        echo ${DB_CHECK} && exit 127 ;;
+        #echo ${DB_CHECK} && exit 127 ;;
 esac
 
 ## run cron

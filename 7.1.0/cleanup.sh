@@ -14,7 +14,7 @@ rm -rf /etc/apparmor.d/abstractions/mysql \
     /var/log/upstart/mysql.log* /var/run/mysqld
 
 ## remove build files
-rm -rf composer.json composer.lock dev install-mysql.sh \
+rm -rf composer.json composer.lock install-mysql.sh \
     install-vtiger.php install-vtiger.sh vendor
 
 ## clean packages
