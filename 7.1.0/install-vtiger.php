@@ -8,6 +8,17 @@ $client = new GuzzleHttp\Client([
     'cookies' => true,
 ]);
 
+function ($method, $path, $requests, $returns) use ($client) {
+    $response = $client->request($method, $path);
+    $html = $response->getBody()->getContents();
+    $doc = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $doc->loadHTML($html);
+    $xpath = new DOMXPath($doc);
+    $vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+}
+
+
 $response = $client->request('GET', 'index.php?module=Install&view=Index&mode=Step4');
 $html = $response->getBody()->getContents();
 $doc = new DOMDocument();

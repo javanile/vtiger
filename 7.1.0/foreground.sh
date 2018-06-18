@@ -1,12 +1,15 @@
 #!/bin/bash
 
 ##
-DB_CHECK=$(php dbcheck.php)
-DB_NAME=${MYSQL_DATABASE:-vtigercrm}
-case ${DB_CHECK} in
-    IMPORT_DB)  mysql -u root -p${MYSQL_ROOT_PASSWORD} ${DB_NAME} < vtigercrm.sql ;;
-    READY)      echo 'vtiger is ready' ;;
-    *)          echo ${DB_CHECK} && exit 127 ;;
+CHECK=$(php forground-check.php)
+case ${CHECK} in
+    IMPORT_DB)
+        DB_NAME=${MYSQL_DATABASE:-vtigercrm}
+        mysql -u root -p${MYSQL_ROOT_PASSWORD} ${DB_NAME} < vtigercrm.sql ;;
+    READY)
+        echo 'vtiger is ready' ;;
+    *)
+        echo ${DB_CHECK} && exit 127 ;;
 esac
 
 ## run cron
