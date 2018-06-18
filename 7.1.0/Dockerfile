@@ -31,8 +31,8 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     mkdir /etc/apache2/ssl
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY https.crt /etc/apache2/ssl/https.crt
-COPY https.pem /etc/apache2/ssl/https.pem
+COPY ssl/localhost.crt /etc/apache2/ssl/localhost.crt
+COPY ssl/localhost.pem /etc/apache2/ssl/localhost.pem
 RUN a2enmod rewrite && a2enmod ssl
 
 ## Fetch Vtiger
