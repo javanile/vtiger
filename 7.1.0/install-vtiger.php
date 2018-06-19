@@ -56,11 +56,12 @@ function VALUES($html, $returns)
     return $returnValues;
 }
 
-//
-$values = GET('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk']);
+// Get session token
+$values = GET($client, 'index.php?module=Install&view=Index&mode=Step4', ['__vtrftk']);
 
-//
+// Submit installation params
 $values = POST(
+    $client,
     'index.php',
     ['__vtrftk', 'auth_key'],
     [
