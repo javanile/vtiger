@@ -22,6 +22,7 @@ RUN docker-php-ext-install mysql mysqli pdo pdo_mysql
 COPY php.ini /usr/local/etc/php/php.ini
 
 ## Command-line utils
+ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet && \
     rm composer-setup.php
@@ -46,6 +47,7 @@ RUN curl -o vt.tar.gz -SL ${VT_SRC}/vtiger%20CRM%20${VT_VER}/Core%20Product/vtig
 ## Install
 COPY install-mysql.sh install-mysql.sh
 RUN ./install-mysql.sh
+RUN composer require guzzlehttp/guzzle
 COPY install-vtiger.php install-vtiger.php
 COPY install-vtiger.sh install-vtiger.sh
 RUN ./install-vtiger.sh
@@ -57,10 +59,8 @@ RUN ./cleanup.sh && rm cleanup.sh
 ## Commands
 COPY extends /usr/local/bin/
 
-## Scripts
-
 ## Configs
-COPY config.inc.php /var/www/html/vtigercrm
+#COPY config.inc.php /var/www/html/vtigercrm
 
 ## Running
 COPY foreground.sh /usr/local/bin/

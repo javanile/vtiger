@@ -1,4 +1,5 @@
 <?php
+libxml_use_internal_errors(true);
 date_default_timezone_set('America/Los_Angeles');
 
 require_once __DIR__.'/vendor/autoload.php';
@@ -8,28 +9,60 @@ $client = new GuzzleHttp\Client([
     'cookies' => true,
 ]);
 
-function ($method, $path, $requests, $returns) use ($client) {
-    $response = $client->request($method, $path);
-    $html = $response->getBody()->getContents();
-    $doc = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $doc->loadHTML($html);
-    $xpath = new DOMXPath($doc);
-    $vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+/**
+ * @param $client
+ * @param $path
+ * @param null $returns
+ * @return array
+ */
+function GET($client, $path, $returns = null)
+{
+    $response = $client->request('GET', $path);
+
+    return VALUES($response->getBody()->getContents(), $returns);
 }
 
+/**
+ * @param $client
+ * @param $path
+ * @param null $returns
+ * @return array
+ */
+function POST($client, $path, $returns = null, $params = null)
+{
+    $response = $client->request('POST', $path, [ 'form_params' => $params ]);
 
-$response = $client->request('GET', 'index.php?module=Install&view=Index&mode=Step4');
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+    return VALUES($response->getBody()->getContents(), $returns);
+}
 
-$response = $client->request('POST', 'index.php', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
+/**
+ * @param $html
+ * @param $returns
+ * @return array
+ */
+function VALUES($html, $returns)
+{
+    $doc = new DOMDocument();
+    $doc->loadHTML($html);
+    $xpath = new DOMXPath($doc);
+
+    $returnValues = [];
+    foreach ($returns as $key) {
+        $returnValues[$key] = $xpath->query('//input[@name="'.$key.'"]/@value')->item(0)->nodeValue;
+    }
+
+    return $returnValues;
+}
+
+//
+$values = GET('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk']);
+
+//
+$values = POST(
+    'index.php',
+    ['__vtrftk', 'auth_key'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
         'module' => 'Install',
         'view' => 'Index',
         'mode' => 'Step5',
@@ -50,83 +83,70 @@ $response = $client->request('POST', 'index.php', [
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
     ]
-]);
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
-$authKey = $xpath->query('//input[@name="auth_key"]/@value')->item(0)->nodeValue;
+);
 
-$response = $client->request('POST', 'index.php', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
-        'auth_key' => $authKey,
+// confirm installation
+$values = POST(
+    $client,
+    'index.php',
+    ['__vtrftk', 'auth_key'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
+        'auth_key' => $values['auth_key'],
         'module' => 'Install',
         'view' => 'Index',
         'mode' => 'Step6',
     ]
-]);
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
-$authKey = $xpath->query('//input[@name="auth_key"]/@value')->item(0)->nodeValue;
+);
 
-$response = $client->request('POST', 'index.php', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
-        'auth_key' => $authKey,
+// select industry sector
+$values = POST(
+    $client,
+    'index.php',
+    ['__vtrftk'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
+        'auth_key' => $values['auth_key'],
         'module' => 'Install',
         'view' => 'Index',
         'mode' => 'Step7',
         'industry' => 'Accounting',
     ]
-]);
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+);
 
-$response = $client->request('POST', 'index.php?module=Users&action=Login', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
+// first login
+$values = POST(
+    $client,
+    'index.php?module=Users&action=Login',
+    ['__vtrftk'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
         'username' => 'admin',
         'password' => 'admin',
     ]
-]);
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+);
 
-$response = $client->request('POST', 'index.php?module=Users&action=SystemSetupSave', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
+// setup crm modules
+$values = POST(
+    $client,
+    'index.php?module=Users&action=SystemSetupSave',
+    ['__vtrftk'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
         'packages[Marketing]' => '1',
     ]
-]);
-$html = $response->getBody()->getContents();
-$doc = new DOMDocument();
-libxml_use_internal_errors(true);
-$doc->loadHTML($html);
-$xpath = new DOMXPath($doc);
-$vtrftk = $xpath->query('//input[@name="__vtrftk"]/@value')->item(0)->nodeValue;
+);
 
-$response = $client->request('POST', 'index.php?module=Users&action=UserSetupSave', [
-    'form_params' => [
-        '__vtrftk' => $vtrftk,
+// save user settings
+$values = POST(
+    $client,
+    'index.php?module=Users&action=UserSetupSave',
+    ['__vtrftk'],
+    [
+        '__vtrftk' => $values['__vtrftk'],
         'currency_name' => 'Euro',
         'lang_name' => 'it_it',
         'time_zone' => 'Europe/Amsterdam',
         'date_format' => 'dd-mm-yyyy',
     ]
-]);
-$html = $response->getBody()->getContents();
+);
