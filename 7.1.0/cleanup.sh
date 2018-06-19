@@ -6,8 +6,8 @@ killall -KILL mysql mysqld_safe mysqld &> /dev/null
 apt-get --yes purge mysql-server-5.5 mysql-client-5.5
 apt-get --yes autoremove --purge
 apt-get autoclean
-deluser --remove-home mysql
-delgroup mysql
+deluser --remove-home mysql &> /dev/null
+delgroup mysql &> /dev/null
 rm -rf /etc/apparmor.d/abstractions/mysql \
     /etc/apparmor.d/cache/usr.sbin.mysqld \
     /etc/mysql /var/lib/mysql /var/log/mysql* \
