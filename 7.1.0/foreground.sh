@@ -10,7 +10,7 @@ case ${CHECK} in
     READY)
         echo 'Vtiger CRM is ready.' ;;
     *)
-        #echo ${DB_CHECK} && exit 127 ;;
+        echo 'Vtiger CRM: '${CHECK} ;;
 esac
 
 ## run cron
