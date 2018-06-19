@@ -60,7 +60,7 @@ RUN ./cleanup.sh && rm cleanup.sh
 COPY extends /usr/local/bin/
 
 ## Configs
-#COPY config.inc.php /var/www/html/vtigercrm
+COPY config.inc.php /var/www/html/vtigercrm
 
 ## Running
 COPY foreground.sh /usr/local/bin/

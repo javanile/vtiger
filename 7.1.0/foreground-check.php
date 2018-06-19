@@ -57,6 +57,31 @@ function db_create($link)
     return mysqli_query($link, "CREATE DATABASE {$name} CHARACTER SET utf8 COLLATE utf8_general_ci");
 }
 
+/**
+ * @param $link
+ * @return bool|mysqli_result
+ */
+function db_import($link)
+{
+    mysqli_select_db($link, MYSQL_DATABASE);
+
+    $sql = '';
+    foreach (file('vtigercrm.sql') as $line) {
+        if (substr($line, 0, 2) == '--' || $line == '') {
+            continue;
+        }
+        $sql .= $line;
+        if (substr(trim($line), -1, 1) == ';') {
+            if (mysqli_query($link, $sql)) {
+                return false;
+            };
+            $sql = '';
+        }
+    }
+
+    return true;
+}
+
 // process standard mysql user
 if (MYSQL_USER && MYSQL_PASSWORD) {
     // first attempt avoid database delay
@@ -68,6 +93,7 @@ if (MYSQL_USER && MYSQL_PASSWORD) {
     if ($link = db_connect(MYSQL_USER, MYSQL_PASSWORD)) {
         if (db_exists($link)) {
             if (db_is_empty($link)) {
+                db_import($link);
                 die('MYSQL_IMPORT_BY_USER');
             } else {
                 die('READY');
@@ -87,11 +113,13 @@ if (MYSQL_ROOT_PASSWORD) {
     if ($link = db_connect('root', MYSQL_ROOT_PASSWORD)) {
         if (db_exists($link)) {
             if (db_is_empty($link)) {
+                db_import($link);
                 die('MYSQL_IMPORT_BY_ROOT');
             } else {
                 die('READY');
             }
         } elseif (db_create($link)) {
+            db_import($link);
             die('MYSQL_IMPORT_BY_ROOT');
         } else {
             die('MYSQL_QUERY_ERROR_'.mysqli_errno($link));
