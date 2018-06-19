@@ -19,3 +19,4 @@ if [ $? -ne 0 ]; then exit 66; fi
 
 ## Export fresh database
 mysqldump -uroot -proot -hlocalhost vtigercrm > vtigercrm.sql
+if [[ ! `find vtigercrm.sql -type f -size +800k 2>/dev/null` ]]; then exit 67; fi
