@@ -23,6 +23,7 @@ define('MYSQL_PASSWORD', getenv('MYSQL_PASSWORD'));
  */
 function db_connect($user, $password)
 {
+    echo MYSQL_HOST, $user, $password, '\n';
     return @mysqli_connect(MYSQL_HOST, $user, $password);
 }
 
@@ -57,8 +58,14 @@ function db_create($link)
     return mysqli_query($link, "CREATE DATABASE {$name} CHARACTER SET utf8 COLLATE utf8_general_ci");
 }
 
-//
+// process standard mysql user
 if (MYSQL_USER && MYSQL_PASSWORD) {
+    // first attempt avoid database delay
+    if (!db_connect(MYSQL_USER, MYSQL_PASSWORD)) {
+        sleep(5);
+    }
+
+    // second attempt real check
     if ($link = db_connect(MYSQL_USER, MYSQL_PASSWORD)) {
         if (db_exists($link)) {
             if (db_is_empty($link)) {
@@ -70,8 +77,14 @@ if (MYSQL_USER && MYSQL_PASSWORD) {
     }
 }
 
-//
+// process root mysql use
 if (MYSQL_ROOT_PASSWORD) {
+    // first attempt avoid database delay
+    if (db_connect('root', MYSQL_ROOT_PASSWORD)) {
+        sleep(5);
+    }
+
+    // second attempt real check
     if ($link = db_connect('root', MYSQL_ROOT_PASSWORD)) {
         if (db_exists($link)) {
             if (db_is_empty($link)) {
@@ -82,10 +95,10 @@ if (MYSQL_ROOT_PASSWORD) {
         } elseif (db_create($link)) {
             die('IMPORT_DATABASE_BY_ROOT');
         } else {
-            die('ERROR_MYSQL_QUERY_'.mysqli_errno($link));
+            die('MYSQL_QUERY_ERROR_'.mysqli_errno($link));
         }
     } else {
-        die('ERROR_MYSQL_CONNECT_'.mysqli_connect_errno());
+        die('MYSQL_ROOT_CONNECT_'.mysqli_connect_errno());
     }
 } else {
     die('ERROR_MYSQL_ROOT_PASSWORD_MISSING');
