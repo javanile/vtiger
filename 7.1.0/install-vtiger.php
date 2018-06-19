@@ -86,7 +86,7 @@ $values = POST(
     ]
 );
 
-// confirm installation
+// Confirm installation
 $values = POST(
     $client,
     'index.php',
@@ -100,7 +100,7 @@ $values = POST(
     ]
 );
 
-// select industry sector
+// Select industry sector
 $values = POST(
     $client,
     'index.php',
@@ -115,7 +115,7 @@ $values = POST(
     ]
 );
 
-// first login
+// First login
 $values = POST(
     $client,
     'index.php?module=Users&action=Login',
@@ -127,7 +127,7 @@ $values = POST(
     ]
 );
 
-// setup crm modules
+// Setup crm modules
 $values = POST(
     $client,
     'index.php?module=Users&action=SystemSetupSave',
@@ -143,7 +143,7 @@ $values = POST(
     ]
 );
 
-// save user settings
+// Save user settings
 $values = POST(
     $client,
     'index.php?module=Users&action=UserSetupSave',
