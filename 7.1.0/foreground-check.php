@@ -72,7 +72,7 @@ function db_import($link)
         }
         $sql .= $line;
         if (substr(trim($line), -1, 1) == ';') {
-            if (mysqli_query($link, $sql)) {
+            if (!mysqli_query($link, $sql)) {
                 return false;
             };
             $sql = '';
