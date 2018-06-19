@@ -134,7 +134,12 @@ $values = POST(
     ['__vtrftk'],
     [
         '__vtrftk' => $values['__vtrftk'],
-        'packages[Marketing]' => '1',
+        'packages[Tools]' => 'on',
+        'packages[Sales]' => '',
+        'packages[Marketing]' => '',
+        'packages[Support]' => '',
+        'packages[Inventory]' => '',
+        'packages[Project]' => '',
     ]
 );
 
