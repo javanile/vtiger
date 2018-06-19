@@ -8,6 +8,10 @@ RUN apt-get update
 ENV VT_SRC=http://sourceforge.net/projects/vtigercrm/files
 ENV VT_VER=7.1.0
 
+## Environtment
+ENV MYSQL_HOST=mysql
+ENV MYSQL_DATABASE=vtigercrm
+
 ## Extend PHP
 RUN apt-get install -y zlib1g-dev && \
     docker-php-ext-install zip

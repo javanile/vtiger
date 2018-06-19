@@ -1,4 +1,4 @@
-ca#!/bin/bash
+#!/bin/bash
 
 ## remove mysql
 service mysql stop
