@@ -29,3 +29,11 @@ services:
     links:
       - mysql710
     restart: "no"
+
+  debug:
+    image: ldavid/vtiger7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "8091:80"
+    restart: "no"
