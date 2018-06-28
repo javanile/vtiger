@@ -1,6 +1,7 @@
 # vtiger
 
 [![](https://images.microbadger.com/badges/image/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own version badge on microbadger.com")
 
 ## Supported tags and respective Dockerfile links
 * [`7.1.0`, `7.1`, `7`, `latest` (7.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0/Dockerfile)
