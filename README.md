@@ -3,7 +3,7 @@
 [![](https://images.microbadger.com/badges/image/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own image badge on microbadger.com")
 
 ## Supported tags and respective Dockerfile links
-* [`7.1.0`, `7.1`, `7`, `latest` (8.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0/Dockerfile)
+* [`7.1.0`, `7.1`, `7`, `latest` (7.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0/Dockerfile)
 * 7.1.0-RC (7.1.0-RC/Dockerfile)	
 * 7.0.1, 7.0 (7.0.1/Dockerfile)
 * 7.0	(8.0/Dockerfile)
