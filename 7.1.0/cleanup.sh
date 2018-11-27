@@ -18,6 +18,3 @@ rm -rf composer.json composer.lock install-mysql.sh \
     install-vtiger.php install-vtiger.sh vendor
 
 ## clean packages
-apt-get clean
-rm -rf /tmp/* /var/tmp/*
-rm -rf /var/lib/apt/lists/*
