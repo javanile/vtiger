@@ -38,6 +38,7 @@ files=(
     000-default.conf
     localhost.crt
     localhost.pem
+    crontab
 )
 
 for version in "${versions[@]}"; do
