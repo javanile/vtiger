@@ -10,7 +10,7 @@ ENV MYSQL_HOST=mysql
 ENV MYSQL_DATABASE=vtigercrm
 
 RUN apt-get update \
- && apt-get install -no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \
+ && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \
  && docker-php-ext-install zip \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install imap \
@@ -18,7 +18,7 @@ RUN apt-get update \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
- && mkdir /etc/apache2/ssl
+ && mkdir /etc/apache2/ssl \
  && curl -o vt.tar.gz -SL "${VT_DOWNLOAD}" \
  && tar -xzf vt.tar.gz \
  && rm vt.tar.gz \

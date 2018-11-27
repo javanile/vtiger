@@ -1,11 +1,12 @@
 # vtiger
 
-Vtiger CRM is open source software that helps more than 100000 businesses grow sales, improve marketing reach, and deliver great customer service. Try it free with Docker!
+Vtiger CRM is open source software that helps more than 100000 businesses grow sales, 
+improve marketing reach, and deliver great customer service. Try it free with Docker!
 
 [![](https://images.microbadger.com/badges/image/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own version badge on microbadger.com")
 
-## Supported tags and respective `Dockerfile` links
+### Supported tags and respective `Dockerfile` links
 * [`7.1.0`, `7.1`, `7`, `latest` (7.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0/Dockerfile)
 * [`7.1.0-RC` (7.1.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0-RC/Dockerfile)
 * [`7.0.1`, `7.0` (7.0.1/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.0.1/Dockerfile)
@@ -29,3 +30,9 @@ Vtiger CRM is open source software that helps more than 100000 businesses grow s
 * 5.2.0-VB2	(5.2.0-VB2/Dockerfile)
 * 5.2.0-VB1	(5.2.0-VB1/Dockerfile)
 * 5.1.0 (5.1.0/Dockerfile)
+
+
+### Development
+
+./update.sh && docker-compose up --build vtiger
+

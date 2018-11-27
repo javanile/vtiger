@@ -45,6 +45,7 @@ for version in "${versions[@]}"; do
     cat Dockerfile.template > ${version}/Dockerfile
 
     for file in "${files[@]}"; do
+        [ -f "$file" ] || continue
         cat ${file} > ${version}/${file}
     done
 done
