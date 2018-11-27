@@ -2,24 +2,24 @@ version: '2'
 
 services:
 
-  vtiger710:
+  vtiger:
     build: 7.1.0
     environment:
-      - MYSQL_HOST=mysql710
+      - MYSQL_HOST=mysql
       - MYSQL_ROOT_PASSWORD=root
     ports:
-      - "20710:80"
+      - "20080:80"
     links:
-      - mysql710
+      - mysql
     restart: "no"
 
-  mysql710:
+  mysql:
     image: mysql:5.5
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - ./7.1.0/mysql:/var/lib/mysql:rw
-      - ./7.1.0:/vtiger:rw
+      - ./mysql:/var/lib/mysql:rw
+      - ./:/vtiger:rw
     restart: "no"
 
   adminer:
@@ -27,5 +27,5 @@ services:
     ports:
       - "8090:8080"
     links:
-      - mysql710
+      - mysql
     restart: "no"

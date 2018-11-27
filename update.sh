@@ -33,7 +33,9 @@ versions=(
 )
 
 files=(
+    config.inc.php
     php.ini
+    000-default.conf
     localhost.crt
     localhost.pem
 )

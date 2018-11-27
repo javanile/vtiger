@@ -1,5 +1,5 @@
 .env
 .idea/
 node_modules/
-7.1.0/mysql/
+mysql/
 npm-debug.log
