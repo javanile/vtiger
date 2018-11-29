@@ -1,67 +1,23 @@
 <?php
-libxml_use_internal_errors(true);
 date_default_timezone_set('America/Los_Angeles');
 
 require_once __DIR__.'/vendor/autoload.php';
 
-$client = new GuzzleHttp\Client([
-    'base_uri' => 'http://localhost/',
-    'cookies' => true,
-]);
-
-/**
- * @param $client
- * @param $path
- * @param null $returns
- * @return array
- */
-function GET($client, $path, $returns = null)
-{
-    $response = $client->request('GET', $path);
-
-    return VALUES($response->getBody()->getContents(), $returns);
-}
-
-/**
- * @param $client
- * @param $path
- * @param null $returns
- * @return array
- */
-function POST($client, $path, $returns = null, $params = null)
-{
-    $response = $client->request('POST', $path, [ 'form_params' => $params ]);
-
-    return VALUES($response->getBody()->getContents(), $returns);
-}
-
-/**
- * @param $html
- * @param $returns
- * @return array
- */
-function VALUES($html, $returns)
-{
-    $doc = new DOMDocument();
-    $doc->loadHTML($html);
-    $xpath = new DOMXPath($doc);
-
-    $returnValues = [];
-    foreach ($returns as $key) {
-        $returnValues[$key] = $xpath->query('//input[@name="'.$key.'"]/@value')->item(0)->nodeValue;
-    }
-
-    return $returnValues;
-}
+use Javanile\HttpRobot\HttpRobot;
 
 // Get session token
-$values = GET($client, 'index.php?module=Install&view=Index&mode=Step4', ['__vtrftk']);
+$robot = new HttpRobot([
+    'base_uri' => 'http://localhost/',
+    'cookies'  => true,
+]);
+
+// Get session token
+$vtrftk = $robot->get('index.php?module=Install&view=Index&mode=Step4', '__vtrftk');
 
 // Submit installation params
 $values = POST(
     $client,
     'index.php',
-    ['__vtrftk', 'auth_key'],
     [
         '__vtrftk' => $values['__vtrftk'],
         'module' => 'Install',
@@ -83,7 +39,8 @@ $values = POST(
         'admin_email' => 'info@javanile.org',
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
-    ]
+    ],
+    ['__vtrftk', 'auth_key']
 );
 
 // Confirm installation

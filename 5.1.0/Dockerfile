@@ -1,11 +1,10 @@
-## Vtiger CRM %%VERSION%%
+## Vtiger CRM 5.1.0
 FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 WORKDIR /var/www/html
 
-## Variables
-ENV VT_VERSION=%%VERSION%%
-ENV VT_DOWNLOAD=%%DOWNLOAD%%
+ENV VT_VERSION=5.1.0
+ENV VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.1.0/Core%20Product/vtigercrm-5.1.0.tar.gz
 ENV MYSQL_HOST=mysql
 ENV MYSQL_DATABASE=vtigercrm
 
@@ -15,50 +14,43 @@ RUN apt-get update \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
+ && wget https://getcomposer.org/composer.phar \
+ && php composer.phar require javanile/http-robot javanile/mysql-import \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /etc/apache2/ssl \
- && curl -o vt.tar.gz -SL "${VT_DOWNLOAD}" \
+ && mkdir /var/www/html/src \
+ && curl -o vt.tar.gz -SL "$VT_DOWNLOAD" \
  && tar -xzf vt.tar.gz \
  && rm vt.tar.gz \
- && chmod -R 775 vtigercrm \
- && chown -R www-data:www-data vtigercrm \
+ && mv vtigercrm vtiger \
+ && chmod -R 775 vtiger \
+ && chown -R www-data:www-data vtiger \
  && apt-get clean \
  && rm -rf /tmp/* /var/tmp/* \
  && rm -rf /var/lib/apt/lists/* \
- && rm -rf /etc/cron.*
+ && rm -rf /etc/cron.* \
+ && rm composer.phar
 
 COPY php.ini /usr/local/etc/php/php.ini
 COPY crontab /etc/cron.d/crontab
-
-## Apache
-
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ssl/localhost.crt /etc/apache2/ssl/localhost.crt
 COPY ssl/localhost.pem /etc/apache2/ssl/localhost.pem
-RUN a2enmod rewrite && a2enmod ssl
-
-
-## Install
-COPY install-mysql.sh install-mysql.sh
-RUN ./install-mysql.sh
-RUN composer require guzzlehttp/guzzle
-COPY install-vtiger.php install-vtiger.php
-COPY install-vtiger.sh install-vtiger.sh
-RUN ./install-vtiger.sh
-
-## Cleanup
-COPY cleanup.sh cleanup.sh
-RUN ./cleanup.sh && rm cleanup.sh
-
-## Commands
-COPY extends /usr/local/bin/
-
-## Configs
-COPY config.inc.php /var/www/html/vtigercrm
-
-## Running
+COPY config.inc.php /var/www/html/vtiger
 COPY foreground.sh /usr/local/bin/
 COPY foreground-check.php foreground-check.php
+COPY extends /usr/local/bin/
+COPY install /usr/local/bin/
+COPY install.php /var/www/html/
+
+RUN a2enmod rewrite
+ && a2enmod ssl
+ && chmod +x /usr/local/bin/foreground.sh
+ && chmod +x /usr/local/bin/extends
+ && chmod +x /usr/local/bin/install
+
+RUN install --mysql --dump
+
 CMD ["foreground.sh"]

@@ -1,35 +1,33 @@
 #!/bin/bash
-
 set -e
 
-#http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%20
-#"${VT_DOWNLOAD}${VT_VERSION}/Core%20Product/vtigercrm${VT_VERSION}.tar.gz"
-#download=http://sourceforge.net/projects/vtigercrm/files
+download=http://sourceforge.net/projects/vtigercrm/files/
 
+declare -A versions
 versions=(
-     7.1.0
-     7.1.0-RC
-     7.0.1
-     7.0.0
-     6.5.0
-     6.4.0
-     6.3.0
-     6.2.0
-     6.1.0
-     6.1.0-Beta
-     6.0.0
-     6.0.0-RC
-     6.0.0-Beta
-     5.4.0
-     5.4.0-RC
-     5.3.0
-     5.3.0-RC
-     5.2.1
-     5.2.0
-     5.2.0-RC
-     5.2.0-VB2
-     5.2.0-VB1
-     5.1.0
+     ["7.1.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["7.1.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["7.0.1"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["7.0.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.5.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.4.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.3.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.2.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.1.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.1.0-Beta"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.0.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.0.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["6.0.0-Beta"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.4.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.4.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.3.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.3.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.2.1"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.2.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.2.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.2.0-VB2"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.2.0-VB1"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["5.1.0"]=vtiger%20CRM%205.1.0/Core%20Product/vtigercrm-5.1.0.tar.gz
 )
 
 files=(
@@ -41,9 +39,13 @@ files=(
     crontab
 )
 
-for version in "${versions[@]}"; do
+for version in "${!versions[@]}"; do
     [ -d "$version" ] || mkdir ${version}
     cat Dockerfile.template > ${version}/Dockerfile
+    sed -ri \
+        -e 's!%%VERSION%%!'"${version}"'!' \
+        -e 's!%%DOWNLOAD%%!'"${download}${versions[$version]}"'!' \
+        ${version}/Dockerfile
 
     for file in "${files[@]}"; do
         [ -f "$file" ] || continue
