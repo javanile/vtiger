@@ -45,10 +45,10 @@ COPY extends /usr/local/bin/
 COPY install /usr/local/bin/
 COPY install.php /var/www/html/
 
-RUN a2enmod rewrite
- && a2enmod ssl
- && chmod +x /usr/local/bin/foreground.sh
- && chmod +x /usr/local/bin/extends
+RUN a2enmod rewrite \
+ && a2enmod ssl \
+ && chmod +x /usr/local/bin/foreground.sh \
+ && chmod +x /usr/local/bin/extends \
  && chmod +x /usr/local/bin/install
 
 RUN install --mysql --dump
