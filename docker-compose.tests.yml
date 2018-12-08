@@ -4,30 +4,25 @@ services:
 
   ## Minimum arguments setup
   vtiger:
-    { build: ${VERSION}, image: vtiger, links: ['mysql'],
-      environment: ['MYSQL_HOST=mysql', 'MYSQL_ROOT_PASSWORD=Pa$$w0rd'] }
+    build: ${VERSION}
+    image: vtiger:${VERSION}
+    links: ['mysql']
+    environment: ['MYSQL_HOST=mysql', 'MYSQL_ROOT_PASSWORD=Pa$$w0rd']
   mysql:
-    { image: mysql:5.5, volumes: ['mysql:/var/lib/mysql:rw'],
-      environment: ['MYSQL_ROOT_PASSWORD=Pa$$w0rd'] }
-
-
-  vtiger-no-root:
-    image: vtiger
-    environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_ROOT_PASSWORD=Pa$$w0rd
-    links:
-      - mysql-no-root
-
-  mysql-no-root:
     image: mysql:5.5
-    environment:
-      - MYSQL_USER=vtiger
-      - MYSQL_PASSWORD=Pa$$w0rd
-    volumes:
-      - mysql-no-root:/var/lib/mysql:rw
+    volumes: ['mysql:/var/lib/mysql:rw']
+    environment: ['MYSQL_ROOT_PASSWORD=Pa$$w0rd']
 
+  ## Non-root mysql user
+  vtiger-non-root:
+    image: vtiger:${VERSION}
+    links: ['mysql-non-root']
+    environment: ['MYSQL_HOST=mysql', 'MYSQL_USER=vtiger', 'MYSQL_PASSWORD=Pa$$w0rd']
+  mysql-non-root:
+    image: mysql:5.5
+    volumes: ['mysql-non-root:/var/lib/mysql:rw']
+    environment: ['MYSQL_USER=vtiger', 'MYSQL_PASSWORD=Pa$$w0rd']
 
 volumes:
   mysql:
-  mysql-no-root:
+  mysql-non-root:

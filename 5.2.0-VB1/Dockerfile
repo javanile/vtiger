@@ -49,9 +49,9 @@ RUN a2enmod rewrite \
  && chmod +x /usr/local/bin/extends \
  && chmod +x /usr/local/bin/install
 
-#RUN MYSQL_HOST=localhost \
-#    MYSQL_ROOT_PASSWORD=root \
-#    install --install-mysql --dump --remove-mysql
+RUN MYSQL_HOST=localhost \
+    MYSQL_ROOT_PASSWORD=root \
+    install --install-mysql --dump --remove-mysql
 
 #COPY config.inc.php /var/www/html/vtiger/
 

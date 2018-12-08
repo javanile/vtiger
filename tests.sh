@@ -33,11 +33,8 @@ for version in "${versions[@]}"; do
     docker-compose -f docker-compose.tests.yml build vtiger
 
     echo "----[ Minimum arguments setup ]----"
-    docker-compose -f docker-compose.tests.yml up -d mysql
-    docker-compose -f docker-compose.tests.yml up -d vtiger
-    sleep 10s
+    docker-compose -f docker-compose.tests.yml up -d vtiger && sleep 10s
     docker-compose -f docker-compose.tests.yml logs vtiger
-
 
 
     docker-compose -f docker-compose.tests.yml down -v --remove-orphans
