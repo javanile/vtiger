@@ -37,6 +37,7 @@ files=(
     localhost.crt
     localhost.pem
     crontab
+    foreground.sh
     extends.sh
     install.sh
     setup-wizard.php

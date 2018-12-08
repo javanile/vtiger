@@ -46,10 +46,10 @@ COPY install.sh /usr/local/bin/install
 
 RUN a2enmod rewrite \
  && a2enmod ssl \
- && chmod +x /usr/local/bin/foreground.sh \
+ && chmod +x /usr/local/bin/foreground \
  && chmod +x /usr/local/bin/extends \
  && chmod +x /usr/local/bin/install
 
-RUN install --mysql --dump
+#RUN install --mysql --dump
 
-CMD ["foreground.sh"]
+CMD ["foreground"]

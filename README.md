@@ -29,8 +29,7 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 * 5.2.0-RC (5.2.0-RC/Dockerfile)
 * 5.2.0-VB2	(5.2.0-VB2/Dockerfile)
 * 5.2.0-VB1	(5.2.0-VB1/Dockerfile)
-* 5.1.0 (5.1.0/Dockerfile)
-
+* [`5.1.0`, `5.1` (5.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.1.0/Dockerfile)
 
 ### Development
 
