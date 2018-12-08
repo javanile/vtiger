@@ -6,7 +6,7 @@ WORKDIR /var/www/html
 ENV VT_VERSION=5.2.0
 ENV VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
 ENV MYSQL_HOST=mysql
-ENV MYSQL_DATABASE=vtigercrm
+ENV MYSQL_DATABASE=vtiger
 
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \
@@ -36,8 +36,8 @@ RUN apt-get update \
 COPY php.ini /usr/local/etc/php/php.ini
 COPY crontab /etc/cron.d/crontab
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY ssl/localhost.crt /etc/apache2/ssl/localhost.crt
-COPY ssl/localhost.pem /etc/apache2/ssl/localhost.pem
+COPY localhost.crt /etc/apache2/ssl/localhost.crt
+COPY localhost.pem /etc/apache2/ssl/localhost.pem
 COPY config.inc.php /var/www/html/vtiger/
 COPY setup-wizard.php /var/www/html/
 COPY foreground.sh /usr/local/bin/foreground
