@@ -5,9 +5,9 @@ download=http://sourceforge.net/projects/vtigercrm/files/
 
 declare -A versions
 versions=(
-     ["7.1.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
-     ["7.1.0-RC"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
-     ["7.0.1"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
+     ["7.1.0"]=vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
+     ["7.1.0-RC"]=vtiger%20CRM%207.1.0%20RC/Core%20Product/vtigercrm7.1.0rc.tar.gz
+     ["7.0.1"]=vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz
      ["7.0.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
      ["6.5.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
      ["6.4.0"]=vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz
