@@ -37,6 +37,9 @@ files=(
     localhost.crt
     localhost.pem
     crontab
+    extends.sh
+    install.sh
+    setup-wizard.php
 )
 
 for version in "${!versions[@]}"; do

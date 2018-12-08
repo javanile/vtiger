@@ -38,12 +38,11 @@ COPY crontab /etc/cron.d/crontab
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ssl/localhost.crt /etc/apache2/ssl/localhost.crt
 COPY ssl/localhost.pem /etc/apache2/ssl/localhost.pem
-COPY config.inc.php /var/www/html/vtiger
-COPY foreground.sh /usr/local/bin/
-COPY foreground-check.php foreground-check.php
-COPY extends /usr/local/bin/
-COPY install /usr/local/bin/
-COPY install.php /var/www/html/
+COPY config.inc.php /var/www/html/vtiger/
+COPY setup-wizard.php /var/www/html/
+COPY foreground.sh /usr/local/bin/foreground
+COPY extends.sh /usr/local/bin/extends
+COPY install.sh /usr/local/bin/install
 
 RUN a2enmod rewrite \
  && a2enmod ssl \
