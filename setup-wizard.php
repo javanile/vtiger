@@ -1,4 +1,12 @@
 <?php
+
+define('DB_HOST', getenv('MYSQL_HOST') ?: 'mysql');
+define('DB_PORT', getenv('MYSQL_PORT') ?: '3306');
+define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'vtiger');
+define('DB_USER', getenv('MYSQL_USER') ?: 'root');
+define('DB_PASS', getenv('MYSQL_PASSWORD') ?: 'root');
+define('DB_ROOT', getenv('MYSQL_ROOT_PASSWORD') ?: 'root');
+
 date_default_timezone_set('America/Los_Angeles');
 
 require_once __DIR__.'/vendor/autoload.php';
@@ -24,10 +32,10 @@ $values = $robot->post(
         'view' => 'Index',
         'mode' => 'Step5',
         'db_type' => 'mysqli',
-        'db_hostname' => '127.0.0.1',
-        'db_username' => 'root',
-        'db_password' => 'root',
-        'db_name' => 'vtiger',
+        'db_hostname' => DB_HOST,
+        'db_username' => DB_USER,
+        'db_password' => DB_PASS,
+        'db_name' => DB_NAME,
         'db_root_username' => '',
         'db_root_password' => '',
         'currency_name' => 'USA, Dollars',
@@ -36,7 +44,7 @@ $values = $robot->post(
         'retype_password' => 'admin',
         'firstname' => '',
         'lastname' => 'Administrator',
-        'admin_email' => 'info@javanile.org',
+        'admin_email' => 'vtiger@localhost.lan',
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
     ],
