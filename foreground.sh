@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-##
+## import database using environment variables
 ./vendor/bin/mysql-import vtiger.sql
 
 ## run cron

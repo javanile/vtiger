@@ -1,5 +1,7 @@
 <?php
 
+echo "[vtiger] setup wizard start...\n";
+
 define('DB_HOST', getenv('MYSQL_HOST') ?: 'mysql');
 define('DB_PORT', getenv('MYSQL_PORT') ?: '3306');
 define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'vtiger');
@@ -9,13 +11,12 @@ define('DB_ROOT', getenv('MYSQL_ROOT_PASSWORD') ?: 'root');
 
 date_default_timezone_set('America/Los_Angeles');
 
-echo DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS.' '.DB_ROOT."\n";
+echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS.' '.DB_ROOT."\n";
 
 require_once __DIR__.'/vendor/autoload.php';
 
 use Javanile\HttpRobot\HttpRobot;
 
-echo "[vtiger] setup wizard start...\n";
 $robot = new HttpRobot([
     'base_uri' => 'http://localhost/',
     'cookies'  => true,
@@ -69,7 +70,7 @@ $values = $robot->post(
 echo "[vtiger] form token: '{$values['__vtrftk']}', auth token: '{$values['auth_key']}'\n";
 
 // Select industry sector
-$values = $robot->post(
+$vtrftk = $robot->post(
     'index.php',
     [
         '__vtrftk' => $values['__vtrftk'],
@@ -83,10 +84,10 @@ $values = $robot->post(
 );
 
 // First login
-$values = $robot->post(
+$vtrftk = $robot->post(
     'index.php?module=Users&action=Login',
     [
-        '__vtrftk' => $values['__vtrftk'],
+        '__vtrftk' => $vtrftk,
         'username' => 'admin',
         'password' => 'admin',
     ],
@@ -94,10 +95,10 @@ $values = $robot->post(
 );
 
 // Setup crm modules
-$values = $robot->post(
+$vtrftk = $robot->post(
     'index.php?module=Users&action=SystemSetupSave',
     [
-        '__vtrftk' => $values['__vtrftk'],
+        '__vtrftk' => $vtrftk,
         'packages[Tools]' => 'on',
         'packages[Sales]' => '',
         'packages[Marketing]' => '',
@@ -109,10 +110,10 @@ $values = $robot->post(
 );
 
 // Save user settings
-$values = $robot->post(
+$vtrftk = $robot->post(
     'index.php?module=Users&action=UserSetupSave',
     [
-        '__vtrftk' => $values['__vtrftk'],
+        '__vtrftk' => $vtrftk,
         'currency_name' => 'Euro',
         'lang_name' => 'it_it',
         'time_zone' => 'Europe/Amsterdam',
