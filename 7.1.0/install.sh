@@ -1,8 +1,15 @@
 #!/bin/bash
 set -e
 
+DB_HOST=${MYSQL_HOST:-mysql}
+DB_PORT=${MYSQL_PORT:-3306}
+DB_NAME=${MYSQL_DATABASE:-vtiger}
+DB_USER=${MYSQL_USER:-root}
+DB_PASS=${MYSQL_PASSWORD:-root}
+DB_ROOT=${MYSQL_ROOT_PASSWORD:-root}
+
 ## Install MySQL
-if [[ $@ == *'--mysql'* ]]; then
+if [[ $@ == *'--install-mysql'* ]]; then
     apt-get update
     echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-set-selections
     echo "mysql-server-5.5 mysql-server/root_password_again password root" | debconf-set-selections
@@ -47,12 +54,13 @@ if [ $? -ne 0 ]; then exit 66; fi
 
 ## Export fresh database
 if [[ $@ == *'--dump'* ]]; then
-    mysqldump -uroot -proot -hlocalhost vtiger > vtiger.sql
+    #mysqldump -uroot -proot -hlocalhost vtiger > vtiger.sql
+    mysqldump -u${DB_USER} -p${DB_PASS} -h${DB_HOST} ${DB_NAME} > ${DB_NAME}.sql
     if [[ ! `find vtiger.sql -type f -size +800k 2>/dev/null` ]]; then exit 67; fi
 fi
 
 ## Uninstall MySQL
-if [[ $@ == *'--mysql'* ]]; then
+if [[ $@ == *'--remove-mysql'* ]]; then
     service mysql stop
     killall -KILL mysql mysqld_safe mysqld &> /dev/null
     apt-get --yes purge mysql-server-5.5 mysql-client-5.5

@@ -16,6 +16,7 @@ services:
   mysql:
     image: mysql:5.5
     environment:
+      - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - mysql:/var/lib/mysql:rw
@@ -23,7 +24,9 @@ services:
     restart: "no"
 
   adminer:
-    image: adminer
+    image: javanile/adminer
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
     ports:
       - "8090:8080"
     links:
