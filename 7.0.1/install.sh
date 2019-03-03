@@ -64,7 +64,13 @@ fi
 if [[ $@ == *'--dump'* ]]; then
     #mysqldump -uroot -proot -hlocalhost vtiger > vtiger.sql
     mysqldump -u${DB_USER} -p${DB_PASS} -h${DB_HOST} ${DB_NAME} > ${DB_NAME}.sql
-    if [[ ! `find vtiger.sql -type f -size +800k 2>/dev/null` ]]; then exit 67; fi
+    if [[ ! `find vtiger.sql -type f -size +800k 2>/dev/null` ]]; then
+        echo "[vtiger] dump error database sql too small"
+        echo "---(vtiger.sql START)----"
+        cat vtiger.sql
+        echo "---(vtiger.sql END)----"
+        exit 67;
+    fi
 fi
 
 ## Uninstall MySQL

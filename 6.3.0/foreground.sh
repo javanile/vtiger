@@ -4,8 +4,8 @@ set -e
 ## import database using environment variables
 ./vendor/bin/mysql-import vtiger.sql
 
-## fix bootstrap configuration
-
+## start up configuration
+php /var/www/html/startup.php
 
 ## run cron
 cron

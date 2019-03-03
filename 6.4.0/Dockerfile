@@ -5,6 +5,9 @@ WORKDIR /var/www/html
 
 ENV VT_VERSION=6.4.0 \
     VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.4.0/Core%20Product/vtigercrm6.4.0.tar.gz \
+    VT_ADMIN_USER=admin \
+    VT_ADMIN_PASSWORD=admin \
+    VT_ADMIN_EMAIL=admin \
     MYSQL_HOST=mysql \
     MYSQL_DATABASE=vtiger \
     COMPOSER_ALLOW_SUPERUSER=1
@@ -16,7 +19,7 @@ RUN apt-get update \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot javanile/mysql-import \
+ && php composer.phar --no-ansi require javanile/http-robot javanile/mysql-import \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \

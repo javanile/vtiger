@@ -48,7 +48,7 @@ $values = $robot->post(
     ],
     ['__vtrftk', 'auth_key']
 );
-echo "[vtiger] #2 form-token: '{$values['__vtrftk']}', auth-key: '{$values['auth_key']}'\n";
+echo "[vtiger] #2 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 // Confirm installation
 $values = $robot->post(
@@ -62,7 +62,7 @@ $values = $robot->post(
     ],
     ['__vtrftk', 'auth_key']
 );
-echo "[vtiger] #3 form-token: '{$values['__vtrftk']}', auth-key: '{$values['auth_key']}'\n";
+echo "[vtiger] #3 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 // Select industry sector
 $vtrftk = $robot->post(
