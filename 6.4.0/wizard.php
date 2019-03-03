@@ -55,7 +55,7 @@ $values = $robot->post(
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
     ],
-    null//['__vtrftk', 'auth_key']
+    ['__vtrftk', 'auth_key']
 );
 echo "[vtiger] #2 form-token: '{$values['__vtrftk']}', auth-key: '{$values['auth_key']}'\n";
 

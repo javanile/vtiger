@@ -39,7 +39,7 @@ fi
 
 ## Install MySQL
 if [[ $@ == *'--assert-mysql'* ]]; then
-    service mysql restart && sleep 15s
+    service mysql restart && sleep 10s
     ## Check if database exists
     ASSERT_DB=`mysqlshow -uroot -proot -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger`
     if [ "$ASSERT_DB" != "vtiger" ]; then

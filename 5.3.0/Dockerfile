@@ -58,6 +58,7 @@ RUN a2enmod ssl \
 
 ## <develop>
 RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --assert-mysql --wizard --dump
+COPY config.inc.php /var/www/html/vtiger/
 ## </develop>
 
 ## <production>
