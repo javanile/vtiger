@@ -1,12 +1,13 @@
 ## Vtiger CRM %%VERSION%%
-FROM php:5.6.30-apache
+FROM php:%%PHP_VERSION%%-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 WORKDIR /var/www/html
 
-ENV VT_VERSION=%%VERSION%%
-ENV VT_DOWNLOAD=%%DOWNLOAD%%
-ENV MYSQL_HOST=mysql
-ENV MYSQL_DATABASE=vtiger
+ENV VT_VERSION=%%VERSION%% \
+    VT_DOWNLOAD=%%DOWNLOAD%% \
+    MYSQL_HOST=mysql \
+    MYSQL_DATABASE=vtiger \
+    COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \

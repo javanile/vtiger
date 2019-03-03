@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export VERSION=7.1.0
+export VERSION=6.5.0
 
 ./update.sh && cp develop-install.sh ${VERSION}
 

@@ -26,6 +26,9 @@ $robot = new HttpRobot([
     'cookies'  => true,
 ]);
 
+var_dump($robot->get('index.php?module=Install&view=Index&mode=Step4'));
+die();
+
 // Get session token
 $vtrftk = $robot->get('index.php?module=Install&view=Index&mode=Step4', '__vtrftk');
 echo "[vtiger] #1 form-token: '{$vtrftk}'\n";
