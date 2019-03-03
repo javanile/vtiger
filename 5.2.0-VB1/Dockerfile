@@ -19,7 +19,7 @@ RUN apt-get update \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --no-ansi require javanile/http-robot javanile/mysql-import \
+ && php composer.phar --ansi require javanile/http-robot javanile/mysql-import \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
@@ -66,7 +66,7 @@ COPY config.inc.php /var/www/html/vtiger/
 ## </develop>
 
 ## <production>
-#RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --install-mysql --wizard --dump --remove-mysql
+#RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --install-mysql --assert-mysql --wizard --dump --remove-mysql
 #COPY config.inc.php /var/www/html/vtiger/
 ## </production>
 

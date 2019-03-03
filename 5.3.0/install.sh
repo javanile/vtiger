@@ -21,14 +21,14 @@ if [[ $@ == *'--install-mysql'* ]]; then
     chmod -R 777 /var/run/mysqld/mysqld.sock
     chmod -R 777 /var/lib/mysql
     sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/my.cnf
-    service mysql restart && sleep 10s
+    service mysql restart && sleep 5s
     ## Create database and localhost access
     mysql -uroot -proot -h127.0.0.1 -e "CREATE DATABASE IF NOT EXISTS vtiger;"
     mysql -uroot -proot -h127.0.0.1 -e "ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci;"
     mysql -uroot -proot -h127.0.0.1 -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
     mysql -uroot -proot -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
     mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
-    service mysql restart && sleep 10s
+    service mysql restart && sleep 5s
     ## Force flush privileges
     mysql -uroot -proot -h127.0.0.1 -e "DROP USER 'root'@'%';"
     mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
@@ -39,7 +39,7 @@ fi
 
 ## Install MySQL
 if [[ $@ == *'--assert-mysql'* ]]; then
-    service mysql restart && sleep 10s
+    service mysql restart && sleep 5s
     ## Check if database exists
     ASSERT_DB=`mysqlshow -uroot -proot -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger`
     if [ "$ASSERT_DB" != "vtiger" ]; then
@@ -51,7 +51,7 @@ fi
 ## Execute Wizard
 if [[ $@ == *'--wizard'* ]]; then
     ## Restart service
-    service apache2 restart && sleep 10s
+    service apache2 restart && sleep 5s
     ## Check if apache is ready
     VT_READY=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
     if [ "$VT_READY" != "HTTP/1.1 200 OK" ]; then exit 64; fi
@@ -64,7 +64,7 @@ fi
 if [[ $@ == *'--dump'* ]]; then
     #mysqldump -uroot -proot -hlocalhost vtiger > vtiger.sql
     mysqldump -u${DB_USER} -p${DB_PASS} -h${DB_HOST} ${DB_NAME} > ${DB_NAME}.sql
-    if [[ ! `find vtiger.sql -type f -size +800k 2>/dev/null` ]]; then
+    if [[ ! `find vtiger.sql -type f -size +600k 2>/dev/null` ]]; then
         echo "[vtiger] dump error database sql too small"
         echo "---(vtiger.sql START)----"
         cat vtiger.sql
