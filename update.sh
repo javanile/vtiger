@@ -40,6 +40,8 @@ files=(
     foreground.sh
     extends.sh
     install.sh
+    autoload.php
+    startup.php
     wizard.php
 )
 

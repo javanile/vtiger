@@ -15,14 +15,14 @@ RUN apt-get update \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
- && curl -o composer.phar -SL https://getcomposer.org/composer.phar \
+ && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
  && php composer.phar require javanile/http-robot javanile/mysql-import \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /etc/apache2/ssl \
  && mkdir /var/www/html/src \
- && curl -o vt.tar.gz -SL "$VT_DOWNLOAD" \
+ && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
  && tar -xzf vt.tar.gz \
  && rm vt.tar.gz \
  && mv vtigercrm vtiger \
