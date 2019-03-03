@@ -10,13 +10,13 @@ ENV VT_VERSION=6.1.0 \
     COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update \
- && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \
+ && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
  && docker-php-ext-install zip \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar require javanile/http-robot javanile/mysql-import \
+ && php composer.phar --ansi require javanile/http-robot javanile/mysql-import \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
