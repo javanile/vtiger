@@ -1,15 +1,10 @@
 <?php
 
+require_once __DIR__.'/autoload.php';
+
+use Javanile\HttpRobot\HttpRobot;
+
 echo "[vtiger] setup wizard start...\n";
-
-define('DB_HOST', getenv('MYSQL_HOST') ?: 'mysql');
-define('DB_PORT', getenv('MYSQL_PORT') ?: '3306');
-define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'vtiger');
-define('DB_USER', getenv('MYSQL_USER') ?: 'root');
-define('DB_PASS', getenv('MYSQL_PASSWORD') ?: 'root');
-define('DB_ROOT', getenv('MYSQL_ROOT_PASSWORD') ?: 'root');
-
-date_default_timezone_set('America/Los_Angeles');
 
 echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS.' '.DB_ROOT."\n";
 if (!mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
@@ -17,17 +12,10 @@ if (!mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
     exit(1);
 }
 
-require_once __DIR__.'/vendor/autoload.php';
-
-use Javanile\HttpRobot\HttpRobot;
-
 $robot = new HttpRobot([
     'base_uri' => 'http://localhost/',
     'cookies'  => true,
 ]);
-
-var_dump($robot->get('index.php?module=Install&view=Index&mode=Step4'));
-die();
 
 // Get session token
 $vtrftk = $robot->get('index.php?module=Install&view=Index&mode=Step4', '__vtrftk');

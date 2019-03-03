@@ -49,7 +49,7 @@ RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root develop-install --install-mysq
 COPY foreground.sh /usr/local/bin/foreground
 COPY extends.sh /usr/local/bin/extends
 COPY install.sh /usr/local/bin/install
-COPY wizard.php /var/www/html/
+COPY autoload.php startup.php wizard.php /var/www/html/
 
 RUN a2enmod ssl \
  && a2enmod rewrite \

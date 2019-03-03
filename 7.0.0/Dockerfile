@@ -3,10 +3,11 @@ FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 WORKDIR /var/www/html
 
-ENV VT_VERSION=7.0.0
-ENV VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz
-ENV MYSQL_HOST=mysql
-ENV MYSQL_DATABASE=vtiger
+ENV VT_VERSION=7.0.0 \
+    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz \
+    MYSQL_HOST=mysql \
+    MYSQL_DATABASE=vtiger \
+    COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog \
@@ -48,7 +49,7 @@ RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root develop-install --install-mysq
 COPY foreground.sh /usr/local/bin/foreground
 COPY extends.sh /usr/local/bin/extends
 COPY install.sh /usr/local/bin/install
-COPY wizard.php /var/www/html/
+COPY autoload.php startup.php wizard.php /var/www/html/
 
 RUN a2enmod ssl \
  && a2enmod rewrite \
