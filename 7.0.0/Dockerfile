@@ -38,25 +38,31 @@ COPY crontab /etc/cron.d/crontab
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger.crt /etc/apache2/ssl/vtiger.crt
 COPY vtiger.pem /etc/apache2/ssl/vtiger.pem
-COPY wizard.php /var/www/html/
+
+## <develop>
+COPY develop-install.sh /usr/local/bin/develop-install
+RUN chmod +x /usr/local/bin/develop-install
+RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root develop-install --install-mysql
+## </develop>
+
 COPY foreground.sh /usr/local/bin/foreground
 COPY extends.sh /usr/local/bin/extends
 COPY install.sh /usr/local/bin/install
+COPY wizard.php /var/www/html/
 
-RUN a2enmod rewrite \
- && a2enmod ssl \
+RUN a2enmod ssl \
+ && a2enmod rewrite \
  && chmod +x /usr/local/bin/foreground \
  && chmod +x /usr/local/bin/extends \
  && chmod +x /usr/local/bin/install
 
-RUN MYSQL_HOST=localhost \
-    MYSQL_ROOT_PASSWORD=root \
-    install --install-mysql --wizard --dump --remove-mysql
+## <develop>
+RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --assert-mysql --wizard --dump
+## </develop>
 
-RUN MYSQL_HOST=localhost \
-    MYSQL_ROOT_PASSWORD=root \
-    install --install-mysql --wizard --dump --remove-mysql
-
+## <production>
+#RUN MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --install-mysql --wizard --dump --remove-mysql
 #COPY config.inc.php /var/www/html/vtiger/
+## </production>
 
 CMD ["foreground"]

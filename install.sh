@@ -35,10 +35,17 @@ if [[ $@ == *'--install-mysql'* ]]; then
     mysql -uroot -proot -h127.0.0.1 -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
     mysql -uroot -proot -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
     mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
-    service mysql restart && sleep 10s
+fi
+
+## Install MySQL
+if [[ $@ == *'--assert-mysql'* ]]; then
+    service mysql restart && sleep 15s
     ## Check if database exists
     ASSERT_DB=`mysqlshow -uroot -proot -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger`
-    if [ "$ASSERT_DB" != "vtiger" ]; then echo "INSTALL(ERROR) '--install-mysql' database not found."; exit 65; fi
+    if [ "$ASSERT_DB" != "vtiger" ]; then
+        echo "[vtiger] install error '--install-mysql' database not found.";
+        exit 65;
+    fi
 fi
 
 ## Execute Wizard

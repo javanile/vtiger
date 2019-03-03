@@ -12,6 +12,10 @@ define('DB_ROOT', getenv('MYSQL_ROOT_PASSWORD') ?: 'root');
 date_default_timezone_set('America/Los_Angeles');
 
 echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS.' '.DB_ROOT."\n";
+if (!mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
+    echo '[vtiger] database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
+    exit(1);
+}
 
 require_once __DIR__.'/vendor/autoload.php';
 
@@ -24,7 +28,7 @@ $robot = new HttpRobot([
 
 // Get session token
 $vtrftk = $robot->get('index.php?module=Install&view=Index&mode=Step4', '__vtrftk');
-echo "[vtiger] form token: {$vtrftk}\n";
+echo "[vtiger] #1 form-token: '{$vtrftk}'\n";
 
 // Submit installation params
 $values = $robot->post(
@@ -51,9 +55,9 @@ $values = $robot->post(
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
     ],
-    ['__vtrftk', 'auth_key']
+    null//['__vtrftk', 'auth_key']
 );
-echo "[vtiger] form token: '{$values['__vtrftk']}', auth token: '{$values['auth_key']}'\n";
+echo "[vtiger] #2 form-token: '{$values['__vtrftk']}', auth-key: '{$values['auth_key']}'\n";
 
 // Confirm installation
 $values = $robot->post(
@@ -67,7 +71,7 @@ $values = $robot->post(
     ],
     ['__vtrftk', 'auth_key']
 );
-echo "[vtiger] form token: '{$values['__vtrftk']}', auth token: '{$values['auth_key']}'\n";
+echo "[vtiger] #3 form-token: '{$values['__vtrftk']}', auth-key: '{$values['auth_key']}'\n";
 
 // Select industry sector
 $vtrftk = $robot->post(
