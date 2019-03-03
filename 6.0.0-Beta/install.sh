@@ -38,19 +38,20 @@ if [[ $@ == *'--install-mysql'* ]]; then
     service mysql restart && sleep 10s
     ## Check if database exists
     ASSERT_DB=`mysqlshow -uroot -proot -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger`
-    if [ "$ASSERT_DB" != "vtiger" ]; then exit 65; fi
+    if [ "$ASSERT_DB" != "vtiger" ]; then echo "INSTALL(ERROR) '--install-mysql' database not found."; exit 65; fi
 fi
 
-## Restart service
-service apache2 restart && sleep 10s
-
-## Check if apache is ready
-VT_READY=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
-if [ "$VT_READY" != "HTTP/1.1 200 OK" ]; then exit 64; fi
-
-## Run interactive installation
-php /var/www/html/setup-wizard.php
-if [ $? -ne 0 ]; then exit 66; fi
+## Execute Wizard
+if [[ $@ == *'--wizard'* ]]; then
+    ## Restart service
+    service apache2 restart && sleep 10s
+    ## Check if apache is ready
+    VT_READY=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
+    if [ "$VT_READY" != "HTTP/1.1 200 OK" ]; then exit 64; fi
+    ## Run interactive installation
+    php /var/www/html/wizard.php
+    if [ $? -ne 0 ]; then exit 66; fi
+fi
 
 ## Export fresh database
 if [[ $@ == *'--dump'* ]]; then

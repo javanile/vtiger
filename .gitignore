@@ -3,3 +3,5 @@
 node_modules/
 mysql/
 npm-debug.log
+develop-install.sh
+!/develop-install.sh

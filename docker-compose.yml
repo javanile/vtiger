@@ -3,7 +3,7 @@ version: '2'
 services:
 
   vtiger:
-    build: 7.1.0
+    build: ${VERSION}
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_ROOT_PASSWORD=root
