@@ -173,7 +173,7 @@ $default_user_is_admin = false;
 $disable_persistent_connections = false;
 
 //Master currency name
-$currency_name = 'USA, Dollars';
+$currency_name = getenv('VT_CURRENCY_NAME') ?: 'USA, Dollars';
 
 // default charset
 // default charset default value = 'UTF-8' or 'ISO-8859-1'

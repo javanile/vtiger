@@ -3,14 +3,15 @@ FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 WORKDIR /var/www/html
 
-ENV VT_VERSION=7.0.1 \
-    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz \
-    VT_ADMIN_USER=admin \
-    VT_ADMIN_PASSWORD=admin \
-    VT_ADMIN_EMAIL=admin \
-    MYSQL_HOST=mysql \
-    MYSQL_DATABASE=vtiger \
-    COMPOSER_ALLOW_SUPERUSER=1
+ENV VT_VERSION='7.0.1' \
+    VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz' \
+    VT_ADMIN_USER='admin' \
+    VT_ADMIN_PASSWORD='admin' \
+    VT_ADMIN_EMAIL='admin@localhost.lan' \
+    VT_CURRENCY_NAME='USA, Dollars' \
+    MYSQL_HOST='mysql' \
+    MYSQL_DATABASE='vtiger' \
+    COMPOSER_ALLOW_SUPERUSER='1'
 
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
