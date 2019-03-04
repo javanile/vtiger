@@ -116,3 +116,22 @@ $vtrftk = $robot->post(
     ],
     ['__vtrftk']
 );
+
+// Select Modules
+$modules = [
+    'Documents' => false,
+];
+foreach ($modules as $module => $status) {
+    $robot->post(
+        'index.php',
+        [
+            '__vtrftk' => $vtrftk,
+            'module' => 'ModuleManager',
+            'parent' => 'Settings',
+            'action' => 'Basic',
+            'mode' => 'updateModuleStatus',
+            'forModule' => $modle,
+            'updateStatus' => $status,
+        ]
+    );
+}

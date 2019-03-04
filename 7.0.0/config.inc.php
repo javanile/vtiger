@@ -20,18 +20,6 @@ version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTI
 
 include('vtigerversion.php');
 
-// Get .ENV variables file
-/*
-include('vendor/vlucas/phpdotenv/src/Loader.php');
-include('vendor/vlucas/phpdotenv/src/Dotenv.php');
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
-function env($variable, $default = null) {
-    $value = getenv($variable);
-    return $value ? $value : $default.'';
-}
-*/
-
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
 ini_set('memory_limit','512M');
