@@ -7,6 +7,8 @@ services:
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_ROOT_PASSWORD=root
+      - VT_ADMIN_USER=vtiger
+      - VT_ADMIN_PASSWORD=tigerpaw
     ports:
       - "20080:80"
     links:

@@ -25,13 +25,16 @@ if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
 }
 
 echo "[vtiger] update adminstrator settings\n";
-/*
-// update password
-$password = 'adpexzg3FUZAk';
-mysqli_query($db, "
-  UPDATE vtiger_users 
-     SET user_password = '{$password}'
-       , crypt_type = '' 
-   WHERE id = '1'
-");
-*/
+if (!file_exists($lock = __DIR__.'/startup.lock')) {
+    // update password
+    $username = getenv('VT_ADMIN_USER') ?: 'admin'
+    $password = encrypt_password($username, getenv('VT_ADMIN_PASSWORD') ?: 'admin');
+    mysqli_query($db, "
+        UPDATE vtiger_users 
+        SET user_name = '{$username}' 
+          , user_password = '{$password}'
+          , crypt_type = '' 
+        WHERE id = '1'
+    ");
+    file_put_contents($lock);
+}
