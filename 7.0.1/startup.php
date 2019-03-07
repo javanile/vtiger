@@ -25,6 +25,8 @@ if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
 }
 
 echo "[vtiger] update adminstrator settings\n";
+/*
+// update password
 $password = 'adpexzg3FUZAk';
 mysqli_query($db, "
   UPDATE vtiger_users 
@@ -32,3 +34,4 @@ mysqli_query($db, "
        , crypt_type = '' 
    WHERE id = '1'
 ");
+*/
