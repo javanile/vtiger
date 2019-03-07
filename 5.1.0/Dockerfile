@@ -1,5 +1,5 @@
 ## Vtiger CRM 5.1.0
-FROM php:5.3-apache
+FROM php:5.3.29-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 WORKDIR /var/www/html
 

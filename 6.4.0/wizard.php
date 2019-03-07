@@ -122,7 +122,8 @@ $modules = [
     'Documents' => false,
 ];
 foreach ($modules as $module => $status) {
-    $robot->post(
+    echo "[vtiger] ".($status?'enable':'disable')." module '${module}': ";
+    $resp = $robot->post(
         'index.php',
         [
             '__vtrftk' => $vtrftk,
@@ -130,8 +131,9 @@ foreach ($modules as $module => $status) {
             'parent' => 'Settings',
             'action' => 'Basic',
             'mode' => 'updateModuleStatus',
-            'forModule' => $modle,
+            'forModule' => $module,
             'updateStatus' => $status,
         ]
     );
+    echo trim($resp)."\n";
 }

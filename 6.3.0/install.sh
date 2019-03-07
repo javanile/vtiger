@@ -50,19 +50,16 @@ fi
 
 ## Execute Wizard
 if [[ $@ == *'--wizard'* ]]; then
-    ## Restart service
     service apache2 restart && sleep 5s
-    ## Check if apache is ready
-    VT_READY=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
-    if [ "$VT_READY" != "HTTP/1.1 200 OK" ]; then exit 64; fi
-    ## Run interactive installation
+    ## Check if apache and vtiger are ready
+    ASSERT_VT=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
+    if [ "$ASSERT_VT" != "HTTP/1.1 200 OK" ]; then exit 64; fi
     php /var/www/html/wizard.php
     if [ $? -ne 0 ]; then exit 66; fi
 fi
 
 ## Export fresh database
 if [[ $@ == *'--dump'* ]]; then
-    #mysqldump -uroot -proot -hlocalhost vtiger > vtiger.sql
     mysqldump -u${DB_USER} -p${DB_PASS} -h${DB_HOST} ${DB_NAME} > ${DB_NAME}.sql
     if [[ ! `find vtiger.sql -type f -size +600k 2>/dev/null` ]]; then
         echo "[vtiger] dump error database sql too small"
@@ -76,12 +73,14 @@ fi
 ## Uninstall MySQL
 if [[ $@ == *'--remove-mysql'* ]]; then
     service mysql stop
-    killall -KILL mysql mysqld_safe mysqld &> /dev/null
+    if pgrep mysql; then killall -KILL mysql; fi
+    if pgrep mysqld_safe; then killall -KILL mysqld_safe; fi
+    if pgrep mysqld; then killall -KILL mysqld; fi
     apt-get --yes purge mysql-server-5.5 mysql-client-5.5
     apt-get --yes autoremove --purge
     apt-get autoclean
-    deluser --remove-home mysql &> /dev/null
-    delgroup mysql &> /dev/null
+    deluser --remove-home mysql
+    if grep -q mysql /etc/group; then delgroup mysql; fi
     rm -rf /etc/apparmor.d/abstractions/mysql
     rm -rf /etc/apparmor.d/cache/usr.sbin.mysqld
     rm -rf /etc/mysql

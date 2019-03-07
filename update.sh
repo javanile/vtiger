@@ -27,7 +27,7 @@ versions=(
      ["5.2.0-RC"]=main*5.6.30*vtiger%20CRM%205.2.0%20RC/vtigercrm-5.2.0-RC.tar.gz
      ["5.2.0-VB2"]=main*5.6.30*vtiger%20CRM%205.2.0%20VB2/vtigercrm-5.2.0-vb2.tar.gz
      ["5.2.0-VB1"]=main*5.6.30*vtiger%20CRM%205.2.0%20VB1/vtigercrm-5.2.0-vb1.tar.gz
-     ["5.1.0"]=stale1*5.3*vtiger%20CRM%205.1.0/Core%20Product/vtigercrm-5.1.0.tar.gz
+     ["5.1.0"]=stale1*5.3.29*vtiger%20CRM%205.1.0/Core%20Product/vtigercrm-5.1.0.tar.gz
 )
 
 files=(
