@@ -8,7 +8,7 @@ set -e
 php /var/www/html/startup.php
 
 ##
-[ ! -f vtiger.json ] cp /var/www/html/vtiger.json .
+[ ! -f vtiger.json ] && cp /var/www/html/vtiger.json .
 
 ## run cron
 cron
