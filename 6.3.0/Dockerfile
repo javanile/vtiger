@@ -1,7 +1,6 @@
 ## Vtiger CRM 6.3.0
 FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
-WORKDIR /var/www/html
 
 ENV VT_VERSION='6.3.0' \
     VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.3.0/Core%20Product/vtigercrm6.3.0.tar.gz' \
@@ -25,7 +24,7 @@ RUN apt-get update \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /etc/apache2/ssl \
- && mkdir /var/www/html/src \
+ && mkdir /app \
  && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
  && tar -xzf vt.tar.gz \
  && rm vt.tar.gz \
@@ -51,19 +50,21 @@ COPY vtiger.pem vtiger.crt /etc/apache2/ssl/
 # && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root develop-install.sh --install-mysql
 ## </develop>
 
-COPY install.sh foreground.sh /usr/local/bin/
-COPY autoload.php startup.php wizard.php /var/www/html/
+COPY install.sh foreground.sh vtiger /usr/local/bin/
+COPY autoload.php startup.php wizard.php vtiger.json /var/www/html/
 
 ## <develop>
-#RUN chmod +x /usr/local/bin/{install.sh,foreground.sh}
+#RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh /usr/local/bin/vtiger \
 # && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --assert-mysql --wizard --dump
 ## </develop>
 
 ## <production>
-RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh \
+RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh /usr/local/bin/vtiger \
  && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install.sh --install-mysql --assert-mysql --wizard --dump --remove-mysql
 ## </production>
 
 COPY config.inc.php /var/www/html/vtiger/
+
+WORKDIR /app
 
 CMD ["foreground.sh"]

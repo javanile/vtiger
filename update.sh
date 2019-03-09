@@ -34,6 +34,8 @@ files=(
     config.inc.php
     php.ini
     000-default.conf
+    vtiger
+    vtiger.json
     vtiger.crt
     vtiger.pem
     crontab

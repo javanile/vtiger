@@ -1,7 +1,6 @@
 ## Vtiger CRM 5.1.0
 FROM php:5.3.29-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
-WORKDIR /var/www/html
 
 ENV VT_VERSION='5.1.0' \
     VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.1.0/Core%20Product/vtigercrm-5.1.0.tar.gz' \
@@ -25,7 +24,7 @@ RUN apt-get update \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /etc/apache2/ssl \
- && mkdir /var/www/html/src \
+ && mkdir /app \
  && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
  && tar -xzf vt.tar.gz \
  && rm vt.tar.gz \
@@ -52,7 +51,7 @@ COPY vtiger.pem vtiger.crt /etc/apache2/ssl/
 ## </develop>
 
 COPY install.sh foreground.sh /usr/local/bin/
-COPY autoload.php startup.php wizard.php /var/www/html/
+COPY autoload.php startup.php wizard.php vtiger.json /var/www/html/
 
 ## <develop>
 #RUN chmod +x /usr/local/bin/{install.sh,foreground.sh}
@@ -65,5 +64,7 @@ RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh \
 ## </production>
 
 COPY config.inc.php /var/www/html/vtiger/
+
+WORKDIR /app
 
 CMD ["foreground.sh"]
