@@ -36,5 +36,5 @@ if (!file_exists($lock = __DIR__.'/startup.lock')) {
           , crypt_type = '' 
         WHERE id = '1'
     ");
-    file_put_contents($lock);
+    file_put_contents($lock, json_encode(['lock' => true]));
 }
