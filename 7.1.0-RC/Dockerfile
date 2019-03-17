@@ -19,7 +19,7 @@ RUN apt-get update \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot javanile/mysql-import \
+ && php composer.phar --ansi require javanile/http-robot javanile/mysql-import javanile/vtiger-cli \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \

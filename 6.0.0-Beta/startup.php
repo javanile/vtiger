@@ -27,6 +27,7 @@ if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
 echo "[vtiger] update adminstrator settings\n";
 if (!file_exists($lock = __DIR__.'/startup.lock')) {
     // update password
+    /*
     $username = getenv('VT_ADMIN_USER') ?: 'admin';
     $password = encrypt_password($username, getenv('VT_ADMIN_PASSWORD') ?: 'admin');
     mysqli_query($db, "
@@ -37,4 +38,5 @@ if (!file_exists($lock = __DIR__.'/startup.lock')) {
         WHERE id = '1'
     ");
     file_put_contents($lock, json_encode(['lock' => true]));
+    */
 }
