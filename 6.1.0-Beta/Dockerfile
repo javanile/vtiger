@@ -43,27 +43,11 @@ COPY php.ini /usr/local/etc/php/php.ini
 COPY crontab /etc/cron.d/crontab
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger.pem vtiger.crt /etc/apache2/ssl/
-
-## <develop>
-#COPY develop-install.sh /usr/local/bin/
-#RUN chmod +x /usr/local/bin/develop-install.sh \
-# && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root develop-install.sh --install-mysql
-## </develop>
-
-COPY install.sh foreground.sh vtiger /usr/local/bin/
+COPY foreground.sh vtiger /usr/local/bin/
 COPY autoload.php startup.php wizard.php vtiger.json /var/www/html/
+#COPY config.inc.php /var/www/html/vtiger/
 
-## <develop>
-#RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh /usr/local/bin/vtiger \
-# && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install --assert-mysql --wizard --dump
-## </develop>
-
-## <production>
-RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/foreground.sh /usr/local/bin/vtiger \
- && MYSQL_HOST=127.0.0.1 MYSQL_ROOT_PASSWORD=root install.sh --install-mysql --assert-mysql --wizard --dump --remove-mysql
-## </production>
-
-COPY config.inc.php /var/www/html/vtiger/
+RUN chmod +x /usr/local/bin/foreground.sh
 
 WORKDIR /app
 

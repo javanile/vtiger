@@ -2,13 +2,13 @@
 set -e
 
 ## import database using environment variables
-/var/www/html/vendor/bin/mysql-import /var/www/html/vtiger.sql
-
-## start up configuration
-php /var/www/html/startup.php
+if [[ -z "$DEVELOP_MODE" ]]; then
+    /var/www/html/vendor/bin/mysql-import /var/www/html/vtiger.sql
+    php /var/www/html/startup.php
+fi
 
 ##
-[ ! -f vtiger.json ] && cp /var/www/html/vtiger.json .
+[[ ! -f vtiger.json ]] && cp /var/www/html/vtiger.json .
 
 ## run cron
 cron

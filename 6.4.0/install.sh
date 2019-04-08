@@ -8,33 +8,43 @@ DB_USER=${MYSQL_USER:-root}
 DB_PASS=${MYSQL_PASSWORD:-root}
 DB_ROOT=${MYSQL_ROOT_PASSWORD:-root}
 
+export DEBIAN_FRONTEND=noninteractive
+
 ## Install MySQL
 if [[ $@ == *'--install-mysql'* ]]; then
     apt-get update
-    echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-set-selections
-    echo "mysql-server-5.5 mysql-server/root_password_again password root" | debconf-set-selections
-    apt-get install -y --no-install-recommends mysql-server-5.5
-    touch /var/run/mysqld/mysqld.sock
-    touch /var/run/mysqld/mysqld.pid
-    chown -R mysql:mysql /var/run/mysqld/mysqld.sock
-    chown -R mysql:mysql /var/lib/mysql
-    chmod -R 777 /var/run/mysqld/mysqld.sock
-    chmod -R 777 /var/lib/mysql
-    sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/my.cnf
-    service mysql restart && sleep 5s
+    #echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-set-selections
+    #echo "mysql-server-5.5 mysql-server/root_password_again password root" | debconf-set-selections
+    { \
+		echo "mariadb-server-10.1" mysql-server/root_password password 'root'; \
+		echo "mariadb-server-10.1" mysql-server/root_password_again password 'root'; \
+	} | debconf-set-selections;
+    apt-get install -y --no-install-recommends mariadb-server-10.1
+    #touch /var/run/mysqld/mysqld.sock
+    #touch /var/run/mysqld/mysqld.pid
+    #chown -R mysql:mysql /var/run/mysqld/mysqld.sock
+    #chown -R mysql:mysql /var/lib/mysql
+    #chmod -R 777 /var/run/mysqld/mysqld.sock
+    #chmod -R 777 /var/lib/mysql
+    #sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/my.cnf
+    service mysql stop
+    mysqld_safe --skip-grant-tables --skip-networking &
+    sleep 5s
     ## Create database and localhost access
-    mysql -uroot -proot -h127.0.0.1 -e "CREATE DATABASE IF NOT EXISTS vtiger;"
-    mysql -uroot -proot -h127.0.0.1 -e "ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci;"
-    mysql -uroot -proot -h127.0.0.1 -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
-    mysql -uroot -proot -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-    mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
+    mysql -uroot -e "CREATE DATABASE IF NOT EXISTS vtiger;"
+    mysql -uroot -e "ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    mysql -uroot -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
+    mysql -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+    mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+    mysql -uroot -e "FLUSH PRIVILEGES;"
     service mysql restart && sleep 5s
     ## Force flush privileges
-    mysql -uroot -proot -h127.0.0.1 -e "DROP USER 'root'@'%';"
-    mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
-    mysql -uroot -proot -h127.0.0.1 -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
-    mysql -uroot -proot -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-    mysql -uroot -proot -h127.0.0.1 -e "FLUSH PRIVILEGES;"
+    mysql -uroot -proot -h0.0.0.0 -e "DROP USER 'root'@'%';"
+    mysql -uroot -proot -h0.0.0.0 -e "FLUSH PRIVILEGES;"
+    mysql -uroot -proot -h0.0.0.0 -e "CREATE USER 'root'@'%' IDENTIFIED BY 'root';"
+    mysql -uroot -proot -h0.0.0.0 -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+    mysql -uroot -proot -h0.0.0.0 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+    mysql -uroot -proot -h0.0.0.0 -e "FLUSH PRIVILEGES;"
 fi
 
 ## Install MySQL
