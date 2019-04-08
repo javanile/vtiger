@@ -32,6 +32,10 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 * [`5.1.0`, `5.1` (5.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.1.0/Dockerfile)
 
 ### Development
+ 
 
-./update.sh && docker-compose up --build vtiger
+```bash
+docker-compose run --rm update
+```
 
+&& docker-compose up --build vtiger

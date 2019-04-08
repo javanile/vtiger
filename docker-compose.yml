@@ -32,5 +32,12 @@ services:
     links:
       - mysql
 
+  update:
+    image: debian
+    working_dir: /vtiger
+    entrypoint: ['/vtiger/update.sh']
+    volumes:
+      - ./:/vtiger:rw
+
 volumes:
   mysql:

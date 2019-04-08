@@ -5,7 +5,7 @@ download_files=http://sourceforge.net/projects/vtigercrm/files/
 
 declare -A versions
 versions=(
-     ["7.1.0"]=main*5.6.30*vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
+     ["7.1.0"]=main*5.6.40*vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
      ["7.1.0-RC"]=main*5.6.30*vtiger%20CRM%207.1.0%20RC/Core%20Product/vtigercrm7.1.0rc.tar.gz
      ["7.0.1"]=main*5.6.30*vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz
      ["7.0.0"]=main*5.6.30*vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz
@@ -31,24 +31,25 @@ versions=(
 )
 
 files=(
-    config.inc.php
-    php.ini
     000-default.conf
-    vtiger
-    vtiger.json
-    vtiger.crt
-    vtiger.pem
-    crontab
-    foreground.sh
-    extends.sh
-    install.sh
     autoload.php
+    config.inc.php
+    crontab
+    extends.sh
+    foreground.sh
+    install.sh
+    php.ini
     startup.php
+    vtiger
+    vtiger.crt
+    vtiger.json
+    vtiger.pem
     wizard.php
 )
 
 for version in "${!versions[@]}"; do
-    [ -d "$version" ] || mkdir ${version}
+    [[ -d "$version" ]] || mkdir ${version}
+    [[ -f "${version}/*" ]] && rm ${version}/*
 
     template=Dockerfile.$(echo ${versions[$version]} | cut -d* -f1).template
     php_version=$(echo ${versions[$version]} | cut -d* -f2)
