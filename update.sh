@@ -32,20 +32,19 @@ versions=(
 
 files=(
     000-default.conf
-    autoload.php
     config.inc.php
     crontab
     extends.sh
     php.ini
-    phpinfo.php
-    startup.php
+    vtiger-startup.php
     vtiger
-    vtiger.crt
+    vtiger-ssl.crt
     vtiger.json
-    vtiger.pem
+    vtiger-ssl.pem
     vtiger-foreground.sh
     vtiger-install.php
     vtiger-install.sh
+    vtigere-autoload.php
 )
 
 for version in "${!versions[@]}"; do
