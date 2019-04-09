@@ -36,26 +36,27 @@ files=(
     config.inc.php
     crontab
     extends.sh
-    foreground.sh
     php.ini
+    phpinfo.php
     startup.php
     vtiger
     vtiger.crt
     vtiger.json
     vtiger.pem
-    vtiger.sql
-    wizard.php
+    vtiger-foreground.sh
+    vtiger-install.php
+    vtiger-install.sh
 )
 
 for version in "${!versions[@]}"; do
     [[ -d "$version" ]] || mkdir ${version}
-    [[ -f "${version}/*" ]] && find ${version} -type f ! -name 'vtiger.sql' -delete
+    rm ${version}/* && true
 
     template=Dockerfile.$(echo ${versions[$version]} | cut -d* -f1).template
     php_version=$(echo ${versions[$version]} | cut -d* -f2)
     download=${download_files}$(echo ${versions[$version]} | cut -d* -f3)
 
-    cat ${template} > ${version}/Dockerfile
+    sed /^#/d ${template} > ${version}/Dockerfile
     sed -e 's!%%VERSION%%!'"${version}"'!' \
         -e 's!%%DOWNLOAD%%!'"${download}"'!' \
         -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \

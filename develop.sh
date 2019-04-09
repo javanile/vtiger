@@ -28,15 +28,11 @@ set -e
 ## 5.1.0
 
 export VERSION=7.1.0
-
 echo -e "\n----[ build vtiger ${VERSION} ]----"
-
-docker-compose down -v --remove-orphans
-docker-compose up -d mysql && sleep 5
+docker-compose down --remove-orphans
+docker-compose up -d mysql
 docker-compose run --rm update
+cp develop-install.sh ${VERSION}
 docker-compose build vtiger
 docker-compose up -d vtiger
 docker-compose logs vtiger
-echo -e "\n----[ wizard ]----"
-docker-compose exec vtiger php /var/www/html/wizard.php
-docker-compose exec mysql bash -c "mysqldump -hlocalhost -uroot -p\$MYSQL_ROOT_PASSWORD \$MYSQL_DATABASE > /vtiger/${VERSION}/vtiger.sql"

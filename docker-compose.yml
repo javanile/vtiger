@@ -2,19 +2,41 @@ version: '2'
 
 services:
 
+  develop:
+    build: ${VERSION}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=root
+      - DEVELOP_MODE=yes
+    ports:
+      - "20082:80"
+    links:
+      - mysql
+
   vtiger:
     build: ${VERSION}
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_ROOT_PASSWORD=root
-      - VT_ADMIN_USER=vtiger
-      - VT_ADMIN_PASSWORD=tigerpaw
-      - DEVELOP_MODE=1
+      - VT_ADMIN_USER=admin
+      - VT_ADMIN_PASSWORD=admin
     ports:
       - "20080:80"
+    volumes:
+      - ./config.inc.php:/var/www/html/vtiger/config.inc.php
     links:
       - mysql
       - adminer
+
+  adminer:
+    image: javanile/adminer
+    environment:
+      - MYSQL_DATABASE=vtiger
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "20081:8080"
+    links:
+      - mysql
 
   mysql:
     image: mysql:5.5
@@ -24,15 +46,6 @@ services:
     volumes:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
-
-  adminer:
-    image: javanile/adminer
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-    ports:
-      - "20081:8080"
-    links:
-      - mysql
 
   update:
     image: debian

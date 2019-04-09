@@ -1,17 +1,7 @@
-## Vtiger CRM 6.0.0-RC
 FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
-ENV VT_VERSION='6.0.0-RC' \
-    VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz' \
-    VT_ADMIN_USER='admin' \
-    VT_ADMIN_PASSWORD='admin' \
-    VT_ADMIN_EMAIL='admin@localhost.lan' \
-    VT_CURRENCY_NAME='USA, Dollars' \
-    MYSQL_HOST='mysql' \
-    MYSQL_DATABASE='vtiger' \
-    COMPOSER_ALLOW_SUPERUSER='1'
-
+ENV COMPOSER_ALLOW_SUPERUSER='1'
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
  && docker-php-ext-install zip \
@@ -43,12 +33,25 @@ COPY php.ini /usr/local/etc/php/php.ini
 COPY crontab /etc/cron.d/crontab
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger.pem vtiger.crt /etc/apache2/ssl/
-COPY foreground.sh vtiger /usr/local/bin/
-COPY autoload.php startup.php wizard.php vtiger.json /var/www/html/
-#COPY config.inc.php /var/www/html/vtiger/
 
-RUN chmod +x /usr/local/bin/foreground.sh
+COPY develop-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh --install-mysql
+
+COPY vtiger-*.sh /usr/local/bin/
+COPY autoload.php startup.php vtiger-install.php vtiger.json /var/www/html/
+
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+
+
+COPY config.inc.php /var/www/html/vtiger/
 
 WORKDIR /app
 
-CMD ["foreground.sh"]
+ENV VT_VERSION='6.0.0-RC' \
+    VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz' \
+    VT_ADMIN_USER='admin' \
+    VT_ADMIN_PASSWORD='admin' \
+    VT_ADMIN_EMAIL='admin@localhost.lan' \
+    VT_CURRENCY_NAME='USA, Dollars' \
+
+CMD ["vtiger-foreground.sh"]
