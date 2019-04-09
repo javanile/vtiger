@@ -1,7 +1,9 @@
 FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
-ENV COMPOSER_ALLOW_SUPERUSER=1 \
+ENV VT_VERSION=7.0.0 \
+    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz \
+    COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
 RUN apt-get update \
@@ -11,9 +13,9 @@ RUN apt-get update \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot
-RUN php composer.phar --ansi global require javanile/mysql-import javanile/vtiger-cli
-RUN usermod -u 1000 www-data \
+ && php composer.phar --ansi require javanile/http-robot \
+ && php composer.phar --ansi global require javanile/mysql-import javanile/vtiger-cli \
+ && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /app /etc/apache2/ssl \
@@ -48,9 +50,7 @@ COPY config.inc.php /var/www/html/vtiger/
 
 WORKDIR /app
 
-ENV VT_VERSION='7.0.0' \
-    VT_DOWNLOAD='http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz' \
-    VT_ADMIN_USER='admin' \
+ENV VT_ADMIN_USER='admin' \
     VT_ADMIN_PASSWORD='admin' \
     VT_ADMIN_EMAIL='admin@localhost.lan' \
     VT_CURRENCY_NAME='USA, Dollars' \
