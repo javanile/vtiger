@@ -38,13 +38,11 @@ COPY php.ini /usr/local/etc/php/php.ini
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger-ssl.* /etc/apache2/ssl/
 
-COPY develop-install.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php vtiger.json /var/www/html/
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
 
 COPY config.inc.php /var/www/html/vtiger/
 

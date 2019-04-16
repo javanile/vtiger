@@ -12,7 +12,7 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use Javanile\HttpRobot\HttpRobot;
 
-echo "[vtiger] setup wizard start...\n";
+echo "[vtiger] vtiger test installation...\n";
 
 echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS."\n";
 if (!mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
@@ -58,8 +58,6 @@ $values = $robot->post(
 );
 echo "[vtiger] #2 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
-
-
 // Confirm installation
 $values = $robot->post(
     'index.php',
@@ -73,8 +71,6 @@ $values = $robot->post(
     ['__vtrftk', 'auth_key', '@text']
 );
 echo "[vtiger] #3 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
-
-
 
 // Select industry sector
 $values = $robot->post(
@@ -90,26 +86,20 @@ $values = $robot->post(
     ['__vtrftk', '@text']
 );
 
-var_dump($values['@text']);
-exit(1);
-
 if (!$values['__vtrftk']) {
     echo "[vtiger] install error on industry selector\n";
     echo $values['@text'];
     exit(1);
 }
 
-echo "[vtiger] #4 form-token: '{$vtrftk}''\n";
-
+echo "[vtiger] #4 form-token: '{$values['__vtrftk']}''\n";
 
 // /index.php?module=Users&parent=Settings&view=SystemSetup
-
-
 // First login
 $vtrftk = $robot->post(
     'index.php?module=Users&action=Login',
     [
-        '__vtrftk' => $vtrftk,
+        '__vtrftk' => $values['__vtrftk'],
         'username' => 'admin',
         'password' => 'admin',
     ],
@@ -136,8 +126,6 @@ $vtrftk = $robot->post(
     ['__vtrftk']
 );
 
-var_dump($vtrftk);
-
 // Save user settings
 $vtrftk = $robot->post(
     'index.php?module=Users&action=UserSetupSave',
@@ -150,11 +138,6 @@ $vtrftk = $robot->post(
     ],
     ['__vtrftk']
 );
-
-var_dump($vtrftk);
-
-echo $robot->get(
-    'index.php');
 
 // Select Modules
 /*
