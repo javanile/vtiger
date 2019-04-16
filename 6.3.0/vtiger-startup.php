@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/autoload.php';
+require_once __DIR__.'/vtiger-autoload.php';
 
 function encrypt_password($username, $user_password, $crypt_type = '') {
     $salt = substr($username, 0, 2);

@@ -1,12 +1,20 @@
 <?php
 
-require_once __DIR__.'/autoload.php';
+define('DB_HOST', '127.0.0.1');
+define('DB_PORT', '3306');
+define('DB_NAME', 'vtiger');
+define('DB_USER', 'vtiger');
+define('DB_PASS', 'vtiger');
+
+date_default_timezone_set('America/Los_Angeles');
+
+require_once __DIR__.'/vendor/autoload.php';
 
 use Javanile\HttpRobot\HttpRobot;
 
 echo "[vtiger] setup wizard start...\n";
 
-echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS.' '.DB_ROOT."\n";
+echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS."\n";
 if (!mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
     echo '[vtiger] database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
     exit(1);
@@ -46,9 +54,11 @@ $values = $robot->post(
         'dateformat' => 'dd-mm-yyyy',
         'timezone' => 'America/Los_Angeles',
     ],
-    ['__vtrftk', 'auth_key']
+    ['__vtrftk', 'auth_key', '@text']
 );
 echo "[vtiger] #2 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
+
+
 
 // Confirm installation
 $values = $robot->post(
@@ -60,12 +70,14 @@ $values = $robot->post(
         'view' => 'Index',
         'mode' => 'Step6',
     ],
-    ['__vtrftk', 'auth_key']
+    ['__vtrftk', 'auth_key', '@text']
 );
 echo "[vtiger] #3 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
+
+
 // Select industry sector
-$vtrftk = $robot->post(
+$values = $robot->post(
     'index.php',
     [
         '__vtrftk' => $values['__vtrftk'],
@@ -75,8 +87,20 @@ $vtrftk = $robot->post(
         'mode' => 'Step7',
         'industry' => 'Accounting',
     ],
-    ['__vtrftk']
+    ['__vtrftk', '@text']
 );
+
+var_dump($values['@text']);
+exit(1);
+
+if (!$values['__vtrftk']) {
+    echo "[vtiger] install error on industry selector\n";
+    echo $values['@text'];
+    exit(1);
+}
+
+echo "[vtiger] #4 form-token: '{$vtrftk}''\n";
+
 
 // /index.php?module=Users&parent=Settings&view=SystemSetup
 
@@ -91,6 +115,11 @@ $vtrftk = $robot->post(
     ],
     ['__vtrftk']
 );
+
+if (!$vtrftk) {
+   echo "[vtiger] install error on first login.\n";
+   exit(1);
+}
 
 // Setup crm modules
 $vtrftk = $robot->post(
@@ -107,6 +136,8 @@ $vtrftk = $robot->post(
     ['__vtrftk']
 );
 
+var_dump($vtrftk);
+
 // Save user settings
 $vtrftk = $robot->post(
     'index.php?module=Users&action=UserSetupSave',
@@ -119,6 +150,11 @@ $vtrftk = $robot->post(
     ],
     ['__vtrftk']
 );
+
+var_dump($vtrftk);
+
+echo $robot->get(
+    'index.php');
 
 // Select Modules
 /*

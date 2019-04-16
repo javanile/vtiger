@@ -13,7 +13,7 @@ RUN apt-get update \
  && docker-php-ext-install imap \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot \
+ && php composer.phar --ansi require javanile/http-robot:0.0.2 \
  && php composer.phar --ansi global require javanile/mysql-import javanile/vtiger-cli \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
@@ -40,7 +40,7 @@ COPY vtiger-ssl.* /etc/apache2/ssl/
 
 ## @block: develop
 COPY develop-install.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh --install-mysql
+RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 ## @endblock
 
 COPY vtiger-*.sh /usr/local/bin/

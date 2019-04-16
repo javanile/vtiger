@@ -29,10 +29,11 @@ set -e
 
 export VERSION=7.1.0
 echo -e "\n----[ build vtiger ${VERSION} ]----"
-docker-compose down --remove-orphans
+docker-compose down -v --remove-orphans
 docker-compose up -d mysql
 docker-compose run --rm update
 cp develop-install.sh ${VERSION}
+docker-compose rm -f vtiger
 docker-compose build vtiger
 docker-compose up -d vtiger
 docker-compose logs vtiger

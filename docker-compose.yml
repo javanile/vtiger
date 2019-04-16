@@ -2,17 +2,6 @@ version: '2'
 
 services:
 
-  develop:
-    build: ${VERSION}
-    environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_ROOT_PASSWORD=root
-      - DEVELOP_MODE=yes
-    ports:
-      - "20082:80"
-    links:
-      - mysql
-
   vtiger:
     build: ${VERSION}
     environment:

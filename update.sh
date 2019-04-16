@@ -44,7 +44,7 @@ files=(
     vtiger-foreground.sh
     vtiger-install.php
     vtiger-install.sh
-    vtigere-autoload.php
+    vtiger-autoload.php
 )
 
 for version in "${!versions[@]}"; do
