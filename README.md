@@ -1,6 +1,6 @@
 # vtiger
 
-Vtiger CRM is open source software that helps more than 100000 businesses grow sales, 
+Vtiger CRM is open source software that helps more than 100000 businesses grow sales,  
 improve marketing reach, and deliver great customer service. Try it free with Docker!
 
 [![](https://images.microbadger.com/badges/image/javanile/vtiger.svg)](https://microbadger.com/images/javanile/vtiger "Get your own image badge on microbadger.com")
@@ -20,11 +20,11 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 * [`6.0.0` (6.0.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0/Dockerfile)
 * [`6.0.0-RC` (6.0.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0-RC/Dockerfile)
 * [`6.0.0-Beta` (6.0.0-Beta/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0-Beta/Dockerfile)
-* [`5.4.0` (5.4.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.4.0/Dockerfile)
+* [`5.4.0`, `5.4`, `5` (5.4.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.4.0/Dockerfile)
 * [`5.4.0-RC` (5.4.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.4.0-RC/Dockerfile)
-* [`5.3.0` (5.3.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.3.0/Dockerfile)
+* [`5.3.0`, `5.3` (5.3.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.3.0/Dockerfile)
 * [`5.3.0-RC` (5.3.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.3.0-RC/Dockerfile)
-* [`5.2.1` (5.2.1/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.2.1/Dockerfile)
+* [`5.2.1`, `5.2` (5.2.1/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.2.1/Dockerfile)
 * [`5.2.0` (5.2.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.2.0/Dockerfile)
 * [`5.2.0-RC` (5.2.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.2.0-RC/Dockerfile)
 * [`5.2.0-VB2` (5.2.0-VB2/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.2.0-VB2/Dockerfile)
