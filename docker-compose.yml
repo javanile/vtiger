@@ -7,10 +7,23 @@ services:
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_ROOT_PASSWORD=root
-      - VT_ADMIN_USER=vtiger
-      - VT_ADMIN_PASSWORD=tigerpaw
+      - VT_ADMIN_USER=admin
+      - VT_ADMIN_PASSWORD=admin
     ports:
       - "20080:80"
+    volumes:
+      - ./config.inc.php:/var/www/html/vtiger/config.inc.php
+    links:
+      - mysql
+      - adminer
+
+  adminer:
+    image: javanile/adminer
+    environment:
+      - MYSQL_DATABASE=vtiger
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "20081:8080"
     links:
       - mysql
 
@@ -23,14 +36,12 @@ services:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
 
-  adminer:
-    image: javanile/adminer
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-    ports:
-      - "20081:8080"
-    links:
-      - mysql
+  update:
+    image: debian
+    working_dir: /vtiger
+    entrypoint: ['/vtiger/update.sh']
+    volumes:
+      - ./:/vtiger:rw
 
 volumes:
   mysql:

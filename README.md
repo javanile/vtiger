@@ -13,11 +13,11 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 * [`7.0.0` (7.0.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.0.0/Dockerfile)
 * [`6.5.0`, `6.5`, `6` (6.5.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.5.0/Dockerfile)
 * [`6.4.0`, `6.4` (6.4.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.4.0/Dockerfile)
-* [`6.3.0` (6.3.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.3.0/Dockerfile)
-* [`6.2.0` (6.2.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.2.0/Dockerfile)
-* [`6.1.0` (6.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.1.0/Dockerfile)
+* [`6.3.0`, `6.3` (6.3.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.3.0/Dockerfile)
+* [`6.2.0`, `6.2` (6.2.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.2.0/Dockerfile)
+* [`6.1.0`, `6.1` (6.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.1.0/Dockerfile)
 * [`6.1.0-Beta` (6.1.0-Beta/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.1.0-Beta/Dockerfile)
-* [`6.0.0` (6.0.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0/Dockerfile)
+* [`6.0.0`, `6.0` (6.0.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0/Dockerfile)
 * [`6.0.0-RC` (6.0.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0-RC/Dockerfile)
 * [`6.0.0-Beta` (6.0.0-Beta/Dockerfile)](https://github.com/javanile/vtiger/blob/master/6.0.0-Beta/Dockerfile)
 * [`5.4.0`, `5.4`, `5` (5.4.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.4.0/Dockerfile)
@@ -32,6 +32,10 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 * [`5.1.0`, `5.1` (5.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/5.1.0/Dockerfile)
 
 ### Development
+ 
 
-./update.sh && docker-compose up --build vtiger
+```bash
+docker-compose run --rm update
+```
 
+&& docker-compose up --build vtiger
