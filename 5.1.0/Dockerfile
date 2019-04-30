@@ -16,6 +16,7 @@ RUN apt-get update \
  && docker-php-ext-install zip \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install imap \
+ && docker-php-ext-install exif \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
  && php composer.phar --ansi require javanile/http-robot javanile/mysql-import javanile/vtiger-cli \

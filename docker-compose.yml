@@ -3,16 +3,15 @@ version: '2'
 services:
 
   vtiger:
-    build: ${VERSION}
+    #build: ${VERSION}
+    build: 7.1.0
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_ROOT_PASSWORD=root
-      - VT_ADMIN_USER=admin
-      - VT_ADMIN_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "20080:80"
     volumes:
       - ./config.inc.php:/var/www/html/vtiger/config.inc.php
+      - ./volumes/storage:/var/www/html/vtiger/storage
     links:
       - mysql
       - adminer
@@ -21,7 +20,7 @@ services:
     image: javanile/adminer
     environment:
       - MYSQL_DATABASE=vtiger
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "20081:8080"
     links:
@@ -30,8 +29,7 @@ services:
   mysql:
     image: mysql:5.5
     environment:
-      - MYSQL_DATABASE=vtiger
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=secret
     volumes:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
