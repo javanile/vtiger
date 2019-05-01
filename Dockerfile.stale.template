@@ -1,6 +1,9 @@
+## Vtiger CRM %%VERSION%%
 FROM httpd:2.4.39
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
+## use this to add php 5.3.29 to this container
+## https://docs.moodle.org/36/en/Compiling_PHP_from_source
 
 COPY config.inc.php /var/www/html/vtiger/
 
