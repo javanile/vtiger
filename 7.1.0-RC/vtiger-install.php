@@ -92,7 +92,7 @@ if (!$values['__vtrftk']) {
     exit(1);
 }
 
-echo "[vtiger] #4 form-token: '{$values['__vtrftk']}''\n";
+echo "[vtiger] #4 form-token: '{$values['__vtrftk']}'\n";
 
 // /index.php?module=Users&parent=Settings&view=SystemSetup
 // First login

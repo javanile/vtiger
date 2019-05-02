@@ -12,7 +12,7 @@ services:
     ports:
       - "20080:80"
     volumes:
-      - ./config.inc.php:/var/www/html/vtiger/config.inc.php
+      - ./config.inc.php:/var/www/html/vtiger/config.inc.php:rw
     links:
       - mysql
       - adminer
