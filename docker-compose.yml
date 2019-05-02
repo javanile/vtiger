@@ -9,6 +9,7 @@ services:
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "20080:80"
+      - "20443:443"
     volumes:
       - ./config.inc.php:/var/www/html/vtiger/config.inc.php
       - ./phpinfo.php:/var/www/html/vtiger/phpinfo.php
