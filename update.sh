@@ -33,6 +33,7 @@ versions=(
 files=(
     000-default.conf
     config.inc.php
+    config.performance.php
     crontab
     extends.sh
     php.ini

@@ -45,7 +45,7 @@ COPY crontab /etc/cron.d/crontab
 
 RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
 
-COPY config.inc.php /var/www/html/vtiger/
+COPY config.inc.php config.performance.php /var/www/html/vtiger/
 
 VOLUME ["/var/www/html/vtiger/storage", "/var/www/html/vtiger/logs"]
 
