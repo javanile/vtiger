@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-WORKDIR="$(dirname "$0")"
+WORKDIR=$(dirname $0)
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
@@ -11,11 +11,12 @@ echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
 printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /etc/env.sh
 
 ## import database using environment variables
+echo "[vtiger] starting up...\n";
 cd /var/www/html/ && mysql-import vtiger.sql && php vtiger-startup.php
 
 ## update permissions
 echo "[vtiger] update file and directory permissions"
-cd /var/www/html/vtiger
+cd /var/www/html/vtiger && touch logs/php.log
 chmod 777 tabdata.php config.inc.php parent_tabdata.php modules
 chmod 777 -R modules/Settings layouts/vlayout/modules storage user_privileges cron/modules test logs languages cache
 chmod 777 -R layouts/v7/modules && true
