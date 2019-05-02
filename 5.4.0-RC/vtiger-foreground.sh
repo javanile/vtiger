@@ -3,7 +3,9 @@ set -e
 WORKDIR="$(dirname "$0")"
 
 ## welcome message
-echo "---[ vtiger ${VT_VERSION} ]---"
+echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
+echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
+echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
 
 ## store environment variables
 printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /etc/env.sh

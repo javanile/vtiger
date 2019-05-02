@@ -205,3 +205,5 @@ if (isset($default_timezone) && function_exists('date_default_timezone_set')) {
 $default_layout = 'v7';
 
 include_once 'config.security.php';
+
+cattivo_cattivo();
