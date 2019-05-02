@@ -27,7 +27,9 @@ set -e
 ## 5.2.0-VB1
 ## 5.1.0
 
-export VERSION=7.1.0
+source .env
+[[ ! -d ./volumes/logs ]] && mkdir -p ./volumes/logs
+[[ ! -d ./volumes/storage ]] && mkdir -p ./volumes/storage
 echo -e "\n----[ build vtiger ${VERSION} ]----"
 docker-compose down -v --remove-orphans
 docker-compose up -d mysql

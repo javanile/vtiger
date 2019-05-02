@@ -34,7 +34,6 @@ RUN apt-get update \
  && rm -rf /etc/cron.* \
  && rm composer.phar
 
-COPY crontab /etc/cron.d/crontab
 COPY php.ini /usr/local/etc/php/php.ini
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger-ssl.* /etc/apache2/ssl/
@@ -42,12 +41,13 @@ COPY vtiger-ssl.* /etc/apache2/ssl/
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php vtiger.json /var/www/html/
+COPY crontab /etc/cron.d/crontab
 
 RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
 
 COPY config.inc.php /var/www/html/vtiger/
 
-VOLUME ["/var/www/html/vtiger/storage"]
+VOLUME ["/var/www/html/vtiger/storage", "/var/www/html/vtiger/logs"]
 
 WORKDIR /app
 

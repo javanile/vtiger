@@ -3,14 +3,14 @@ version: '2'
 services:
 
   vtiger:
-    #build: ${VERSION}
-    build: 7.1.0
+    build: ${VERSION}
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "20080:80"
     volumes:
       - ./config.inc.php:/var/www/html/vtiger/config.inc.php
+      - ./volumes/logs:/var/www/html/vtiger/logs
       - ./volumes/storage:/var/www/html/vtiger/storage
     links:
       - mysql
