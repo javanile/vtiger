@@ -1,12 +1,10 @@
 #!/bin/bash
 set -e
 
-export VERSION=7.1.0
-
 docker-compose run --rm update
 
 [[ -d ./volumes ]] && rm -fr ./volumes
 
-git add .
+git add . > /dev/null
 git commit -am "$*"
 git push
