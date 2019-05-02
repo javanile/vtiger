@@ -27,7 +27,7 @@ set -e
 ## 5.2.0-VB1
 ## 5.1.0
 
-export VERSION=5.4.0
+export VERSION=7.1.0
 echo -e "\n----[ build vtiger ${VERSION} ]----"
 docker-compose down -v --remove-orphans
 docker-compose up -d mysql
