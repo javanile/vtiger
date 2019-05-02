@@ -15,7 +15,7 @@ RUN apt-get update \
  && docker-php-ext-install mysql mysqli pdo pdo_mysql \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
  && php composer.phar --ansi require javanile/http-robot:0.0.2 \
- && php composer.phar --ansi global require javanile/mysql-import javanile/vtiger-cli \
+ && php composer.phar --ansi global require javanile/mysql-import:0.0.10 javanile/vtiger-cli \
  && usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \

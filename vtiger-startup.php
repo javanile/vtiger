@@ -18,13 +18,13 @@ function encrypt_password($username, $user_password, $crypt_type = '') {
     return $encrypted_password;
 }
 
-echo "[vtiger] starting up...\n";
+echo "[vtiger] looking for database...\n";
 if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
     echo '[vtiger] database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
     exit(1);
 }
 
-echo "[vtiger] update adminstrator settings\n";
+echo "[vtiger] update administrator settings\n";
 if (!file_exists($lock = __DIR__.'/startup.lock')) {
     // update password
     /*
