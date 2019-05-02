@@ -42,6 +42,7 @@ files=(
     vtiger.json
     vtiger-ssl.pem
     vtiger-foreground.sh
+    vtiger-cron.sh
     vtiger-install.php
     vtiger-install.sh
     vtiger-autoload.php

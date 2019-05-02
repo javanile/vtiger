@@ -1,2 +1,4 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-* * * * * /var/www/html/vtiger/cron/vtigercron.sh &> /var/www/html/vtiger/logs/vtgier_cron.log
+* * * * * root date >> /var/www/html/vtiger/logs/clock_root.log
+* * * * * date >> /var/www/html/vtiger/logs/clock.log
+* * * * * vtiger-cron.sh

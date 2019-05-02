@@ -2,6 +2,12 @@
 set -e
 WORKDIR="$(dirname "$0")"
 
+## welcome message
+echo "---[ vtiger ${VT_VERSION} ]---"
+
+## store environment variables
+printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /etc/env.sh
+
 ## import database using environment variables
 cd /var/www/html/ && mysql-import vtiger.sql && php vtiger-startup.php
 
