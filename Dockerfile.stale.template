@@ -1,12 +1,31 @@
 ## Vtiger CRM %%VERSION%%
-FROM httpd:2.4.39
-LABEL maintainer='Francesco Bianco <info@javanile.org>'
+FROM orsolin/docker-php-5.3-apache
 
-## use this to add php 5.3.29 to this container
-## https://docs.moodle.org/36/en/Compiling_PHP_from_source
+ENV VT_VERSION=%%VERSION%% \
+    VT_DOWNLOAD=%%DOWNLOAD%% \
+    COMPOSER_ALLOW_SUPERUSER=1 \
+    PATH=/root/.composer/vendor/bin:$PATH
 
-COPY config.inc.php /var/www/html/vtiger/
+WORKDIR /var/www/html
+
+RUN curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
+ && tar -xzf vt.tar.gz \
+ && rm vt.tar.gz \
+ && mv vtigercrm vtiger \
+ && chmod -R 775 vtiger \
+ && chown -R www-data:www-data vtiger
+
+COPY php.ini /etc/php5/apache2/conf.d/php.ini
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY vtiger-ssl.* /etc/apache2/ssl/
+
+RUN mkdir -p /var/www/html/vtiger
+RUN sed -e 's!DocumentRoot /var/www/html!DocumentRoot /var/www/html/vtiger!' -ri /etc/apache2/apache2.conf
+RUN service apache2 start
+
+#RUN docker-php-ext-install imap
+#COPY config.inc.php /var/www/html/vtiger/
 
 WORKDIR /app
 
-CMD ["foreground.sh"]
+#CMD ["foreground.sh"]

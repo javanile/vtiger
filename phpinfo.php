@@ -1,1 +1,1 @@
-<?php ciao23();
+<?php phpinfo();

@@ -31,11 +31,12 @@ source .env
 [[ ! -d ./volumes/logs ]] && mkdir -p ./volumes/logs
 [[ ! -d ./volumes/storage ]] && mkdir -p ./volumes/storage
 echo -e "\n----[ build vtiger ${VERSION} ]----"
-docker-compose down -v --remove-orphans
-docker-compose up -d mysql
+#docker-compose down -v --remove-orphans
+#docker-compose up -d mysql
 docker-compose run --rm update
 cp develop-install.sh ${VERSION}
+docker-compose stop  vtiger
 docker-compose rm -f vtiger
 docker-compose build vtiger
-docker-compose up -d vtiger
-docker-compose logs vtiger
+docker-compose up vtiger
+#docker-compose logs vtiger
