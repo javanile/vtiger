@@ -33,9 +33,7 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 
 ## Get started and demo
 
-> TIP: if you want see in action and speed-up a demo go to https://github.com/javanile/vtiger-demo
-
-
+> **LOOK FOR DEMO FAST! Visit --> https://github.com/javanile/vtiger-demo**
 
 ## Development
  
