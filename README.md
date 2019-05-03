@@ -33,7 +33,7 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 
 ## Get started and demo
 
-> **⏩ LOOKING FOR FAST DEMO! Visit --> https://github.com/javanile/vtiger-demo <--**
+> **LOOKING FOR FAST DEMO! Visit --> https://github.com/javanile/vtiger-demo <-- 🐅**
 
 ## Development
  
