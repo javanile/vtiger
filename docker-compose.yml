@@ -12,8 +12,8 @@ services:
       - "20443:443"
     volumes:
       #- ./config.inc.php:/var/www/html/config.inc.php
-      - ./phpinfo.php:/var/www/html/phpinfo.php
-      - ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
+      #- ./phpinfo.php:/var/www/html/phpinfo.php
+      #cd- ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
       - ./volumes/logs:/var/www/html/logs
       - ./volumes/storage:/var/www/html/storage
     links:
