@@ -4,7 +4,7 @@ WORKDIR=$(echo $PWD)
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
-echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
+echo "  | vtiger ${VT_VERSION} |  " | sed 's/[\.]/./g'
 echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
 
 ## store environment variables
@@ -15,11 +15,10 @@ echo "[vtiger] starting up...";
 cd /usr/src/vtiger && mysql-import vtiger.sql && php vtiger-startup.php
 
 ## update permissions
-echo "[vtiger] update files and directories permission"
-cd /var/www/html && touch logs/php.log
-#chmod 777 tabdata.php config.inc.php parent_tabdata.php modules
-#chmod 777 -R modules/Settings layouts/vlayout/modules storage user_privileges cron/modules test logs languages cache
-#chmod 777 -R layouts/v7/modules && true
+echo "[vtiger] prepare log files"
+cd /var/www/html/logs
+touch access.log apache.log migration.log platform.log soap.log php.log
+touch cron.log installation.log security.log sqltime.log vtigercrm.log
 
 ## return to working directory
 echo "[vtiger] set working directory: ${WORKDIR}"
