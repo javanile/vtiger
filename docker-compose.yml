@@ -11,11 +11,11 @@ services:
       - "20080:80"
       - "20443:443"
     volumes:
-      #- ./config.inc.php:/var/www/html/vtiger/config.inc.php
-      - ./phpinfo.php:/var/www/html/vtiger/phpinfo.php
+      #- ./config.inc.php:/var/www/html/config.inc.php
+      - ./phpinfo.php:/var/www/html/phpinfo.php
       - ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
-      - ./volumes/logs:/var/www/html/vtiger/logs
-      - ./volumes/storage:/var/www/html/vtiger/storage
+      - ./volumes/logs:/var/www/html/logs
+      - ./volumes/storage:/var/www/html/storage
     links:
       - mysql
       - adminer
