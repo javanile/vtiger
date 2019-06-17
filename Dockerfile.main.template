@@ -6,6 +6,8 @@ ENV VT_VERSION=%%VERSION%% \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
+WORKDIR /usr/src/vtiger
+
 RUN apt-get update \
  && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
  && docker-php-ext-install zip \
@@ -16,31 +18,33 @@ RUN apt-get update \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
  && php composer.phar --ansi require javanile/http-robot:0.0.2 \
  && php composer.phar --ansi global require javanile/mysql-import:0.0.10 javanile/vtiger-cli \
- && usermod -u 1000 www-data \
- && groupmod -g 1000 www-data \
+ && usermod -u 1000 www-data && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /app /etc/apache2/ssl \
- && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
- && tar -xzf vt.tar.gz \
- && rm vt.tar.gz \
- && mv vtigercrm vtiger \
- && chmod -R 775 vtiger \
- && chown -R www-data:www-data vtiger \
- && a2enmod ssl \
- && a2enmod rewrite \
- && apt-get clean \
- && rm -rf /tmp/* /var/tmp/* \
- && rm -rf /var/lib/apt/lists/* \
- && rm -rf /etc/cron.* \
- && rm composer.phar
+ && curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz \
+ && mv vtigercrm /var/www/html \
+ && cd /var/www/html \
+ && chown -R www-data:www-data /var/www/html \
+ && find -type f -exec chmod 644 {} \; \
+ && find -type d -exec chmod 755 {} \; \
+ && chmod 777 tabdata.php config.inc.php parent_tabdata.php modules \
+ && chmod 777 -R modules/Settings layouts/vlayout/modules storage user_privileges cron/modules test logs languages cache
+ && chmod 777 -R layouts/v7/modules
+ && a2enmod ssl && a2enmod rewrite \
+ && apt-get clean && rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+
+#
+#
+# && true
+
 
 COPY php.ini /usr/local/etc/php/php.ini
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY vtiger-ssl.* /etc/apache2/ssl/
 
 ## @block: develop
-#COPY develop-install.sh /usr/local/bin/
-#RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
+COPY develop-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 ## @endblock
 
 COPY vtiger-*.sh /usr/local/bin/
@@ -48,12 +52,12 @@ COPY vtiger-*.php vtiger.json /var/www/html/
 COPY crontab /etc/cron.d/crontab
 
 ## @block: develop
-#RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
 ## @block: production
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
+#RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
 ## @endblock
 
-COPY config.inc.php config.performance.php /var/www/html/vtiger/
+COPY config.inc.php config.performance.php /var/www/html/
 
 VOLUME ["/var/www/html/vtiger/storage", "/var/www/html/vtiger/logs"]
 

@@ -20,18 +20,16 @@ RUN apt-get update \
  && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && mkdir /app /etc/apache2/ssl \
- && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
- && tar -xzf vt.tar.gz \
- && rm vt.tar.gz \
+ && curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" \
+ && tar -xzf vtiger.tar.gz \
+ && rm vtiger.tar.gz \
  && mv vtigercrm vtiger \
  && chmod -R 775 vtiger \
  && chown -R www-data:www-data vtiger \
  && a2enmod ssl \
  && a2enmod rewrite \
  && apt-get clean \
- && rm -rf /tmp/* /var/tmp/* \
- && rm -rf /var/lib/apt/lists/* \
- && rm -rf /etc/cron.* \
+ && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.* \
  && rm composer.phar
 
 COPY php.ini /usr/local/etc/php/php.ini
