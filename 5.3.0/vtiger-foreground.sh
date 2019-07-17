@@ -4,7 +4,7 @@ WORKDIR=$(echo $PWD)
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
-echo "  | vtiger ${VT_VERSION} |  " | sed 's/[\.]/./g'
+echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
 echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
 
 ## store environment variables

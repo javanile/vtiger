@@ -47,6 +47,7 @@ files=(
     vtiger-install.php
     vtiger-install.sh
     vtiger-autoload.php
+    LoggerManager.php
 )
 
 for version in "${!versions[@]}"; do
