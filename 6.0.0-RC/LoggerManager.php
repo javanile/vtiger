@@ -8,8 +8,15 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-/** Classes to avoid logging */
+$_ENV['VT_DEBUG'] = 'true, caio';
+$key = '';
+for ($i = 0; $i < strlen(trim$_ENV['VT_DEBUG']); $i++) {
+    $char = $_ENV['VT_DEBUG'][$i];
+    if ()
+        var_dump($char);
+}
 
+/** Classes to avoid logging */
 class LoggerManager
 {
 	static function getlogger($name = 'ROOT') {
@@ -31,13 +38,24 @@ class Logger
 	 * Writing log file information could cost in-terms of performance.
 	 * Enable logging based on the levels here explicitly
 	 */
-	private $enableLogLevel =  array(	
+	private $enableLogLevel = array(
+        'FATAL' => false,
 		'ERROR' => false,
-		'FATAL' => false,
+        'WARN'  => false,
 		'INFO'  => false,
-		'WARN'  => false,
 		'DEBUG' => false,
 	);
+
+    /**
+     * @var array
+     */
+    private $logLevelWeight = [
+        'FATAL' => 0,
+        'ERROR' => 1,
+        'WARN'  => 2,
+        'INFO'  => 3,
+        'DEBUG' => 4
+    ];
 
     /**
      * Logger constructor.
@@ -47,9 +65,9 @@ class Logger
      */
 	function __construct($name, $configinfo = false)
     {
+        //var_dump($_SERVER);
         var_dump($name, $configinfo);
         die();
-
 		$this->name = $name;
 		$this->configinfo = $configinfo;
 		
@@ -58,23 +76,32 @@ class Logger
 			$this->enableLogLevel['DEBUG'] = true;
 		}
 	}
-	
-	function emit($level, $message) {
 
-		if(!$this->appender) {
+    /**
+     * @param $level
+     * @param $message
+     */
+	function emit($level, $message)
+    {
+		if (!$this->appender) {
 			$filename = 'logs/vtigercrm.log';			
-			if($this->configinfo && isset($this->configinfo['appender']['File'])) {
+			if ($this->configinfo && isset($this->configinfo['appender']['File'])) {
 				$filename = $this->configinfo['appender']['File'];
 			}
 			$this->appender = new LoggerAppenderFile($filename, 0777); 
 		}
+
 		$mypid = @getmypid();
 		
 		$this->appender->emit("$level [$mypid] $this->name - ", $message);
 	}
-	
-	function info($message) {
-	    if($this->isLevelEnabled('INFO')) {
+
+    /**
+     * @param $message
+     */
+	function info($message)
+    {
+	    if ($this->isLevelEnabled('INFO')) {
             $this->emit('INFO', $message);
 		}
 	}
@@ -96,21 +123,44 @@ class Logger
 			$this->emit('FATAL', $message);
 		}		
 	}
-	
-	function error($message) {
+
+    /**
+     * @param $message
+     */
+	function error($message)
+    {
 		if($this->isLevelEnabled('ERROR')) {
 			$this->emit('ERROR', $message);
 		}
 	}
-	
-	function isLevelEnabled($level) {
-		if($this->enableLogLevel[$level] && $this->configinfo) {
-			return (strtoupper($this->configinfo['level']) == $level);
+
+    /**
+     * @param $level
+     * @return bool
+     */
+	function isLevelEnabled($level)
+    {
+		if ($this->enableLogLevel[$level] && $this->configinfo) {
+			return $this->isLevelRelevantThan($level, $this->configinfo['level']);
 		}
+
 		return false;
 	}
-	
-	function isDebugEnabled() {
+
+    /**
+     * @param $level1
+     * @param $level2
+     */
+	function isLevelRelevantThen($level1, $level2)
+    {
+        return $this->logLevelWeight[$level1] >= $this->logLevelWeight[$level2];
+    }
+
+    /**
+     * @return bool
+     */
+	function isDebugEnabled()
+    {
 		return $this->isLevelEnabled('DEBUG');
 	}
 }

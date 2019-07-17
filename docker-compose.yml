@@ -17,8 +17,7 @@ services:
       #- ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
       - ./volumes/logs:/var/www/html/logs
       - ./volumes/storage:/var/www/html/storage
-      - ./mail.php:/var/www/html/modules/Emails/mail.php:rw
-      - ./LoggerManager.php:/var/www/html/libraries/log4php/LoggerManager.php:rw
+      - ./:/var/www/html/libraries/log4php
     links:
       - mysql
       - adminer
