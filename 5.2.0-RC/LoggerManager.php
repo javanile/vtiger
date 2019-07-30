@@ -17,7 +17,7 @@ class LoggerManager
     {
         if (static::$overrideinfo === null) {
             static::$overrideinfo = [];
-            foreach (preg_split('/\\s*,\\s*/', trim(getenv['VT_DEBUG'])) as $config) {
+            foreach (preg_split('/\\s*,\\s*/', trim(getenv('VT_DEBUG'))) as $config) {
                 list($key, $value) = preg_split('/\\s*:\\s*/', $config);
                 if ($value !== null) {
                     static::$overrideinfo[strtoupper($key)] = strtoupper($value);
@@ -83,9 +83,9 @@ class Logger
     {
         $this->name = $name;
 		$this->configinfo = $configinfo;
+		$debug = getenv('VT_DEBUG') ?: null;
 
-		if ($configinfo && isset($_ENV['VT_DEBUG']) && $_ENV['VT_DEBUG'] &&
-            $_ENV['VT_DEBUG'] != 'false' && $_ENV['VT_DEBUG'] != '0') {
+		if ($configinfo && isset($debug) && $debug && strtolower($debug) != 'false' && $debug != '0') {
             foreach ($this->enableLogLevel as $level => $flag) {
                 $this->enableLogLevel[$level] = $this->isLevelRelevantThen($level, $configinfo['level']);
             }
@@ -225,7 +225,7 @@ class LoggerAppenderFile
 		$fh = fopen($this->filename, 'a');
 
 		if ($fh) {
-			$err = fwrite($fh, date('m/d/Y H:i:s') . " $prefix $message\n");
+			$err = fwrite($fh, date('Y-m-d H:i:s') . " $prefix $message\n");
 			fclose($fh);
 			die();
 		}

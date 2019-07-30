@@ -26,7 +26,7 @@ RUN apt-get update && \
     rm -fr /var/www/html && mv vtigercrm /var/www/html && \
     vtiger permissions --fix && \
     a2enmod ssl && a2enmod rewrite && \
-    apt-get clean && php composer.phar cleancache && \
+    apt-get clean && php composer.phar clearcache && \
     rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
 ## @block: develop
