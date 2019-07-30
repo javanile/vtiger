@@ -6,48 +6,41 @@ ENV VT_VERSION=7.0.0 \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
-RUN apt-get update \
- && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
- && docker-php-ext-install zip \
- && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
- && docker-php-ext-install imap \
- && docker-php-ext-install exif \
- && docker-php-ext-install mysql mysqli pdo pdo_mysql \
- && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot:0.0.2 \
- && php composer.phar --ansi global require javanile/mysql-import:0.0.10 javanile/vtiger-cli \
- && usermod -u 1000 www-data \
- && groupmod -g 1000 www-data \
- && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
- && mkdir /app /etc/apache2/ssl \
- && curl -o vt.tar.gz -sL "$VT_DOWNLOAD" \
- && tar -xzf vt.tar.gz \
- && rm vt.tar.gz \
- && mv vtigercrm vtiger \
- && chmod -R 775 vtiger \
- && chown -R www-data:www-data vtiger \
- && a2enmod ssl \
- && a2enmod rewrite \
- && apt-get clean \
- && rm -rf /tmp/* /var/tmp/* \
- && rm -rf /var/lib/apt/lists/* \
- && rm -rf /etc/cron.* \
- && rm composer.phar
+WORKDIR /usr/src/vtiger
 
-COPY php.ini /usr/local/etc/php/php.ini
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY php.ini /usr/local/etc/php/
+COPY vtiger.json /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
+COPY 000-default.conf /etc/apache2/sites-available/
 
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip && \
+    curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
+    php composer.phar --ansi require javanile/http-robot:0.0.2 && \
+    php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 && \
+    usermod -u 1000 www-data && groupmod -g 1000 www-data && \
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
+    rm -fr /var/www/html && mv vtigercrm /var/www/html && \
+    vtiger permissions --fix && \
+    a2enmod ssl && a2enmod rewrite && \
+    apt-get clean && php composer.phar clearcache && \
+    rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+
+COPY develop-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 
 COPY vtiger-*.sh /usr/local/bin/
-COPY vtiger-*.php vtiger.json /var/www/html/
+COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+COPY LoggerManager.php /var/www/html/libraries/log4php/
+COPY config.inc.php config.performance.php /var/www/html/
 
-COPY config.inc.php config.performance.php /var/www/html/vtiger/
-
-VOLUME ["/var/www/html/vtiger/storage", "/var/www/html/vtiger/logs"]
+VOLUME ["/var/www/html/storage", "/var/www/html/logs"]
 
 WORKDIR /app
 

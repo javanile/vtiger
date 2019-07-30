@@ -37,7 +37,7 @@ service apache2 start
 ## Check if apache and vtiger are ready
 ASSERT_VT=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
 if [[ "$ASSERT_VT" != "HTTP/1.1 200 OK" ]]; then exit 64; fi
-php /var/www/html/vtiger-install.php
+php /usr/src/vtiger/vtiger-install.php
 if [[ $? -ne 0 ]]; then exit 66; fi
 
 ## Export fresh database

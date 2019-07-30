@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
-source /etc/env.sh
+source /run/crond.env
 
-/var/www/html/vtiger/cron/vtigercron.sh &> /var/www/html/vtiger/logs/cron.log
+chmod +x /var/www/html/cron/vtigercron.sh
+
+/var/www/html/cron/vtigercron.sh &> /var/www/html/logs/cron.log
