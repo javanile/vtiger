@@ -59,8 +59,8 @@ for version in "${!versions[@]}"; do
     download=${download_files}$(echo ${versions[$version]} | cut -d* -f3)
 
     sed /^#/d ${template} > ${version}/Dockerfile
-    sed -e 's!%%VERSION%%!'"${version}"'!' \
-        -e 's!%%DOWNLOAD%%!'"${download}"'!' \
+    sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
+        -e 's!%%VT_DOWNLOAD%%!'"${download}"'!' \
         -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
         -ri ${version}/Dockerfile
 

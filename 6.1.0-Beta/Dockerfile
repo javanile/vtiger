@@ -1,8 +1,8 @@
 FROM php:5.6.40-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
-ENV VT_VERSION=%%VT_VERSION%% \
-    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
+ENV VT_VERSION=6.1.0-Beta \
+    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/Vtiger%20CRM%206.1.0%20Beta/Core%20Product/vtigercrm-6.1.0-ea.tar.gz \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 

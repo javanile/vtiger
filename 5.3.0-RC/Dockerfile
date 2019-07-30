@@ -1,7 +1,7 @@
 FROM orsolin/docker-php-5.3-apache
 
-ENV VT_VERSION=%%VT_VERSION%% \
-    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
+ENV VT_VERSION=5.3.0-RC \
+    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.3.0%20RC/Core%20Product/vtigercrm-5.3.0-RC.tar.gz \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
