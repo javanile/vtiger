@@ -2,7 +2,8 @@
 
 require_once __DIR__.'/vtiger-autoload.php';
 
-function encrypt_password($username, $user_password, $crypt_type = '') {
+function encrypt_password($username, $user_password, $crypt_type = '')
+{
     $salt = substr($username, 0, 2);
     if ($crypt_type == '') {
         $crypt_type = 'MD5';
@@ -18,13 +19,13 @@ function encrypt_password($username, $user_password, $crypt_type = '') {
     return $encrypted_password;
 }
 
-echo "[vtiger] looking for database...\n";
+echo "[vtiger] Looking for database...\n";
 if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
-    echo '[vtiger] database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
+    echo '[vtiger] Database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
     exit(1);
 }
 
-echo "[vtiger] update administrator settings\n";
+echo "[vtiger] Update administrator settings\n";
 if (!file_exists($lock = __DIR__.'/startup.lock')) {
     // update password
     /*

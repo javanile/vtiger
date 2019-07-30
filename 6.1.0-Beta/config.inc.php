@@ -18,6 +18,11 @@ version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTI
 //ini_set('display_errors','on'); version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
 //ini_set('display_errors','on'); error_reporting(E_ALL); // STRICT DEVELOPMENT
 
+if (getenv('VT_DEBUG') && strtolower(getenv('VT_DEBUG')) != 'false' && getenv('VT_DEBUG') != '0') {
+    ini_set('display_errors', 'on');
+    version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+}
+
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
@@ -129,10 +134,10 @@ $limitpage_navigation = '5';
 $history_max_viewed = '5';
 
 // default_module default value = Home
-$default_module = 'Home';
+$default_module = getenv('VT_DEFAULT_MODULE') ?: 'Home';
 
 // default_action default value = index
-$default_action = 'index';
+$default_action = getenv('VT_DEFAULT_ACTION') ?: 'index';
 
 // set default theme
 // default_theme default value = blue
