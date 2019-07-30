@@ -34,9 +34,6 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 
 ### Development
  
-
 ```bash
-docker-compose run --rm update
+./develop.sh
 ```
-
-&& docker-compose up --build vtiger
