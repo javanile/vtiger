@@ -6,7 +6,7 @@ services:
     build: ${VERSION}
     environment:
       #- VT_LOG4PHP_DEBUG=true
-      - VT_DEBUG=
+      - VT_DEBUG=false
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "20080:80"

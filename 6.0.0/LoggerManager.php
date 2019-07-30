@@ -8,19 +8,35 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-$_ENV['VT_DEBUG'] = 'true, caio';
-$key = '';
-for ($i = 0; $i < strlen(trim$_ENV['VT_DEBUG']); $i++) {
-    $char = $_ENV['VT_DEBUG'][$i];
-    if ()
-        var_dump($char);
-}
-
 /** Classes to avoid logging */
 class LoggerManager
 {
-	static function getlogger($name = 'ROOT') {
-		$configinfo = LoggerPropertyConfigurator::getInstance()->getConfigInfo($name);
+    static protected $overrideinfo = null;
+
+	static function getlogger($name = 'ROOT')
+    {
+        if (static::$overrideinfo === null) {
+            static::$overrideinfo = [];
+            foreach (preg_split('/\\s*,\\s*/', trim(getenv['VT_DEBUG'])) as $config) {
+                list($key, $value) = preg_split('/\\s*:\\s*/', $config);
+                if ($value !== null) {
+                    static::$overrideinfo[strtoupper($key)] = strtoupper($value);
+                } else {
+                    static::$overrideinfo['ROOT'] = strtoupper($key);
+                }
+            }
+        }
+
+	    $configinfo = LoggerPropertyConfigurator::getInstance()->getConfigInfo($name);
+
+        if ($configinfo && isset(static::$overrideinfo['ROOT'])) {
+            $configinfo['level'] = static::$overrideinfo['ROOT'];
+        }
+
+        if ($configinfo && isset(static::$overrideinfo[$name])) {
+            $configinfo['level'] = static::$overrideinfo[$name];
+        }
+
 		return new Logger($name, $configinfo);
 	}
 }
@@ -65,14 +81,18 @@ class Logger
      */
 	function __construct($name, $configinfo = false)
     {
-        //var_dump($_SERVER);
-        var_dump($name, $configinfo);
-        die();
-		$this->name = $name;
+        $this->name = $name;
 		$this->configinfo = $configinfo;
-		
+
+		if ($configinfo && isset($_ENV['VT_DEBUG']) && $_ENV['VT_DEBUG'] &&
+            $_ENV['VT_DEBUG'] != 'false' && $_ENV['VT_DEBUG'] != '0') {
+            foreach ($this->enableLogLevel as $level => $flag) {
+                $this->enableLogLevel[$level] = $this->isLevelRelevantThen($level, $configinfo['level']);
+            }
+        }
+
 		/** For migration log-level we need debug turned-on */
-		if(strtoupper($name) == 'MIGRATION') {
+		if (strtoupper($name) == 'MIGRATION') {
 			$this->enableLogLevel['DEBUG'] = true;
 		}
 	}
@@ -153,7 +173,7 @@ class Logger
      */
 	function isLevelRelevantThen($level1, $level2)
     {
-        return $this->logLevelWeight[$level1] >= $this->logLevelWeight[$level2];
+        return $this->logLevelWeight[$level1] <= $this->logLevelWeight[$level2];
     }
 
     /**
@@ -203,9 +223,11 @@ class LoggerAppenderFile
 			}
 		}
 		$fh = fopen($this->filename, 'a');
+
 		if ($fh) {
-			fwrite($fh, date('m/d/Y H:i:s') . " $prefix $message\n");
+			$err = fwrite($fh, date('m/d/Y H:i:s') . " $prefix $message\n");
 			fclose($fh);
+			die();
 		}
 	}
 }

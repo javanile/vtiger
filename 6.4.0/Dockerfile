@@ -1,8 +1,8 @@
 FROM php:5.6.40-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
-ENV VT_VERSION=6.4.0 \
-    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.4.0/Core%20Product/vtigercrm6.4.0.tar.gz \
+ENV VT_VERSION=%%VT_VERSION%% \
+    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
@@ -19,7 +19,7 @@ RUN apt-get update \
  && docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip \
  && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
  && php composer.phar --ansi require javanile/http-robot:0.0.2 \
- && php composer.phar --ansi global require javanile/mysql-import:0.0.10 javanile/vtiger-cli:0.0.3 \
+ && php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 \
  && usermod -u 1000 www-data && groupmod -g 1000 www-data \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
  && curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz \

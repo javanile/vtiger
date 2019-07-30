@@ -1,7 +1,7 @@
 FROM orsolin/docker-php-5.3-apache
 
-ENV VT_VERSION=5.2.0-VB2 \
-    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.2.0%20VB2/vtigercrm-5.2.0-vb2.tar.gz \
+ENV VT_VERSION=%%VT_VERSION%% \
+    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 

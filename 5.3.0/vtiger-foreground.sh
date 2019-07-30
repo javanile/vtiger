@@ -12,7 +12,7 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 
 ## import database using environment variables
 echo "[vtiger] starting up...";
-cd /usr/src/vtiger && mysql-import vtiger.sql && php vtiger-startup.php
+cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import vtiger.sql && php vtiger-startup.php
 
 ## update permissions
 echo "[vtiger] prepare log files"

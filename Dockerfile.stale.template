@@ -1,8 +1,8 @@
 ## Vtiger CRM %%VERSION%%
 FROM orsolin/docker-php-5.3-apache
 
-ENV VT_VERSION=%%VERSION%% \
-    VT_DOWNLOAD=%%DOWNLOAD%% \
+ENV VT_VERSION=%%VT_VERSION%% \
+    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
