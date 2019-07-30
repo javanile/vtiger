@@ -19,7 +19,7 @@ function encrypt_password($username, $user_password, $crypt_type = '')
     return $encrypted_password;
 }
 
-echo "[vtiger] looking for database...\n";
+echo "[vtiger] Looking for database...\n";
 if (!$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)) {
     echo '[vtiger] Database: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
     exit(1);

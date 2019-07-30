@@ -222,12 +222,12 @@ class LoggerAppenderFile
 				chmod($this->filename, $this->chmod);
 			}
 		}
+
 		$fh = fopen($this->filename, 'a');
 
 		if ($fh) {
 			$err = fwrite($fh, date('Y-m-d H:i:s') . " $prefix $message\n");
 			fclose($fh);
-			die();
 		}
 	}
 }
