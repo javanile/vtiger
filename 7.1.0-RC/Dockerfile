@@ -13,20 +13,21 @@ COPY vtiger.json /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
 
-RUN apt-get update \
- && apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip \
- && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
- && docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip \
- && curl -o composer.phar -sL https://getcomposer.org/composer.phar \
- && php composer.phar --ansi require javanile/http-robot:0.0.2 \
- && php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 \
- && usermod -u 1000 www-data && groupmod -g 1000 www-data \
- && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
- && curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz \
- && rm -fr /var/www/html && mv vtigercrm /var/www/html \
- && vtiger permissions --fix \
- && a2enmod ssl && a2enmod rewrite \
- && apt-get clean && rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip && \
+    curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
+    php composer.phar --ansi require javanile/http-robot:0.0.2 && \
+    php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 && \
+    usermod -u 1000 www-data && groupmod -g 1000 www-data && \
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
+    rm -fr /var/www/html && mv vtigercrm /var/www/html && \
+    vtiger permissions --fix && \
+    a2enmod ssl && a2enmod rewrite && \
+    apt-get clean && php composer.phar cleancache && \
+    rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
 COPY develop-install.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
@@ -36,7 +37,6 @@ COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
 RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
-
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
 
