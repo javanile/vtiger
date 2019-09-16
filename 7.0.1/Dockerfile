@@ -1,4 +1,4 @@
-FROM php:5.6.40-apache
+FROM php:7.2.22-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
 ENV VT_VERSION=7.0.1 \
@@ -16,7 +16,7 @@ COPY 000-default.conf /etc/apache2/sites-available/
 RUN apt-get update && \
     apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-    docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip && \
+    docker-php-ext-install imap exif mysqli pdo pdo_mysql zip && \
     curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
     php composer.phar --ansi require javanile/http-robot:0.0.2 && \
     php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 && \

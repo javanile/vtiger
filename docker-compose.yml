@@ -3,14 +3,14 @@ version: '2'
 services:
 
   vtiger:
-    build: ${VERSION}
+    build: ${version}
     environment:
       - VT_DEBUG=true
       #- VT_LOG4PHP_DEBUG=true
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - "20080:80"
-      - "20443:443"
+      - 20080:80
+      - 20443:443
     volumes:
       #- ./config.inc.php:/var/www/html/config.inc.php
       #- ./phpinfo.php:/var/www/html/phpinfo.php
@@ -27,7 +27,7 @@ services:
       - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - "20081:8080"
+      - 20081:8080
     links:
       - mysql
 
@@ -39,10 +39,19 @@ services:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
 
+  clean:
+    image: debian
+    working_dir: /vtiger
+    entrypoint:
+      - /vtiger/clean.sh
+    volumes:
+      - ./:/vtiger:rw
+
   update:
     image: debian
     working_dir: /vtiger
-    entrypoint: ['/vtiger/update.sh']
+    entrypoint:
+      - /vtiger/update.sh
     volumes:
       - ./:/vtiger:rw
 

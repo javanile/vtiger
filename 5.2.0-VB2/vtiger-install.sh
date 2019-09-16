@@ -5,11 +5,20 @@ export DEBIAN_FRONTEND=noninteractive
 
 ## Install MySQL
 if [[ $@ == *'--install-mysql'* ]]; then
+    ## ============================================================ ##
+    ## IMPORTANT NOTICE!                                            ##
+    ## This docker image use an external mysql database service.    ##
+    ## During build process will be installed a database server     ##
+    ## with the sole purpose of creating a database dump to allow   ##
+    ## auto installation and files preparations for future uses.    ##
+    ## The database will be immediately removed without affecting   ##
+    ## image size, keeping all free from unnecessary dependencies.  ##                                     ##
+    ## ============================================================ ##
     apt-get update
-    echo "mariadb-server-10.1 mysql-server/root_password password root" | debconf-set-selections
-    echo "mariadb-server-10.1 mysql-server/root_password_again password root" | debconf-set-selections
+    echo "mariadb-server-10.3 mysql-server/root_password password root" | debconf-set-selections
+    echo "mariadb-server-10.3 mysql-server/root_password_again password root" | debconf-set-selections
 
-    apt-get install -y --no-install-recommends mariadb-server-10.1
+    apt-get install -y --no-install-recommends mariadb-server-10.3
 
     service mysql start
 

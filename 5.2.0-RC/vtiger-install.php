@@ -132,7 +132,7 @@ $vtrftk = $robot->post(
     [
         '__vtrftk' => $vtrftk,
         'currency_name' => 'Euro',
-        'lang_name' => 'it_it',
+        'lang_name' => 'en_us',
         'time_zone' => 'Europe/Amsterdam',
         'date_format' => 'dd-mm-yyyy',
     ],
