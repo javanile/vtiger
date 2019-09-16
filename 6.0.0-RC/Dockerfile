@@ -3,6 +3,7 @@ LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
 ENV VT_VERSION=6.0.0-RC \
     VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.0%20RC/Core%20Product/vtigercrm-6.0.0rc.tar.gz \
+    DATABASE_PACKAGE=mariadb-server-10.1 \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 

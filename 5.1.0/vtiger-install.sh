@@ -15,10 +15,10 @@ if [[ $@ == *'--install-mysql'* ]]; then
     ## image size, keeping all free from unnecessary dependencies.  ##                                     ##
     ## ============================================================ ##
     apt-get update
-    echo "mariadb-server-10.3 mysql-server/root_password password root" | debconf-set-selections
-    echo "mariadb-server-10.3 mysql-server/root_password_again password root" | debconf-set-selections
+    echo "${DATABASE_PACKAGE} mysql-server/root_password password root" | debconf-set-selections
+    echo "${DATABASE_PACKAGE} mysql-server/root_password_again password root" | debconf-set-selections
 
-    apt-get install -y --no-install-recommends mariadb-server-10.3
+    apt-get install -y --no-install-recommends ${DATABASE_PACKAGE}
 
     service mysql start
 

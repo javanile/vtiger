@@ -3,6 +3,7 @@ LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
 ENV VT_VERSION=%%VT_VERSION%% \
     VT_DOWNLOAD=%%VT_DOWNLOAD%% \
+    DATABASE_PACKAGE=%%DATABASE_PACKAGE%% \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
