@@ -11,9 +11,9 @@
 /** Classes to avoid logging */
 class LoggerManager
 {
-    static protected $overrideinfo = null;
+    protected static $overrideinfo = null;
 
-	static function getlogger($name = 'ROOT')
+    public static function getlogger($name = 'ROOT')
     {
         if (static::$overrideinfo === null) {
             static::$overrideinfo = [];
@@ -27,7 +27,7 @@ class LoggerManager
             }
         }
 
-	    $configinfo = LoggerPropertyConfigurator::getInstance()->getConfigInfo($name);
+        $configinfo = LoggerPropertyConfigurator::getInstance()->getConfigInfo($name);
 
         if ($configinfo && isset(static::$overrideinfo['ROOT'])) {
             $configinfo['level'] = static::$overrideinfo['ROOT'];
@@ -37,8 +37,8 @@ class LoggerManager
             $configinfo['level'] = static::$overrideinfo[$name];
         }
 
-		return new Logger($name, $configinfo);
-	}
+        return new Logger($name, $configinfo);
+    }
 }
 
 /**
@@ -46,21 +46,21 @@ class LoggerManager
  */
 class Logger
 {
-	private $name = false;
-	private $appender = false;
-	private $configinfo = false;
-	
-	/**
-	 * Writing log file information could cost in-terms of performance.
-	 * Enable logging based on the levels here explicitly
-	 */
-	private $enableLogLevel = array(
+    private $name = false;
+    private $appender = false;
+    private $configinfo = false;
+
+    /**
+     * Writing log file information could cost in-terms of performance.
+     * Enable logging based on the levels here explicitly.
+     */
+    private $enableLogLevel = [
         'FATAL' => false,
-		'ERROR' => false,
+        'ERROR' => false,
         'WARN'  => false,
-		'INFO'  => false,
-		'DEBUG' => false,
-	);
+        'INFO'  => false,
+        'DEBUG' => false,
+    ];
 
     /**
      * @var array
@@ -70,7 +70,7 @@ class Logger
         'ERROR' => 1,
         'WARN'  => 2,
         'INFO'  => 3,
-        'DEBUG' => 4
+        'DEBUG' => 4,
     ];
 
     /**
@@ -79,99 +79,103 @@ class Logger
      * @param $name
      * @param bool $configinfo
      */
-	function __construct($name, $configinfo = false)
+    public function __construct($name, $configinfo = false)
     {
         $this->name = $name;
-		$this->configinfo = $configinfo;
-		$debug = getenv('VT_DEBUG') ?: null;
+        $this->configinfo = $configinfo;
+        $debug = getenv('VT_DEBUG') ?: null;
 
-		if ($configinfo && isset($debug) && $debug && strtolower($debug) != 'false' && $debug != '0') {
+        if ($configinfo && isset($debug) && $debug && strtolower($debug) != 'false' && $debug != '0') {
             foreach ($this->enableLogLevel as $level => $flag) {
                 $this->enableLogLevel[$level] = $this->isLevelRelevantThen($level, $configinfo['level']);
             }
         }
 
-		/** For migration log-level we need debug turned-on */
-		if (strtoupper($name) == 'MIGRATION') {
-			$this->enableLogLevel['DEBUG'] = true;
-		}
-	}
+        /* For migration log-level we need debug turned-on */
+        if (strtoupper($name) == 'MIGRATION') {
+            $this->enableLogLevel['DEBUG'] = true;
+        }
+    }
 
     /**
      * @param $level
      * @param $message
      */
-	function emit($level, $message)
+    public function emit($level, $message)
     {
-		if (!$this->appender) {
-			$filename = 'logs/vtigercrm.log';			
-			if ($this->configinfo && isset($this->configinfo['appender']['File'])) {
-				$filename = $this->configinfo['appender']['File'];
-			}
-			$this->appender = new LoggerAppenderFile($filename, 0777); 
-		}
+        if (!$this->appender) {
+            $filename = 'logs/vtigercrm.log';
+            if ($this->configinfo && isset($this->configinfo['appender']['File'])) {
+                $filename = $this->configinfo['appender']['File'];
+            }
+            $this->appender = new LoggerAppenderFile($filename, 0777);
+        }
 
-		$mypid = @getmypid();
-		
-		$this->appender->emit("$level [$mypid] $this->name - ", $message);
-	}
+        $mypid = @getmypid();
+
+        $this->appender->emit("$level [$mypid] $this->name - ", $message);
+    }
 
     /**
      * @param $message
      */
-	function info($message)
+    public function info($message)
     {
-	    if ($this->isLevelEnabled('INFO')) {
+        if ($this->isLevelEnabled('INFO')) {
             $this->emit('INFO', $message);
-		}
-	}
-	
-	function debug($message) {
-		if($this->isDebugEnabled()) {
-			$this->emit('DEBUG', $message);
-		}
-	}
-	
-	function warn($message) {
-		if($this->isLevelEnabled('WARN')) {
-			$this->emit('WARN', $message);
-		}
-	}
-	
-	function fatal($message) {
-		if($this->isLevelEnabled('FATAL')) {
-			$this->emit('FATAL', $message);
-		}		
-	}
+        }
+    }
+
+    public function debug($message)
+    {
+        if ($this->isDebugEnabled()) {
+            $this->emit('DEBUG', $message);
+        }
+    }
+
+    public function warn($message)
+    {
+        if ($this->isLevelEnabled('WARN')) {
+            $this->emit('WARN', $message);
+        }
+    }
+
+    public function fatal($message)
+    {
+        if ($this->isLevelEnabled('FATAL')) {
+            $this->emit('FATAL', $message);
+        }
+    }
 
     /**
      * @param $message
      */
-	function error($message)
+    public function error($message)
     {
-		if($this->isLevelEnabled('ERROR')) {
-			$this->emit('ERROR', $message);
-		}
-	}
+        if ($this->isLevelEnabled('ERROR')) {
+            $this->emit('ERROR', $message);
+        }
+    }
 
     /**
      * @param $level
+     *
      * @return bool
      */
-	function isLevelEnabled($level)
+    public function isLevelEnabled($level)
     {
-		if ($this->enableLogLevel[$level] && $this->configinfo) {
-			return $this->isLevelRelevantThan($level, $this->configinfo['level']);
-		}
+        if ($this->enableLogLevel[$level] && $this->configinfo) {
+            return $this->isLevelRelevantThan($level, $this->configinfo['level']);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * @param $level1
      * @param $level2
      */
-	function isLevelRelevantThen($level1, $level2)
+    public function isLevelRelevantThen($level1, $level2)
     {
         return $this->logLevelWeight[$level1] <= $this->logLevelWeight[$level2];
     }
@@ -179,10 +183,10 @@ class Logger
     /**
      * @return bool
      */
-	function isDebugEnabled()
+    public function isDebugEnabled()
     {
-		return $this->isLevelEnabled('DEBUG');
-	}
+        return $this->isLevelEnabled('DEBUG');
+    }
 }
 
 /**
@@ -193,41 +197,42 @@ class LoggerAppenderFile
     /**
      * @var
      */
-	private $filename;
+    private $filename;
 
     /**
      * @var int
      */
-	private $chmod;
+    private $chmod;
 
     /**
      * LoggerAppenderFile constructor.
+     *
      * @param $filename
      * @param int $chmod
      */
-	function __construct($filename, $chmod = 0222)
+    public function __construct($filename, $chmod = 0222)
     {
-		$this->filename = $filename;
-		$this->chmod    = $chmod;
-	}
+        $this->filename = $filename;
+        $this->chmod = $chmod;
+    }
 
     /**
      * @param $prefix
      * @param $message
      */
-	function emit($prefix, $message)
+    public function emit($prefix, $message)
     {
-		if ($this->chmod != 0777 && file_exists($this->filename)) {
-			if (is_readable($this->filename)) {
-				chmod($this->filename, $this->chmod);
-			}
-		}
+        if ($this->chmod != 0777 && file_exists($this->filename)) {
+            if (is_readable($this->filename)) {
+                chmod($this->filename, $this->chmod);
+            }
+        }
 
-		$fh = fopen($this->filename, 'a');
+        $fh = fopen($this->filename, 'a');
 
-		if ($fh) {
-			$err = fwrite($fh, date('Y-m-d H:i:s') . " $prefix $message\n");
-			fclose($fh);
-		}
-	}
+        if ($fh) {
+            $err = fwrite($fh, date('Y-m-d H:i:s')." $prefix $message\n");
+            fclose($fh);
+        }
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 define('DB_HOST', $_ENV['MYSQL_HOST'] ?: 'mysql');
 define('DB_PORT', $_ENV['MYSQL_PORT'] ?: '3306');
 define('DB_NAME', $_ENV['MYSQL_DATABASE'] ?: 'vtiger');
