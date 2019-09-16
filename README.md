@@ -36,7 +36,7 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 
 **LOOKING FOR FAST DEMO! Visit --> https://github.com/javanile/vtiger-demo <--**
 
-## PHP Versions
+## PHP versions
 
 | Vtiger CRM                                                                                       | PHP      |
 |--------------------------------------------------------------------------------------------------|----------|
