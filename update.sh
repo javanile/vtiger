@@ -29,11 +29,13 @@ for version in "${!versions[@]}"; do
 
     template=Dockerfile.$(echo ${versions[$version]} | cut -d* -f1).template
     php_version=$(echo ${versions[$version]} | cut -d* -f2)
-    download=${download_files}$(echo ${versions[$version]} | cut -d* -f3)
+    directory=$(echo ${versions[$version]} | cut -d* -f3)
+    download=${download_files}$(echo ${versions[$version]} | cut -d* -f4)
 
     sed /^#/d ${template} > ${version}/Dockerfile
     sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
         -e 's!%%VT_DOWNLOAD%%!'"${download}"'!' \
+        -e 's!%%VT_DIRECTORY%%!'"${directory}"'!' \
         -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
         -ri ${version}/Dockerfile
 

@@ -23,7 +23,7 @@ RUN apt-get update && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
-    rm -fr /var/www/html && mv vtigercrm /var/www/html && \
+    rm -fr /var/www/html && mv "vtigercrm" /var/www/html && \
     vtiger permissions --fix && \
     a2enmod ssl && a2enmod rewrite && \
     apt-get clean && php composer.phar clearcache && \
