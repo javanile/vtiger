@@ -93,14 +93,14 @@ if (trim(getenv('VT_SITE_URL'))) {
     $_SERVER['HTTP_HOST'] = parse_url(trim(getenv('VT_SITE_URL')), PHP_URL_HOST);
     if (preg_match('/^https/i', trim(getenv('VT_SITE_URL')))) {
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] .= $_SERVER['HTTP_PORT'] && $_SERVER['HTTP_PORT'] != 443 ? ':' . $_SERVER['HTTP_PORT'] : '';
+        $_SERVER['HTTP_HOST'] .= $_SERVER['HTTP_PORT'] && $_SERVER['HTTP_PORT'] != 443 ? ':'.$_SERVER['HTTP_PORT'] : '';
     } else {
-        $_SERVER['HTTP_HOST'] .= $_SERVER['HTTP_PORT'] && $_SERVER['HTTP_PORT'] != 80 ? ':' . $_SERVER['HTTP_PORT'] : '';
+        $_SERVER['HTTP_HOST'] .= $_SERVER['HTTP_PORT'] && $_SERVER['HTTP_PORT'] != 80 ? ':'.$_SERVER['HTTP_PORT'] : '';
     }
 }
 
 // Update $site_URL using VT_SITE_URL envrionment varible
-$site_URL = 'http'.(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . '/';
+$site_URL = 'http'.(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '').'://'.$_SERVER['HTTP_HOST'].'/';
 
 // url for customer portal (Example: http://vtiger.com/portal)
 $PORTAL_URL = $site_URL.'/customerportal';
