@@ -1,9 +1,9 @@
-FROM php:5.6.40-apache
+FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
 ENV VT_VERSION=6.0.0 \
     VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%206.0.0/Core%20Product/vtigercrm6.0.0.tar.gz \
-    DATABASE_PACKAGE=mariadb-server-10.1 \
+    DATABASE_PACKAGE=mysql-server-5.5 \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
@@ -30,11 +30,13 @@ RUN apt-get update && \
     apt-get clean && php composer.phar clearcache && \
     rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
+COPY develop-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
 

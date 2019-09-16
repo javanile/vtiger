@@ -1,5 +1,7 @@
 <?php
 
+define('VT_VERSION', getenv('VT_VERSION'));
+
 define('DB_HOST', '127.0.0.1');
 define('DB_PORT', '3306');
 define('DB_NAME', 'vtiger');
@@ -58,6 +60,9 @@ $values = $robot->post(
 );
 echo "[vtiger] #2 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
+echo $values['@text'];
+exit(1);
+
 // Confirm installation
 $values = $robot->post(
     'index.php',
@@ -86,13 +91,15 @@ $values = $robot->post(
     ['__vtrftk', '@text']
 );
 
-if (!$values['__vtrftk']) {
-    echo "[vtiger] install error on industry selector\n";
-    echo $values['@text'];
-    exit(1);
-}
+if (version_compare(VT_VERSION, '7.0.0', '>=')) {
+    if (!$values['__vtrftk']) {
+        echo "[vtiger] install error on industry selector\n";
+        echo $values['@text'];
+        exit(1);
+    }
 
-echo "[vtiger] #4 form-token: '{$values['__vtrftk']}'\n";
+    echo "[vtiger] #4 form-token: '{$values['__vtrftk']}'\n";
+}
 
 // /index.php?module=Users&parent=Settings&view=SystemSetup
 // First login
@@ -108,6 +115,7 @@ $vtrftk = $robot->post(
 
 if (!$vtrftk) {
     echo "[vtiger] install error on first login.\n";
+    echo $values['@text'];
     exit(1);
 }
 
