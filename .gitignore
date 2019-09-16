@@ -5,3 +5,4 @@ mysql/
 npm-debug.log
 develop-install.sh
 !/develop-install.sh
+build.log

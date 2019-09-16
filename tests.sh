@@ -9,5 +9,5 @@ for version in "${!versions[@]}"; do
     export version=$version
     echo "=====[ TEST BUILD ${version} ]====="
     docker-compose down -v --remove-orphans
-    docker-compose build vtiger
+    docker-compose build vtiger > build.log
 done
