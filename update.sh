@@ -21,6 +21,7 @@ files=(
     vtiger-install.php
     vtiger-install.sh
     vtiger-autoload.php
+    vtiger-functions.php
     LoggerManager.php
 )
 
