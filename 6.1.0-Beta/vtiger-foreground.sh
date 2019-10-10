@@ -16,7 +16,7 @@ cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import vtiger.sql && php vtig
 
 ## fill current mounted volume
 echo "[vtiger] Update volume: /var/lib/vtiger"
-symvol move /usr/src/vtiger/volume /var/lib/vtiger
+symvol copy /usr/src/vtiger/volume /var/lib/vtiger
 symvol link /var/lib/vtiger /var/www/html
 
 ## update permissions
