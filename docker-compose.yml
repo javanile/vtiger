@@ -6,16 +6,16 @@ services:
     build: ${version}
     environment:
       - VT_DEBUG=false
-      #- VT_LOG4PHP_DEBUG=true
+#     - LOG4PHP_DEBUG=true
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - 20080:80
       - 20443:443
     volumes:
-      #- ./config.inc.php:/var/www/html/config.inc.php
-      #- ./phpinfo.php:/var/www/html/phpinfo.php
-      #- ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
       - ./vtiger:/var/lib/vtiger
+#     - ./phpinfo.php:/var/www/html/phpinfo.php
+#     - ./config.inc.php:/var/www/html/config.inc.php
+#     - ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
     links:
       - mysql
       - adminer
