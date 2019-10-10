@@ -18,19 +18,17 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog zip unzip && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip && \
-    curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
-    php composer.phar --ansi require javanile/http-robot:0.0.2 && \
-    php composer.phar --ansi global require javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 && \
+    curl -o composer -sL https://getcomposer.org/composer.phar && \
+    php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.4 && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
-    rm -fr /var/www/html && mv "vtigercrm" /var/www/html && \
-    vtiger permissions --fix && \
+    rm -fr /var/www/html && mv "vtigercrm" /var/www/html && vtiger permissions --fix && \
     curl -o /usr/local/bin/symvol -sL https://javanile.github.io/symvol/symvol.sh && chmod +x /usr/local/bin/symvol && \
     mv .symvol /var/www/html && mkdir -p volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
-    apt-get clean && php composer.phar clearcache && \
-    rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+    apt-get clean && php composer clearcache && \
+    rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/

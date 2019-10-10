@@ -27,8 +27,8 @@ RUN apt-get update && \
     curl -o /usr/local/bin/symvol -sL https://javanile.github.io/symvol/symvol.sh && chmod +x /usr/local/bin/symvol && \
     mv .symvol /var/www/html && mkdir -p volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
-    apt-get clean && php composer.phar clearcache && \
-    rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+    apt-get clean && php composer clearcache && \
+    rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
 ## @block: develop
 #COPY develop-install.sh /usr/local/bin/
