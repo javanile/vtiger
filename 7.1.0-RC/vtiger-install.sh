@@ -28,9 +28,14 @@ if [[ $@ == *'--install-mysql'* ]]; then
                      UPDATE mysql.user SET password = PASSWORD('vtiger') WHERE user = 'vtiger'; \
                      GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
                      FLUSH PRIVILEGES;"
+
+    service mysql stop
+    echo "[mysqld]" >> /etc/mysql/my.cnf
+    echo "sql_mode = ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/my.cnf
+    service mysql start
 fi
 
-## Install MySQL
+## Assert MySQL
 if [[ $@ == *'--assert-mysql'* ]]; then
     service mysql start
     ## Check if database exists
@@ -59,6 +64,11 @@ if [[ $@ == *'--dump'* ]]; then
         echo "---(vtiger.sql END)----"
         exit 67;
     fi
+fi
+
+## Export fresh database
+if [[ $@ == *'--volume'* ]]; then
+    symvol move /var/www/html volume
 fi
 
 ## Uninstall MySQL

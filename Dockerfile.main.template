@@ -10,12 +10,12 @@ ENV VT_VERSION=%%VT_VERSION%% \
 WORKDIR /usr/src/vtiger
 
 COPY php.ini /usr/local/etc/php/
-COPY vtiger.json /usr/src/vtiger/
+COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
 
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
+    apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog zip unzip && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip && \
     curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
@@ -26,6 +26,8 @@ RUN apt-get update && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
     rm -fr /var/www/html && mv "%%VT_DIRECTORY%%" /var/www/html && \
     vtiger permissions --fix && \
+    curl -o /usr/local/bin/symvol -sL https://javanile.github.io/symvol/symvol.sh && chmod +x /usr/local/bin/symvol && \
+    mv .symvol /var/www/html && mkdir -p volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
     apt-get clean && php composer.phar clearcache && \
     rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
@@ -39,14 +41,14 @@ COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
 ## @block: develop
-#RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+#RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --volume --remove-mysql
 ## @block: production
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --volume --remove-mysql
 ## @endblock
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
 
-VOLUME ["/var/www/html/storage", "/var/www/html/logs"]
+VOLUME ["/var/lib/vtiger"]
 
 WORKDIR /app
 

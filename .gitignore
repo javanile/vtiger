@@ -1,5 +1,5 @@
 .idea/
-volumes/
+vtiger/
 node_modules/
 mysql/
 npm-debug.log

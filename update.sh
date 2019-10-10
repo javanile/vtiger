@@ -4,6 +4,7 @@ set -e
 source versions.sh
 
 files=(
+    .symvol
     000-default.conf
     config.inc.php
     config.performance.php

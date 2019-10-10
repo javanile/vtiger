@@ -60,9 +60,6 @@ $values = $robot->post(
 );
 echo "[vtiger] #2 form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
-echo $values['@text'];
-exit(1);
-
 // Confirm installation
 $values = $robot->post(
     'index.php',

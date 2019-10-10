@@ -1,0 +1,5 @@
+.symvol
+logs/
+test/
+storage/
+user_privileges/

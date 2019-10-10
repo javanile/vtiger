@@ -14,6 +14,11 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 echo "[vtiger] Starting up...";
 cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import vtiger.sql && php vtiger-startup.php
 
+## fill current mounted volume
+echo "[vtiger] Update volume: /var/lib/vtiger"
+symvol move /usr/src/vtiger/volume /var/lib/vtiger
+symvol link /var/lib/vtiger /var/www/html
+
 ## update permissions
 echo "[vtiger] Prepare log files"
 cd /var/www/html/logs

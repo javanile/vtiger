@@ -5,7 +5,7 @@ services:
   vtiger:
     build: ${version}
     environment:
-      - VT_DEBUG=true
+      - VT_DEBUG=false
       #- VT_LOG4PHP_DEBUG=true
       - MYSQL_ROOT_PASSWORD=secret
     ports:
@@ -15,8 +15,7 @@ services:
       #- ./config.inc.php:/var/www/html/config.inc.php
       #- ./phpinfo.php:/var/www/html/phpinfo.php
       #- ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
-      - ./volumes/logs:/var/www/html/logs
-      - ./volumes/storage:/var/www/html/storage
+      - ./vtiger:/var/lib/vtiger
     links:
       - mysql
       - adminer

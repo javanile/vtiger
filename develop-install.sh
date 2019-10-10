@@ -18,3 +18,8 @@ mysql -uroot -e "CREATE DATABASE IF NOT EXISTS vtiger; \
                  UPDATE mysql.user SET password = PASSWORD('vtiger') WHERE user = 'vtiger'; \
                  GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
                  FLUSH PRIVILEGES;"
+
+service mysql stop
+echo "[mysqld]" >> /etc/mysql/my.cnf
+echo "sql_mode = ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/my.cnf
+service mysql start
