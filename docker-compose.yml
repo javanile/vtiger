@@ -5,7 +5,7 @@ services:
   vtiger:
     build: ${version}
     environment:
-      - VT_DEBUG=false
+      - VT_DEBUG=true
 #     - LOG4PHP_DEBUG=true
       - MYSQL_ROOT_PASSWORD=secret
     ports:

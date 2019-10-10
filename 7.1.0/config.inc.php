@@ -18,9 +18,9 @@ version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTI
 //ini_set('display_errors','on'); version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
 //ini_set('display_errors','on'); error_reporting(E_ALL); // STRICT DEVELOPMENT
 
-if (getenv('VT_DEBUG') && strtolower(getenv('VT_DEBUG')) != 'false' && getenv('VT_DEBUG') != '0') {
+if (getenv('VT_DEBUG') && !in_array(strtolower(getenv('VT_DEBUG')), ['false', '0'])) {
     ini_set('display_errors', 'on');
-    version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+    error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 }
 
 include 'vtigerversion.php';
