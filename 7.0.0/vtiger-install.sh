@@ -71,6 +71,11 @@ if [[ $@ == *'--volume'* ]]; then
     symvol move /var/www/html volume
 fi
 
+## Apply
+if [[ $@ == *'--patch'* ]]; then
+    sed -e 's!realpath(!__realpath(!' -ri /var/www/html/vtlib/Vtiger/Deprecated.php
+fi
+
 ## Uninstall MySQL
 if [[ $@ == *'--remove-mysql'* ]]; then
     service mysql stop

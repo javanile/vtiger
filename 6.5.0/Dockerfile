@@ -24,7 +24,6 @@ RUN apt-get update && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
     rm -fr /var/www/html && mv "vtigercrm" /var/www/html && vtiger permissions --fix && \
-    sed -e 's!realpath(!__realpath(!' -ri /var/www/html/vtlib/Vtiger/Deprecated.php && \
     curl -o /usr/local/bin/symvol -sL https://javanile.github.io/symvol/symvol.sh && chmod +x /usr/local/bin/symvol && \
     mv .symvol /var/www/html && mkdir -p volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
@@ -35,7 +34,7 @@ COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --volume --remove-mysql
+RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --volume --patch --remove-mysql
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
 
