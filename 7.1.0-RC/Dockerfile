@@ -34,7 +34,7 @@ COPY develop-install.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
-COPY crontab /etc/cron.d/crontab
+COPY crontab /etc/cron.d/
 
 RUN chmod +x /usr/local/bin/vtiger-*.sh && \
     vtiger-install.sh --assert-mysql --dump --patch --remove-mysql && \

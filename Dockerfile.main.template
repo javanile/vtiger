@@ -36,7 +36,7 @@ RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
 ## @endblock
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
-COPY crontab /etc/cron.d/crontab
+COPY crontab /etc/cron.d/
 
 ## @block: develop
 RUN chmod +x /usr/local/bin/vtiger-*.sh && \
