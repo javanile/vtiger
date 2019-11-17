@@ -5,8 +5,8 @@ WORKDIR=$(echo $PWD)
 ## run apache for debugging
 mkdir -p /var/lib/vtiger/logs
 service apache2 start >/dev/null 2>&1
-mv /var/www/html/index.php /var/www/html/index.php.0
-debug() { echo "<h1>$1</h1><script>setTimeout(function(){window.location.reload(1)},5000)</script>" > /var/www/html/index.php; }
+cp /var/www/html/index.php /var/www/html/index.php.0
+debug() { sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.html > /var/www/html/index.php; }
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
@@ -17,19 +17,21 @@ echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
 printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /run/crond.env
 
 ## import database using environment variables
-echo "[vtiger] Starting up..."
+cd /usr/src/vtiger
 debug "Waiting for database preparation..."
-cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import --do-while vtiger.sql && php vtiger-startup.php
+echo "[vtiger] Waiting for available database..."
+echo -n "[vtiger] " && mysql-import --do-while vtiger.sql
+#php vtiger-startup.php
 
 ## fill current mounted volume
-echo "[vtiger] Update volume: /var/lib/vtiger"
 debug "Waiting for volume preparation..."
+echo "[vtiger] Waiting for preparation volume: /var/lib/vtiger"
 symvol copy /usr/src/vtiger/volume /var/lib/vtiger && symvol mode /var/lib/vtiger www-data:www-data
 symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:www-data
 
 ## update permissions
-echo "[vtiger] Prepare log files"
 cd /var/lib/vtiger/logs
+echo "[vtiger] Waiting logs preparation..."
 touch access.log apache.log migration.log platform.log soap.log php.log
 touch cron.log installation.log security.log sqltime.log vtigercrm.log
 
