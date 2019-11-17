@@ -2,8 +2,9 @@
 set -e
 WORKDIR=$(echo $PWD)
 
-## run apache for startup debug
-service apache2 start
+## run apache for debugging
+mkdir -p /var/lib/vtiger/logs
+service apache2 start >/dev/null 2>&1
 mv /var/www/html/index.php /var/www/html/index.php.0
 debug() { echo "<h1>$1</h1><script>setTimeout(function(){window.location.reload(1)},5000)</script>" > /var/www/html/index.php; }
 

@@ -2,8 +2,9 @@
 set -e
 WORKDIR=$(echo $PWD)
 
-## run apache for startup debug
-service apache2 start
+## run apache for debugging
+mkdir -p /var/lib/vtiger/logs
+service apache2 start >/dev/null 2>&1
 mv /var/www/html/index.php /var/www/html/index.php.0
 debug() { echo "<h1>$1</h1><script>setTimeout(function(){window.location.reload(1)},5000)</script>" > /var/www/html/index.php; }
 
@@ -17,12 +18,12 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 
 ## import database using environment variables
 echo "[vtiger] Starting up..."
-debug "Waiting for database..."
+debug "Waiting for database preparation..."
 cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import --do-while vtiger.sql && php vtiger-startup.php
 
 ## fill current mounted volume
 echo "[vtiger] Update volume: /var/lib/vtiger"
-debug "Volume preparation..."
+debug "Waiting for volume preparation..."
 symvol copy /usr/src/vtiger/volume /var/lib/vtiger && symvol mode /var/lib/vtiger www-data:www-data
 symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:www-data
 
