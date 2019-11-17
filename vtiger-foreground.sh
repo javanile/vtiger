@@ -17,12 +17,12 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 
 ## import database using environment variables
 echo "[vtiger] Starting up..."
-debug "Waiting for database..."
+debug "Waiting for database preparation..."
 cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import --do-while vtiger.sql && php vtiger-startup.php
 
 ## fill current mounted volume
 echo "[vtiger] Update volume: /var/lib/vtiger"
-debug "Volume preparation..."
+debug "Waiting for volume preparation..."
 symvol copy /usr/src/vtiger/volume /var/lib/vtiger && symvol mode /var/lib/vtiger www-data:www-data
 symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:www-data
 

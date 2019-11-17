@@ -5,7 +5,7 @@ WORKDIR=$(echo $PWD)
 ## run apache for startup debug
 service apache2 start
 mv /var/www/html/index.php /var/www/html/index.php.0
-debug () { echo "<h1>$1</h1><script>setTimeout(function(){window.location.reload(1)},5000)</script>" > /var/www/html/index.php }
+debug() { echo "<h1>$1</h1><script>setTimeout(function(){window.location.reload(1)},5000)</script>" > /var/www/html/index.php; }
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
