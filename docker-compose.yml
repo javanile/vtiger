@@ -11,8 +11,8 @@ services:
     ports:
       - 20080:80
       - 20443:443
-    volumes:
-      - ./vtiger:/var/lib/vtiger
+#    volumes:
+#      - ./vtiger:/var/lib/vtiger
 #     - ./phpinfo.php:/var/www/html/phpinfo.php
 #     - ./config.inc.php:/var/www/html/config.inc.php
 #     - ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh

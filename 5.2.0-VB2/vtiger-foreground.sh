@@ -2,6 +2,9 @@
 set -e
 WORKDIR=$(echo $PWD)
 
+## run apache for startup debugging
+service apache2 start >/dev/null 2>&1
+
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
 echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
@@ -12,7 +15,8 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 
 ## import database using environment variables
 echo "[vtiger] Starting up...";
-cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import vtiger.sql && php vtiger-startup.php
+echo "<h1>Hello World</h1>" > /var/www/html/index.html
+cd /usr/src/vtiger && echo -n "[vtiger] " && mysql-import --do-while vtiger.sql && php vtiger-startup.php
 
 ## fill current mounted volume
 echo "[vtiger] Update volume: /var/lib/vtiger"
@@ -34,4 +38,5 @@ cd ${WORKDIR}
 
 ## run cron and apache
 echo "[vtiger] Launch foreground process..."
+service apache2 stop >/dev/null 2>&1
 cron && apache2-foreground

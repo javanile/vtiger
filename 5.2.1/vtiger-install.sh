@@ -66,11 +66,6 @@ if [[ $@ == *'--dump'* ]]; then
     fi
 fi
 
-## Export fresh database
-if [[ $@ == *'--volume'* ]]; then
-    symvol move /var/www/html volume
-fi
-
 ## Apply
 if [[ $@ == *'--patch'* ]]; then
     sed -e 's!realpath(!__realpath(!' -ri /var/www/html/vtlib/Vtiger/Deprecated.php

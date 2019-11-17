@@ -19,8 +19,6 @@ docker-compose down -v --remove-orphans
 docker-compose run --rm clean
 docker-compose run --rm update
 
-docker-compose up -d mysql && sleep 5
-
 cp develop-install.sh ${version}
 
 docker-compose build vtiger
