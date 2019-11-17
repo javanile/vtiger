@@ -10,7 +10,7 @@ files=(
     config.performance.php
     crontab
     extends.sh
-    loading.html
+    loading.php
     php.ini
     vtiger-startup.php
     vtiger
