@@ -47,6 +47,7 @@ if [[ $@ == *'--assert-mysql'* ]]; then
 fi
 
 ## Execute Wizard
+mkdir -p /var/lib/vtiger/logs
 service apache2 start
 ## Check if apache and vtiger are ready
 ASSERT_VT=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
