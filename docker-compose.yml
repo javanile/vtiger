@@ -6,16 +6,12 @@ services:
     build: ${version}
     environment:
       - VT_DEBUG=true
-#     - LOG4PHP_DEBUG=true
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - 20080:80
       - 20443:443
     volumes:
       - ./vtiger:/var/lib/vtiger
-#     - ./phpinfo.php:/var/www/html/phpinfo.php
-#     - ./config.inc.php:/var/www/html/config.inc.php
-#     - ./vtiger-foreground.sh:/usr/local/bin/vtiger-foreground.sh
     links:
       - mysql
       - adminer
@@ -38,21 +34,12 @@ services:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
 
-  clean:
+  debian:
     image: debian
-    working_dir: /vtiger
-    entrypoint:
-      - /vtiger/clean.sh
+    working_dir: /app
+    command: bash -c "echo 'prevent default'; exit 0"
     volumes:
-      - ./:/vtiger:rw
-
-  update:
-    image: debian
-    working_dir: /vtiger
-    entrypoint:
-      - /vtiger/update.sh
-    volumes:
-      - ./:/vtiger:rw
+      - ./:/app:rw
 
 volumes:
   mysql:

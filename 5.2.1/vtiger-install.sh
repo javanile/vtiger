@@ -29,7 +29,7 @@ if [[ $@ == *'--install-mysql'* ]]; then
                      GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
                      FLUSH PRIVILEGES;"
 
-    service mysql stop
+    service mysql stop >/dev/null 2>&1
     echo "[mysqld]" >> /etc/mysql/my.cnf
     echo "sql_mode = ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/my.cnf
     service mysql start
@@ -47,6 +47,7 @@ if [[ $@ == *'--assert-mysql'* ]]; then
 fi
 
 ## Execute Wizard
+mkdir -p /var/lib/vtiger/logs
 service apache2 start
 ## Check if apache and vtiger are ready
 ASSERT_VT=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
@@ -64,11 +65,6 @@ if [[ $@ == *'--dump'* ]]; then
         echo "---(vtiger.sql END)----"
         exit 67;
     fi
-fi
-
-## Export fresh database
-if [[ $@ == *'--volume'* ]]; then
-    symvol move /var/www/html volume
 fi
 
 ## Apply

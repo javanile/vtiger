@@ -16,13 +16,10 @@ fi
 echo -e "\n----[ build vtiger ${version} ]----"
 
 docker-compose down -v --remove-orphans
-docker-compose run --rm clean
-docker-compose run --rm update
-
-docker-compose up -d mysql && sleep 5
+docker-compose run --rm debian rm -fr ./vtiger
+docker-compose run --rm debian ./update.sh
 
 cp develop-install.sh ${version}
 
 docker-compose build vtiger
 docker-compose up vtiger
-#docker-compose logs vtiger
