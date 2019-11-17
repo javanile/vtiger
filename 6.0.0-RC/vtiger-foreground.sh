@@ -6,7 +6,7 @@ WORKDIR=$(echo $PWD)
 mkdir -p /var/lib/vtiger/logs
 service apache2 start >/dev/null 2>&1
 cp /var/www/html/index.php /var/www/html/index.php.0
-debug() { sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.html > /var/www/html/index.php; }
+debug() { sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.php > /var/www/html/index.php; }
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'

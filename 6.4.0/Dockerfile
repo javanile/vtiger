@@ -38,7 +38,7 @@ RUN chmod +x /usr/local/bin/vtiger-*.sh && \
     vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
     symvol move /var/www/html /usr/src/vtiger/volume
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY config.inc.php config.performance.php loading.html /var/www/html/
+COPY config.inc.php config.performance.php loading.php /var/www/html/
 
 VOLUME ["/var/lib/vtiger"]
 
