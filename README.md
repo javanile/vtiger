@@ -1,4 +1,4 @@
-# 🐯 vtiger
+# vtiger
 
 Vtiger CRM is open source software that helps more than 100000 businesses grow sales,  
 improve marketing reach, and deliver great customer service. Try it free with Docker!
