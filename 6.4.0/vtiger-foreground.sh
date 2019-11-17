@@ -3,7 +3,7 @@ set -e
 WORKDIR=$(echo $PWD)
 
 ## run apache for startup debugging
-service apache2 start >/dev/null 2>&1
+service apache2 start
 
 ## welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'

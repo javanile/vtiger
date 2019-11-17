@@ -1,9 +1,9 @@
-FROM php:%%PHP_VERSION%%-apache
+FROM php:7.2.22-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 
-ENV VT_VERSION=%%VT_VERSION%% \
-    VT_DOWNLOAD=%%VT_DOWNLOAD%% \
-    DATABASE_PACKAGE=%%DATABASE_PACKAGE%% \
+ENV VT_VERSION=7.2.0 \
+    VT_DOWNLOAD=http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.2.0/Core%20Product/vtigercrm7.2.0.tar.gz \
+    DATABASE_PACKAGE=mariadb-server-10.3 \
     COMPOSER_ALLOW_SUPERUSER=1 \
     PATH=/root/.composer/vendor/bin:$PATH
 
@@ -23,30 +23,20 @@ RUN apt-get update && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
-    rm -fr /var/www/html && mv "%%VT_DIRECTORY%%" /var/www/html && vtiger permissions --fix && \
+    rm -fr /var/www/html && mv "vtigercrm" /var/www/html && vtiger permissions --fix && \
     curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
     mv .symvol /var/www/html && mkdir -p /usr/src/vtiger/volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
     apt-get clean && php composer clearcache && \
     rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
-## @block: develop
-COPY develop-install.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/develop-install.sh && develop-install.sh
-## @endblock
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
-## @block: develop
 RUN chmod +x /usr/local/bin/vtiger-*.sh && \
-    vtiger-install.sh --assert-mysql --dump --patch --remove-mysql && \
+    vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
     symvol move /var/www/html /usr/src/vtiger/volume
-## @block: production
-#RUN chmod +x /usr/local/bin/vtiger-*.sh && \
-#    vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
-#    symvol move /var/www/html /usr/src/vtiger/volume
-## @endblock
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
 
