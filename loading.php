@@ -9,7 +9,7 @@
 </head>
 <body style="font-family:arial">
 <div style="text-align:center;margin-top:50px">
-<img src="/test/logo/vtiger-crm-logo.png" alt="vtiger"/>
+<img src="/layouts/v7/resources/Images/vtiger.png" alt="vtiger"/>
 <p><img src="/libraries/jquery/select2/spinner.gif" alt="loading..."/> %%MESSAGE%%</p>
 </div>
 <script>setTimeout(function(){window.location.replace("/index.php")},5000)</script>
