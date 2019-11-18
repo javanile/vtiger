@@ -1,2 +1,3 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root date +%s > /run/crond.ts
 * * * * * root vtiger-cron.sh

@@ -17,6 +17,10 @@
     %%MESSAGE%%
 </p>
 </div>
-<script>setTimeout(function(){window.location.replace("/index.php")},5000)</script>
+<script>
+    setTimeout(function() {
+        window.location.replace('/index.php')
+    }, 10000)
+</script>
 </body>
 </html>
