@@ -20,7 +20,7 @@
 <script>
     setTimeout(function() {
         window.location.replace('/index.php')
-    }, 10000)
+    }, 15000)
 </script>
 </body>
 </html>
