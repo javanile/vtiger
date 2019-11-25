@@ -2,6 +2,12 @@
 set -e
 WORKDIR=$(echo $PWD)
 
+loading() {
+    if [[ -f /var/www/html/index.php.0 ]]; then
+        sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.php > /var/www/html/index.php
+    fi
+}
+
 ## Welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
 echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
@@ -14,9 +20,9 @@ touch access.log apache.log migration.log platform.log soap.log php.log
 touch cron.log installation.log security.log sqltime.log vtigercrm.log
 
 ## run apache for debugging
-echo "[vtiger] Starg web loading..."
-cp -f /var/www/html/index.php /var/www/html/index.php.0
-loading() { sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.php > /var/www/html/index.php; }
+cd /var/www/html
+echo "[vtiger] Start web loading..."
+[[ ! -f index.php.0 ]] && cp -f index.php index.php.0
 service apache2 start >/dev/null 2>&1
 
 ## store environment variables
@@ -36,10 +42,14 @@ symvol copy /usr/src/vtiger/volume /var/lib/vtiger && symvol mode /var/lib/vtige
 symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:www-data
 
 ## update permissions
-
-## update permissions
 echo "[vtiger] Start cron daemon..."
+loading "Waiting start backgroud process..."
 cron
+
+## stop debugging
+cd /var/www/html
+service apache2 stop >/dev/null 2>&1
+[[ -f index.php.0 ]] && mv -f index.php.0 index.php
 
 ## return to working directory
 echo "[vtiger] Set working directory: ${WORKDIR}"
@@ -50,6 +60,4 @@ cd ${WORKDIR}
 
 ## run cron and apache
 echo "[vtiger] Run main process..."
-service apache2 stop >/dev/null 2>&1
-cp -f /var/www/html/index.php.0 /var/www/html/index.php
 apache2-foreground

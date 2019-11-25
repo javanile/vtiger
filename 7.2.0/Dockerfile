@@ -19,7 +19,7 @@ RUN apt-get update && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip && \
     curl -o composer -sL https://getcomposer.org/composer.phar && \
-    php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.4 && \
+    php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.14 javanile/vtiger-cli:0.0.4 && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \

@@ -11,6 +11,7 @@ services:
       - 20080:80
       - 20443:443
     volumes:
+      - ./:/app
       - ./vtiger:/var/lib/vtiger
     links:
       - mysql

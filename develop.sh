@@ -22,4 +22,6 @@ docker-compose run --rm debian ./update.sh
 cp develop-install.sh ${version}
 
 docker-compose build vtiger
+
+docker-compose down -v --remove-orphans
 docker-compose up vtiger
