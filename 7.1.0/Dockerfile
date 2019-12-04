@@ -1,9 +1,9 @@
-FROM php:7.2.24-apache
+FROM php:7.0.33-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV VT_VERSION="7.1.0" \
     VT_DOWNLOAD="http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz" \
-    DATABASE_PACKAGE="mariadb-server-10.3" \
+    DATABASE_PACKAGE="mariadb-server-10.1" \
     COMPOSER_ALLOW_SUPERUSER="1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 

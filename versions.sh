@@ -5,11 +5,11 @@ download_files=http://sourceforge.net/projects/vtigercrm/files/
 
 declare -A versions
 versions=(
-     ["7.2.0"]=main*7.2.24*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.2.0/Core%20Product/vtigercrm7.2.0.tar.gz
-     ["7.1.0"]=main*7.2.24*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
-     ["7.1.0-RC"]=main*7.2.22*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.1.0%20RC/Core%20Product/vtigercrm7.1.0rc.tar.gz
-     ["7.0.1"]=main*7.2.22*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz
-     ["7.0.0"]=main*7.2.22*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz
+     ["7.2.0"]=main*7.3.8*mariadb-server-10.3*vtigercrm*vtiger%20CRM%207.2.0/Core%20Product/vtigercrm7.2.0.tar.gz
+     ["7.1.0"]=main*7.0.33*mariadb-server-10.1*vtigercrm*vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz
+     ["7.1.0-RC"]=main*7.0.33*mariadb-server-10.1*vtigercrm*vtiger%20CRM%207.1.0%20RC/Core%20Product/vtigercrm7.1.0rc.tar.gz
+     ["7.0.1"]=main*7.0.33*mariadb-server-10.1*vtigercrm*vtiger%20CRM%207.0.1/Core%20Product/vtigercrm7.0.1.tar.gz
+     ["7.0.0"]=main*7.0.33*mariadb-server-10.1*vtigercrm*vtiger%20CRM%207.0/Core%20Product/vtigercrm7.0.0.tar.gz
      ["6.5.0"]=main*5.6.40*mariadb-server-10.1*vtigercrm*vtiger%20CRM%206.5.0/Core%20Product/vtigercrm6.5.0.tar.gz
      ["6.4.0"]=main*5.6.40*mariadb-server-10.1*vtigercrm*vtiger%20CRM%206.4.0/Core%20Product/vtigercrm6.4.0.tar.gz
      ["6.3.0"]=main*5.6.40*mariadb-server-10.1*vtigercrm*vtiger%20CRM%206.3.0/Core%20Product/vtigercrm6.3.0.tar.gz
