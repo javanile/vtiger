@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 WORKDIR=$(echo $PWD)
+touch .vtiger.lock
 
 loading() {
     if [[ -f /var/www/html/index.php.0 ]]; then
@@ -60,4 +61,5 @@ cd ${WORKDIR}
 
 ## run cron and apache
 echo "[vtiger] Run main process..."
+[[ -f .vtiger.lock ]] && rm .vtiger.lock
 apache2-foreground
