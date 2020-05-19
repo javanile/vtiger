@@ -44,7 +44,8 @@ symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:
 
 ## update permissions
 echo "[vtiger] Start cron daemon..."
-loading "Waiting start backgroud process..."
+loading "Waiting start background process..."
+rsyslogd
 cron
 
 ## stop debugging

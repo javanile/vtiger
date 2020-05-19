@@ -22,6 +22,7 @@ RUN apt-get update && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.14 javanile/vtiger-cli:0.0.4 && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
     rm -fr /var/www/html && mv "vtigercrm" /var/www/html && vtiger permissions --fix && \
     curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
