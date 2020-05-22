@@ -122,11 +122,11 @@ $vtrftk = $robot->post(
     [
         '__vtrftk'            => $vtrftk,
         'packages[Tools]'     => 'on',
-        'packages[Sales]'     => '',
-        'packages[Marketing]' => '',
-        'packages[Support]'   => '',
-        'packages[Inventory]' => '',
-        'packages[Project]'   => '',
+        'packages[Sales]'     => 'on',
+        'packages[Marketing]' => 'on',
+        'packages[Support]'   => 'on',
+        'packages[Inventory]' => 'on',
+        'packages[Project]'   => 'on',
     ],
     ['__vtrftk']
 );

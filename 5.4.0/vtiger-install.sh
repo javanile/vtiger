@@ -82,11 +82,8 @@ if [[ $@ == *'--remove-mysql'* ]]; then
     apt-get --yes autoremove --purge && apt-get autoclean
     deluser --remove-home mysql && true
     delgroup mysql && true
-    rm -rf /etc/apparmor.d/abstractions/mysql
-    rm -rf /etc/apparmor.d/cache/usr.sbin.mysqld
-    rm -rf /etc/mysql
-    rm -rf /var/lib/mysql
-    rm -rf /var/log/mysql*
-    rm -rf /var/log/upstart/mysql.log*
-    rm -rf /var/run/mysqld
+    rm -rf \
+        /etc/apparmor.d/abstractions/mysql /etc/apparmor.d/cache/usr.sbin.mysqld /etc/mysql \
+        /var/lib/mysql /var/log/mysql* /var/log/upstart/mysql.log* /var/run/mysqld \
+        /tmp/* /var/tmp/* /var/lib/apt/lists/*
 fi
