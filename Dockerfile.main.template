@@ -26,7 +26,9 @@ RUN apt-get update && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
-    rm -fr /var/www/html && mv "%%VT_DIRECTORY%%" /var/www/html && vtiger permissions --fix && \
+    rm -fr /var/www/html && mv "%%VT_DIRECTORY%%" /var/www/html && \
+    echo "Download ok!" && \
+    vtiger permissions --fix && \
     curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
     mv .symvol /var/www/html && mkdir -p /usr/src/vtiger/volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
