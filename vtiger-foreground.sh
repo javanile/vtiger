@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 set -e
 WORKDIR=$(echo $PWD)
 touch .vtiger.lock
