@@ -1,8 +1,8 @@
 FROM php:7.0.33-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
-
+ENV LAYER_BREAK=true
 ENV VT_VERSION="7.1.0" \
-    VT_DOWNLOAD="http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz" \
+    VT_DOWNLOAD="https://github.com/javanile/vtiger-core/archive/7.1.0.tar.gz" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
     COMPOSER_ALLOW_SUPERUSER="1" \
     PATH="/root/.composer/vendor/bin:$PATH"
@@ -12,8 +12,6 @@ COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
 
-WORKDIR /usr/src/vtiger
-
 RUN apt-get update && \
     apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libxml2-dev cron rsyslog zip unzip socat vim nano && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
@@ -21,12 +19,13 @@ RUN apt-get update && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
     curl -o composer -sL https://getcomposer.org/composer.phar && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.14 javanile/vtiger-cli:0.0.4 && \
-    echo "Composer ok!" && \
-    usermod -u 1000 www-data && groupmod -g 1000 www-data && \
+    echo "Composer ok!" && ${LAYER_BREAK}
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && \
+    cd /usr/src/vtiger && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
-    rm -fr /var/www/html && mv "vtigercrm" /var/www/html && \
+    rm -fr /var/www/html && mv "vtiger-core-7.1.0" /var/www/html && \
     echo "Download ok!" && \
     vtiger permissions --fix && \
     curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
@@ -39,8 +38,7 @@ COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh && \
-    vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
+RUN vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
     symvol move /var/www/html /usr/src/vtiger/volume
 
 COPY LoggerManager.php /var/www/html/libraries/log4php/

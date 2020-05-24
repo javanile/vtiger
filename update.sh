@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 set -e
 
 source versions.sh
@@ -30,11 +30,12 @@ for version in "${!versions[@]}"; do
     [[ -d "$version" ]] || mkdir ${version}
     rm ${version}/* && true
 
-    template=Dockerfile.$(echo ${versions[$version]} | cut -d* -f1).template
-    php_version=$(echo ${versions[$version]} | cut -d* -f2)
-    database_package=$(echo ${versions[$version]} | cut -d* -f3)
-    directory=$(echo ${versions[$version]} | cut -d* -f4)
-    download=${download_files}$(echo ${versions[$version]} | cut -d* -f5)
+    template=Dockerfile.$(echo ${versions[$version]} | cut -d, -f1).template
+    php_version=$(echo ${versions[$version]} | cut -d, -f2)
+    database_package=$(echo ${versions[$version]} | cut -d, -f3)
+    hosting=$(echo ${versions[$version]} | cut -d, -f4)
+    directory=$(echo ${versions[$version]} | cut -d, -f5)
+    download=${source_code_hosting[$hosting]}$(echo ${versions[$version]} | cut -d, -f6)
 
     sed /^#/d ${template} > ${version}/Dockerfile
     sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
@@ -44,8 +45,15 @@ for version in "${!versions[@]}"; do
         -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
         -ri ${version}/Dockerfile
 
+    if [[ "$1" != "${version}" ]]; then
+        sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\!g' -ri ${version}/Dockerfile
+        sed -e ':a;N;$!ba;s!ENV LAYER_BREAK=true\n!!g' -ri ${version}/Dockerfile
+    fi
+
     for file in "${files[@]}"; do
         [[ -f "$file" ]] || continue
         cat ${file} > ${version}/${file}
     done
+
+    chmod +x ${version}/vtiger-*.sh
 done
