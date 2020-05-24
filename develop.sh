@@ -18,6 +18,7 @@ echo -e "\n----[ build vtiger ${version} ]----"
 #docker-compose down -v --remove-orphans
 #docker-compose run --rm debian
 rm -fr ./vtiger && true
+mkdir -p vtiger && true
 #docker-compose run --rm debian
 ./update.sh ${version}
 

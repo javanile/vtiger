@@ -67,13 +67,6 @@ if [[ $@ == *'--dump'* ]]; then
     fi
 fi
 
-## Apply
-if [[ $@ == *'--patch'* ]]; then
-    sed -e 's!realpath(!__realpath(!' -ri \
-        /var/www/html/vtlib/Vtiger/Utils.php \
-        /var/www/html/vtlib/Vtiger/Deprecated.php
-fi
-
 ## Uninstall MySQL
 if [[ $@ == *'--remove-mysql'* ]]; then
     service mysql stop

@@ -46,8 +46,8 @@ for version in "${!versions[@]}"; do
         -ri ${version}/Dockerfile
 
     if [[ "$1" != "${version}" ]]; then
-        sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\!g' -ri ${version}/Dockerfile
         sed -e ':a;N;$!ba;s!ENV LAYER_BREAK=true\n!!g' -ri ${version}/Dockerfile
+        sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\\n   !g' -ri ${version}/Dockerfile
     fi
 
     for file in "${files[@]}"; do

@@ -1,11 +1,13 @@
 <?php
-
 /**
  * Retrieve realpath without resolve symbolic link.
  *
  * @param $path
+ * @param null $link
+ *
+ * @return false|string
  */
-function __realpath($path, $link = null)
+function __realpath__($path, $link = null)
 {
     if ($link) {
         $head = trim(substr($path, strlen($link)), '/');
