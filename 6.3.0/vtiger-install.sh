@@ -38,9 +38,8 @@ fi
 ## Assert MySQL
 if [[ $@ == *'--assert-mysql'* ]]; then
     service mysql start
-    ## Check if database exists
-    ASSERT_DB=`mysqlshow -uvtiger -pvtiger -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger`
-    if [[ "$ASSERT_DB" != "vtiger" ]]; then
+    database=$(mysqlshow -uvtiger -pvtiger -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger)
+    if [[ "${database}" != "vtiger" ]]; then
         echo "[vtiger] install error '--install-mysql' database not found.";
         exit 65;
     fi
@@ -49,19 +48,19 @@ fi
 ## Execute Wizard
 mkdir -p /var/lib/vtiger/logs
 service apache2 start
-## Check if apache and vtiger are ready
-ASSERT_VT=`curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n"`
-if [[ "$ASSERT_VT" != "HTTP/1.1 200 OK" ]]; then exit 64; fi
+response=$(curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n")
+if [[ "${response}" != "HTTP/1.1 200 OK" ]]; then exit 64; fi
 php /usr/src/vtiger/vtiger-install.php
 if [[ $? -ne 0 ]]; then exit 66; fi
 
 ## Export fresh database
 if [[ $@ == *'--dump'* ]]; then
-    mysqldump -uvtiger -pvtiger -h127.0.0.1 vtiger > vtiger.sql
-    if [[ ! `find vtiger.sql -type f -size +200k 2>/dev/null` ]]; then
+    sql_file=/usr/src/vtiger/vtiger.sql
+    mysqldump -uvtiger -pvtiger -h127.0.0.1 vtiger > "${sql_file}"
+    if [[ ! $(find "${sql_file}" -type f -size +200k 2>/dev/null) ]]; then
         echo "[vtiger] dump error database sql too small"
         echo "---(vtiger.sql START)----"
-        cat vtiger.sql
+        cat "${sql_file}"
         echo "---(vtiger.sql END)----"
         exit 67;
     fi

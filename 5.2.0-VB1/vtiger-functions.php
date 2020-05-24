@@ -12,7 +12,7 @@ function __realpath__($path, $link = null)
     if ($link) {
         $head = trim(substr($path, strlen($link)), '/');
         $base = basename($link);
-        $real = __realpath(dirname($link));
+        $real = __realpath__(dirname($link));
 
         return $real.'/'.$base.'/'.$head;
     }
@@ -23,7 +23,7 @@ function __realpath__($path, $link = null)
     }
 
     if ($link != '.' && $link != '/') {
-        return __realpath($path, $link);
+        return __realpath__($path, $link);
     }
 
     return realpath($path);
