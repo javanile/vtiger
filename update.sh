@@ -56,4 +56,5 @@ for version in "${!versions[@]}"; do
     done
 
     chmod +x ${version}/vtiger-*.sh
+    chmod 600 ${version}/crontab
 done

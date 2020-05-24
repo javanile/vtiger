@@ -15,7 +15,7 @@ RUN apt-get update && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
-    echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && \
+    echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && \
     curl -o composer -sL https://getcomposer.org/composer.phar && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.14 javanile/vtiger-cli:0.0.4 && \
     php composer clearcache && rm composer && \
@@ -36,7 +36,6 @@ RUN apt-get update && \
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
-COPY crontab /etc/crontab
 
 RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && \
     cd /var/www/html/vtlib/Vtiger/ && \
@@ -45,6 +44,7 @@ RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && \
 
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php loading.php /var/www/html/
+COPY crontab /etc/
 
 VOLUME ["/var/lib/vtiger"]
 
