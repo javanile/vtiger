@@ -13,8 +13,10 @@ if [[ ! -d "$version" ]]; then
     exit 1
 fi
 
-docker-compose run --rm debian ./update.sh
-docker-compose run --rm debian rm -fr ./vtiger
+#docker-compose run --rm debian
+./update.sh
+#docker-compose run --rm debian
+rm -fr ./vtiger
 
 docker build -t javanile/vtiger:${version} ${version}
 docker push javanile/vtiger:${version}

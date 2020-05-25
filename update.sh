@@ -28,7 +28,7 @@ files=(
 
 for version in "${!versions[@]}"; do
     [[ -d "$version" ]] || mkdir ${version}
-    rm ${version}/* && true
+    rm -fr ${version}/* && true
 
     template=Dockerfile.$(echo ${versions[$version]} | cut -d, -f1).template
     php_version=$(echo ${versions[$version]} | cut -d, -f2)
