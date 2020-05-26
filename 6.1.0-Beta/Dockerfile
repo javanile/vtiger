@@ -17,7 +17,7 @@ RUN apt-get update && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
     echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && \
     curl -o composer -sL https://getcomposer.org/composer.phar && \
-    php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.14 javanile/vtiger-cli:0.0.4 && \
+    php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.15 javanile/vtiger-cli:0.0.4 && \
     php composer clearcache && rm composer && \
     curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \

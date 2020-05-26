@@ -57,6 +57,11 @@ service apache2 stop >/dev/null 2>&1
 echo "[vtiger] Set working directory: ${WORKDIR}"
 cd ${WORKDIR}
 
+## Apply database patches if exists
+loading "Waiting for patch database..."
+[[ -f vtiger.sql ]] && echo -n "[vtiger] Database patch: " && mysql-import --force vtiger.sql
+[[ -f vtiger.override.sql ]] && echo -n "[vtiger] Database override: " && mysql-import --force vtiger.override.sql
+
 ## copy vtiger.json file on working directory
 [[ ! -f vtiger.json ]] && cp /usr/src/vtiger/vtiger.json .
 
