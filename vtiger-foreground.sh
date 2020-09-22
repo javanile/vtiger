@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 set -e
 WORKDIR=$(echo $PWD)
+INDEX=/var/www/html/index.php
 touch .vtiger.lock
 
-loading() {
-    if [[ -f /var/www/html/index.php.0 ]]; then
-        sed -e 's!%%MESSAGE%%!'"$1"'!' /var/www/html/loading.php > /var/www/html/index.php
-    fi
-}
+info() { [[ -f "${INDEX}.1" ]] && sed -e 's!%%MESSAGE%%!'"$1"'!' "${INDEX}.boot" > "${INDEX}"; }
 
 ## Welcome message
 echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
@@ -31,34 +28,33 @@ printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' >
 
 ## import database using environment variables
 cd /usr/src/vtiger
-loading "Waiting for database..."
+info "Waiting for database..."
 echo "[vtiger] Waiting for available database..."
 echo -n "[vtiger] " && mysql-import --do-while vtiger.sql
 #php vtiger-startup.php
 
 ## fill current mounted volume
-loading "Waiting for volume preparation..."
+info "Waiting for volume preparation..."
 echo "[vtiger] Waiting for preparation volume: /var/lib/vtiger"
 symvol copy /usr/src/vtiger/volume /var/lib/vtiger && symvol mode /var/lib/vtiger www-data:www-data
 symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:www-data
 
 ## update permissions
 echo "[vtiger] Start cron daemon..."
-loading "Waiting start background process..."
+info "Waiting start background process..."
 rsyslogd
 cron
 
-## stop debugging
-cd /var/www/html
+## Stop debugging
 service apache2 stop >/dev/null 2>&1
-[[ -f index.php.0 ]] && mv -f index.php.0 index.php
+[[ -f "${INDEX}.0" ]] && mv -f "${INDEX}.0" "${INDEX}"
 
 ## return to working directory
 echo "[vtiger] Set working directory: ${WORKDIR}"
 cd ${WORKDIR}
 
 ## Apply database patches if exists
-loading "Waiting for patch database..."
+info "Waiting for patch database..."
 [[ -f vtiger.sql ]] && echo -n "[vtiger] Database patch: " && mysql-import --force vtiger.sql
 [[ -f vtiger.override.sql ]] && echo -n "[vtiger] Database override: " && mysql-import --force vtiger.override.sql
 

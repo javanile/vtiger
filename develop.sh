@@ -13,7 +13,7 @@ if [[ ! -d "$version" ]]; then
     exit 1
 fi
 
-echo -e "\n----[ build vtiger ${version} ]----"
+echo -e "\n----[ BUILD VTIGER ${version} ]----"
 
 #docker-compose down -v --remove-orphans
 #docker-compose run --rm debian

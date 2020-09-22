@@ -12,7 +12,6 @@ files=(
     extends.sh
     loading.php
     php.ini
-    vtiger-startup.php
     vtiger
     vtiger-ssl.crt
     vtiger.json
