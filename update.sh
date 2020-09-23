@@ -9,20 +9,19 @@ files=(
     config.inc.php
     config.performance.php
     crontab
-    extends.sh
-    loading.php
-    php.ini
+    docker-vtiger-cron.sh
+    docker-vtiger-foreground.sh
+    docker-vtiger-hook.sh
+    docker-vtiger-install.sh
+    index.php.boot
     vtiger
     vtiger-ssl.crt
-    vtiger.json
     vtiger-ssl.pem
-    vtiger-foreground.sh
-    vtiger-cron.sh
+    vtiger.json
     vtiger-install.php
-    vtiger-install.sh
-    vtiger-autoload.php
     vtiger-functions.php
     LoggerManager.php
+    php.ini
 )
 
 for version in "${!versions[@]}"; do
@@ -54,6 +53,6 @@ for version in "${!versions[@]}"; do
         cat ${file} > ${version}/${file}
     done
 
-    chmod +x ${version}/vtiger-*.sh
+    chmod +x ${version}/docker-vtiger-*.sh
     chmod 600 ${version}/crontab
 done
