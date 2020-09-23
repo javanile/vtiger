@@ -50,7 +50,7 @@ COPY vtiger-*.php /usr/src/vtiger/
 #COPY vtiger-foreground.sh /usr/local/bin/
 #COPY vtiger-functions.php /usr/src/vtiger/
 ## @block: release
-RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
+RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
 ## @endblock
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \

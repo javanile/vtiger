@@ -38,7 +38,7 @@ RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 COPY docker-vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 
-RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
+RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
     symvol move /var/www/html /usr/src/vtiger/volume
