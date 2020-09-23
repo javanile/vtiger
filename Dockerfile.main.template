@@ -46,7 +46,7 @@ COPY develop-install.sh /usr/local/bin/
 #${DEVELOP_LAYER}
 RUN develop-install.sh
 #${DEVELOP_LAYER}
-COPY vtiger-install.sh /usr/local/bin/
+COPY docker-vtiger-install.sh /usr/local/bin/
 #${DEVELOP_LAYER}
 COPY vtiger-install.php /usr/src/vtiger/
 #${RELEASE_LAYER}
@@ -55,9 +55,13 @@ COPY vtiger-install.php /usr/src/vtiger/
 #COPY vtiger-*.php /usr/src/vtiger/
 
 #${DEVELOP_LAYER}
-RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
+RUN docker-vtiger-install.sh --assert-mysql --dump --remove-mysql
 #${DEVELOP_LAYER}
 COPY docker-vtiger-foreground.sh /usr/local/bin/
+#${DEVELOP_LAYER}
+COPY docker-vtiger-hook.sh /usr/local/bin/
+#${DEVELOP_LAYER}
+COPY docker-vtiger-cron.sh /usr/local/bin/
 #${DEVELOP_LAYER}
 COPY vtiger-functions.php /usr/src/vtiger/
 #${RELEASE_LAYER}

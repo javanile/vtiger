@@ -36,11 +36,13 @@ RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
 COPY develop-install.sh /usr/local/bin/
 RUN develop-install.sh
-COPY vtiger-install.sh /usr/local/bin/
+COPY docker-vtiger-install.sh /usr/local/bin/
 COPY vtiger-install.php /usr/src/vtiger/
 
-RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
+RUN docker-vtiger-install.sh --assert-mysql --dump --remove-mysql
 COPY docker-vtiger-foreground.sh /usr/local/bin/
+COPY docker-vtiger-hook.sh /usr/local/bin/
+COPY docker-vtiger-cron.sh /usr/local/bin/
 COPY vtiger-functions.php /usr/src/vtiger/
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
