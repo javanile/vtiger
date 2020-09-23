@@ -6,7 +6,6 @@ ENV VT_VERSION="7.1.0" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
-COPY php.ini /usr/local/etc/php/
 COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
@@ -35,16 +34,21 @@ RUN cd /usr/src/vtiger && \
     mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
-COPY docker-vtiger-*.sh /usr/local/bin/
-COPY vtiger-*.php /usr/src/vtiger/
+COPY develop-install.sh /usr/local/bin/
+RUN develop-install.sh
+COPY vtiger-install.sh /usr/local/bin/
+COPY vtiger-install.php /usr/src/vtiger/
 
-RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
+RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
+COPY docker-vtiger-foreground.sh /usr/local/bin/
+COPY vtiger-functions.php /usr/src/vtiger/
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
     symvol move /var/www/html /usr/src/vtiger/volume
 
+COPY php.ini /usr/local/etc/php/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY config.inc.php config.performance.php loading.php /var/www/html/
+COPY config.inc.php config.performance.php index.php.boot /var/www/html/
 COPY crontab /etc/
 
 VOLUME ["/var/lib/vtiger"]
@@ -58,4 +62,4 @@ ENV VT_ADMIN_USER="admin" \
     MYSQL_HOST="mysql" \
     MYSQL_DATABASE="vtiger"
 
-CMD ["vtiger-foreground.sh"]
+CMD ["docker-vtiger-foreground.sh"]

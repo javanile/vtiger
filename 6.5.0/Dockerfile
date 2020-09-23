@@ -43,7 +43,7 @@ RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysq
     symvol move /var/www/html /usr/src/vtiger/volume
 
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY config.inc.php config.performance.php loading.php /var/www/html/
+COPY config.inc.php config.performance.php index.php.boot /var/www/html/
 COPY crontab /etc/
 
 VOLUME ["/var/lib/vtiger"]
@@ -57,4 +57,4 @@ ENV VT_ADMIN_USER="admin" \
     MYSQL_HOST="mysql" \
     MYSQL_DATABASE="vtiger"
 
-CMD ["vtiger-foreground.sh"]
+CMD ["docker-vtiger-foreground.sh"]

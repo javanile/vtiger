@@ -36,9 +36,13 @@ COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/crontab
 
+#RUN chmod +x /usr/local/bin/vtiger-*.sh
 RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --assert-mysql --dump --remove-mysql
+#RUN chmod +x /usr/local/bin/vtiger-*.sh
+#RUN chmod +x /usr/local/bin/vtiger-*.sh && vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php /var/www/html/
+#COPY config.performance.php /var/www/html/
 
 VOLUME ["/var/www/html/storage", "/var/www/html/logs"]
 

@@ -2,4 +2,6 @@
 
 file="/etc/docker-vtiger-hook/$1.sh"
 
-[[ -f "${file}" ]] && bash "${file}"
+if [[ -f "${file}" ]]; then
+  bash "${file}"
+fi

@@ -22,6 +22,9 @@ RUN mkdir -p /var/www/html/vtiger
 RUN sed -e 's!DocumentRoot /var/www/html!DocumentRoot /var/www/html/vtiger!' -ri /etc/apache2/apache2.conf
 RUN service apache2 start
 
+#RUN docker-php-ext-install imap
+#COPY config.inc.php /var/www/html/vtiger/
 
 WORKDIR /app
 
+#CMD ["foreground.sh"]
