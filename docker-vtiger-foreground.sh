@@ -2,6 +2,9 @@
 set -e
 WORKDIR=$(echo $PWD)
 INDEX=/var/www/html/index.php
+
+docker-vtiger-hook.sh init
+
 touch .vtiger.lock
 
 info() { [[ -f "${INDEX}.1" ]] && sed -e 's!%%MESSAGE%%!'"$1"'!' "${INDEX}.boot" > "${INDEX}"; }
@@ -64,4 +67,5 @@ info "Waiting for patch database..."
 ## run cron and apache
 echo "[vtiger] Run main process..."
 [[ -f .vtiger.lock ]] && rm .vtiger.lock
+docker-vtiger-hook.sh befofe-apache-start
 apache2-foreground
