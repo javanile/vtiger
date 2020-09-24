@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+##
+# Vtiger CRM for Docker
+# Copyright (c) 2018-2020 Francesco Bianco <bianco@javanile.org>
+# MIT License <https://git.io/docker-vtiger-license>
+##
+
 declare -A source_code_hosting
 source_code_hosting=(
   ["sourceforge_vtiger"]=http://sourceforge.net/projects/vtigercrm/files/

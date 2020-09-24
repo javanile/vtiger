@@ -1,3 +1,4 @@
+
 FROM orsolin/docker-php-5.3-apache
 
 ENV VT_VERSION=5.3.0 \

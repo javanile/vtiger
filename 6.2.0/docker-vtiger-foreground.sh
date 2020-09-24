@@ -1,40 +1,49 @@
 #!/usr/bin/env bash
 set -e
-WORKDIR=$(echo $PWD)
-INDEX=/var/www/html/index.php
+
+##
+# Vtiger CRM for Docker
+# Copyright (c) 2018-2020 Francesco Bianco <bianco@javanile.org>
+# MIT License <https://git.io/docker-vtiger-license>
+##
+
+workdir=$(echo $PWD)
+index=/var/www/html/index.php
+
+fail() { echo "[vtiger] Fail at $1 on line $2: $3"; }
+info() { if [[ -f "${index}.0" ]]; then sed -e 's!%%MESSAGE%%!'"$1"'!' "${index}.boot" > "${index}"; fi; }
+
+trap 'fail "${BASH_SOURCE}" "${LINENO}" "${BASH_COMMAND}"' 0
 
 docker-vtiger-hook.sh init
 
 touch .vtiger.lock
 
-info() { [[ -f "${INDEX}.1" ]] && sed -e 's!%%MESSAGE%%!'"$1"'!' "${INDEX}.boot" > "${INDEX}"; }
-
 ## Welcome message
-echo "   ________${VT_VERSION}_   " | sed 's/[^ ]/_/g'
-echo "--| vtiger ${VT_VERSION} |--" | sed 's/[\.]/./g'
-echo "   --------${VT_VERSION}-   " | sed 's/[^ ]/‾/g'
+line="===========${VT_VERSION//?/=}"
+echo -e "${line}\n> vtiger ${VT_VERSION} <\n${line}"
 
 ## Init log files
 echo "[vtiger] Init log files..."
 mkdir -p /var/lib/vtiger/logs && cd /var/lib/vtiger/logs
 touch access.log apache.log migration.log platform.log soap.log php.log
 touch cron.log installation.log security.log sqltime.log vtigercrm.log
+chmod 777 *.log .
 
-## run apache for debugging
-cd /var/www/html
-echo "[vtiger] Start web loading..."
-[[ ! -f index.php.0 ]] && cp -f index.php index.php.0
+## Prepare the courtesy screen
+echo "[vtiger] Start courtesy screen..."
+[[ ! -f "${index}.0" ]] && cp -f "${index}" "${index}.0"
 service apache2 start >/dev/null 2>&1
 
-## store environment variables
+## Store environment variables
 printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /run/crond.env
 
-## import database using environment variables
+## Import database using environment variables
 cd /usr/src/vtiger
-info "Waiting for database..."
-echo "[vtiger] Waiting for available database..."
+info "Database preparation..."
+echo "[vtiger] Waiting for database server..."
 echo -n "[vtiger] " && mysql-import --do-while vtiger.sql
-#php vtiger-startup.php
+[[ -f vtiger.sql.lock ]] && docker-vtiger-hook.sh database-import-done
 
 ## fill current mounted volume
 info "Waiting for volume preparation..."
@@ -44,28 +53,21 @@ symvol link /var/lib/vtiger /var/www/html && symvol mode /var/www/html www-data:
 
 ## update permissions
 echo "[vtiger] Start cron daemon..."
-info "Waiting start background process..."
+info "Initialize system services..."
 rsyslogd
 cron
 
-## Stop debugging
+## Dispose courtesy screen
 service apache2 stop >/dev/null 2>&1
-[[ -f "${INDEX}.0" ]] && mv -f "${INDEX}.0" "${INDEX}"
+[[ -f "${index}.0" ]] && mv -f "${index}.0" "${index}"
 
-## return to working directory
-echo "[vtiger] Set working directory: ${WORKDIR}"
-cd ${WORKDIR}
+## Return to working directory
+echo "[vtiger] Set working directory: ${workdir}"
+cd ${workdir}
 
-## Apply database patches if exists
-info "Waiting for patch database..."
-[[ -f vtiger.sql ]] && echo -n "[vtiger] Database patch: " && mysql-import --force vtiger.sql
-[[ -f vtiger.override.sql ]] && echo -n "[vtiger] Database override: " && mysql-import --force vtiger.override.sql
-
-## copy vtiger.json file on working directory
-[[ ! -f vtiger.json ]] && cp /usr/src/vtiger/vtiger.json .
-
-## run cron and apache
-echo "[vtiger] Run main process..."
+## Run main foreground process
+echo "[vtiger] Run foreground process..."
 [[ -f .vtiger.lock ]] && rm .vtiger.lock
-docker-vtiger-hook.sh befofe-apache-start
+[[ ! -f vtiger.json ]] && cp /usr/src/vtiger/vtiger.json .
+docker-vtiger-hook.sh before-apache-start
 apache2-foreground

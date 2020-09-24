@@ -1,3 +1,4 @@
+
 FROM php:5.6.30-apache
 LABEL maintainer='Francesco Bianco <info@javanile.org>'
 

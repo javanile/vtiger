@@ -51,3 +51,11 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 ```bash
 ./develop.sh
 ```
+
+## Shorturls
+
+```bash
+curl -i "https://git.io" \
+     -d "url=https://github.com/javanile/vtiger/blob/master/LICENSE" \
+     -d "code=docker-vtiger-license"
+```

@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+##
+# Vtiger CRM for Docker
+# Copyright (c) 2018-2020 Francesco Bianco <bianco@javanile.org>
+# MIT License <https://git.io/docker-vtiger-license>
+##
+
 export version=$1
 
 if [[ -z "$version" ]]; then
@@ -13,7 +19,8 @@ if [[ ! -d "$version" ]]; then
     exit 1
 fi
 
-echo -e "\n----[ BUILD VTIGER ${version} ]----"
+echo ""
+echo "===[ BUILD VTIGER ${version} ]==="
 
 #docker-compose down -v --remove-orphans
 #docker-compose run --rm debian
