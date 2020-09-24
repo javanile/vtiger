@@ -5,11 +5,11 @@ services:
   vtiger:
     build: ${version}
     environment:
-      - VT_DEBUG=true
+      - VT_DEBUG=false
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - 20080:80
-      - 20443:443
+      - 8080:80
+      - 8443:443
     volumes:
       - ./:/app
       - ./vtiger:/var/lib/vtiger
@@ -23,7 +23,7 @@ services:
       - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - 20081:8080
+      - 8081:8080
     links:
       - mysql
 
@@ -34,13 +34,6 @@ services:
     volumes:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
-
-  debian:
-    image: debian
-    working_dir: /app
-    command: bash -c "echo 'prevent default'; exit 0"
-    volumes:
-      - ./:/app:rw
 
 volumes:
   mysql:
