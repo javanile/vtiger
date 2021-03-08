@@ -1,7 +1,8 @@
 FROM php:5.6.40-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
-ENV VT_VERSION="6.1.0-Beta" \
+ENV VT_INSTALL=1 \
+    VT_VERSION="6.1.0-Beta" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 

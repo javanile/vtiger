@@ -5,7 +5,8 @@ services:
   vtiger:
     build: ${version}
     environment:
-      - VT_DEBUG=true
+      - VT_DEBUG=false
+      - VT_INSTALL=${install}
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - 20080:80

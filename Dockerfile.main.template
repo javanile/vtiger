@@ -2,7 +2,8 @@ FROM php:%%PHP_VERSION%%-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV LAYER_BREAK=true
-ENV VT_VERSION="%%VT_VERSION%%" \
+ENV VT_INSTALL=1 \
+    VT_VERSION="%%VT_VERSION%%" \
     DATABASE_PACKAGE="%%DATABASE_PACKAGE%%" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
