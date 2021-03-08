@@ -35,7 +35,7 @@ services:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
 
-  debian:
+  script:
     image: debian
     working_dir: /app
     command: bash -c "echo 'prevent default'; exit 0"
