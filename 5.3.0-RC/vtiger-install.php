@@ -1,25 +1,45 @@
 <?php
+/**
+ * Vtiger Installation Script.
+ *
+ * @author Francesco Bianco <bianco@javanile.org>
+ */
+
+date_default_timezone_set('America/Los_Angeles');
 
 define('VT_VERSION', getenv('VT_VERSION'));
 
-define('DB_HOST', '127.0.0.1');
-define('DB_PORT', '3306');
-define('DB_NAME', 'vtiger');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
-
-date_default_timezone_set('America/Los_Angeles');
+if (version_compare(VT_VERSION, '7.0.0', '>=')) {
+    define('DB_TYPE', 'mysqli');
+    define('DB_HOST', 'localhost');
+    define('DB_PORT', '3306');
+    define('DB_NAME', 'vtiger');
+    define('DB_USER', 'vtiger');
+    define('DB_PASS', 'vtiger');
+    define('DB_ROOT', '');
+} elseif (version_compare(VT_VERSION, '6.0.0', '>=') && version_compare(VT_VERSION, '7.0.0', '<')) {
+    define('DB_TYPE', 'mysql');
+    define('DB_HOST', '127.0.0.1');
+    define('DB_PORT', '3306');
+    define('DB_NAME', 'vtiger');
+    define('DB_USER', 'root');
+    define('DB_PASS', 'root');
+    define('DB_ROOT', 'root');
+} else {
+    echo "[vtiger] Error unsupported version.";
+    exit(1);
+}
 
 require_once '/usr/src/vtiger/vendor/autoload.php';
 
 use Javanile\HttpRobot\HttpRobot;
 
-echo "[vtiger] vtiger test installation...\n";
+echo "[vtiger] Testing installation...\n";
 
-echo '[vtiger] arguments: '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS."\n";
+echo '[vtiger] Database params: '.DB_TYPE.' '.DB_HOST.' '.DB_PORT.' '.DB_NAME.' '.DB_USER.' '.DB_PASS."\n";
 $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
 if (mysqli_connect_errno()) {
-    echo '[vtiger] database error: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
+    echo '[vtiger] Database error: '.mysqli_connect_errno().' - '.mysqli_connect_error()."\n";
     exit(1);
 }
 
@@ -28,6 +48,7 @@ $robot = new HttpRobot([
     'cookies'  => true,
 ]);
 
+// Check if cookie are working...
 $data = $robot->get('health.php', ['@html']);
 $data = $robot->post('health.php?setcookie=yes', ['cookie_name' => 'test', 'cookie_value' => '1234'], ['@html']);
 $data = $robot->get('health.php', ['@html']);
@@ -49,21 +70,21 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
 /**
  * Submit installation params
  */
-echo "[vtiger] (#2) Sending installation parameters\n";
+echo "[vtiger] (#2) Sending installation parameters";
 $values = $robot->post(
     'index.php',
     [
-        '__vtrftk'         => $vtrftk,
+        '__vtrftk'         => $values['__vtrftk'],
         'module'           => 'Install',
         'view'             => 'Index',
         'mode'             => 'Step5',
-        'db_type'          => 'mysqli',
+        'db_type'          => DB_TYPE,
         'db_hostname'      => DB_HOST,
         'db_username'      => DB_USER,
         'db_password'      => DB_PASS,
         'db_name'          => DB_NAME,
-        'db_root_username' => 'root',
-        'db_root_password' => 'root',
+        'db_root_username' => DB_ROOT,
+        'db_root_password' => DB_ROOT,
         'currency_name'    => 'USA, Dollars',
         'admin'            => 'admin',
         'password'         => 'admin',
@@ -78,7 +99,7 @@ $values = $robot->post(
 );
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
-echo "[vtiger] (#3) Confirm installation parameters\n";
+echo "[vtiger] (#3) Confirm installation parameters";
 $values = $robot->post(
     'index.php',
     [
@@ -95,7 +116,7 @@ echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\
 /**
  * Selecting industry
  */
-echo "[vtiger] (#4) Selecting industry\n";
+echo "[vtiger] (#4) Selecting industry";
 $values = $robot->post(
     'index.php',
     [
@@ -106,7 +127,7 @@ $values = $robot->post(
         'mode'     => 'Step7',
         'industry' => 'Accounting',
     ],
-    ['__vtrftk', '@text']
+    ['__vtrftk', 'auth_key', '@text']
 );
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
@@ -120,7 +141,7 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
 /**
  * First login seems required only for >7
  */
-echo "[vtiger] (#5) First login\n";
+echo "[vtiger] (#5) First login";
 $values = $robot->post(
     'index.php?module=Users&action=Login',
     [
@@ -137,18 +158,16 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
         exit(1);
     }
 }
-echo $values['@text'];
-exit(1);
-
+echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 /**
  * Select crm modules
  */
-echo "[vtiger] (#6) Select modules and packages\n";
+echo "[vtiger] (#6) Select modules and packages";
 $values = $robot->post(
     'index.php?module=Users&action=SystemSetupSave',
     [
-        '__vtrftk'            => $vtrftk,
+        '__vtrftk'            => $values['__vtrftk'],
         'packages[Tools]'     => 'on',
         'packages[Sales]'     => 'on',
         'packages[Marketing]' => 'on',
@@ -159,12 +178,9 @@ $values = $robot->post(
     ['__vtrftk', '@text']
 );
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
-echo $values['@text'];
-exit(1);
-
 
 // Save user settings
-echo "[vtiger] (#7) Save user settings\n";
+echo "[vtiger] (#7) Save user settings";
 $values = $robot->post(
     'index.php?module=Users&action=UserSetupSave',
     [
@@ -177,9 +193,6 @@ $values = $robot->post(
     ['__vtrftk', '@text']
 );
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
-
-echo $values['@text'];
-exit(1);
 
 // =================================================================
 // Select Modules
