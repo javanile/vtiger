@@ -38,7 +38,7 @@ if [[ -n "${VT_INSTALL}" ]]; then
   #php vtiger-startup.php
 
   ## Remove default config.inc.php if VT_INSTALL is false
-  if [[ -f /var/www/html/config.inc.php ]]; then
+  if [[ ! -f /var/www/html/config.inc.php ]]; then
     echo "[vtiger] Create configuration files..."
     cp config.inc.php /var/www/html/config.inc.php
   fi
@@ -76,7 +76,4 @@ loading "Waiting for patch database..."
 ## run cron and apache
 echo "[vtiger] Run main process..."
 [[ -f .vtiger.lock ]] && rm .vtiger.lock
-
-service mysql start
-
 apache2-foreground

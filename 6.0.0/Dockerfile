@@ -44,7 +44,7 @@ COPY vtiger-functions.php /usr/src/vtiger/
 COPY health.php /var/www/html/
 COPY crontab /etc/cron.d/crontab
 
-RUN sed -i 's/^error_reporting = .*$/error_reporting = E_WARNING \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_STRICT/' /usr/local/etc/php/php.ini
+RUN sed -i 's/^error_reporting = .*$/error_reporting = E_ALL \& ~E_WARNING \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_STRICT/' /usr/local/etc/php/php.ini
 RUN sed -i 's/^log4php\.rootLogger=.*$/log4php.rootLogger=ALL,A1/' /var/www/html/log4php.properties
 RUN sed -i 's/^log4php\.logger\.INSTALL=.*$/log4php.logger.INSTALL=ALL,A3/' /var/www/html/log4php.properties
 

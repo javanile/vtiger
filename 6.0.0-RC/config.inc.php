@@ -56,7 +56,7 @@ $dbconfig['db_port'] = ':'.(getenv('MYSQL_PORT') ?: '3306');
 $dbconfig['db_username'] = getenv('MYSQL_USER') ?: 'root';
 $dbconfig['db_password'] = getenv('MYSQL_PASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD');
 $dbconfig['db_name'] = getenv('MYSQL_DATABASE') ?: 'vtigercrm';
-$dbconfig['db_type'] = getenv('MYSQL_TYPE') ?: 'mysqli';
+$dbconfig['db_type'] = getenv('MYSQL_TYPE') ?: (version_compare(getenv('VT_VERSION'), '7.0.0', '>=') ? 'mysqli' : 'mysql');
 $dbconfig['db_status'] = 'true';
 
 // TODO: test if port is empty

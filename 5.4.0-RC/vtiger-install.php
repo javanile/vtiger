@@ -56,7 +56,7 @@ $data = $robot->get('health.php', ['@html']);
 /**
  * Get session token
  */
-echo "[vtiger] (#1) Get session token\n";
+echo "[vtiger] (#1) Get session token";
 $values = $robot->get('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk', '@text']);
 echo " -> token: '{$values['__vtrftk']}'\n";
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
