@@ -11,6 +11,7 @@ files=(
     crontab
     extends.sh
     loading.php
+    health.php
     php.ini
     vtiger-startup.php
     vtiger

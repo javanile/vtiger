@@ -15,6 +15,7 @@ if [[ $@ == *'--install-mysql'* ]]; then
     ## image size, keeping all free from unnecessary dependencies.  ##                                     ##
     ## ============================================================ ##
     apt-get update
+
     echo "${DATABASE_PACKAGE} mysql-server/root_password password root" | debconf-set-selections
     echo "${DATABASE_PACKAGE} mysql-server/root_password_again password root" | debconf-set-selections
 
@@ -50,7 +51,15 @@ mkdir -p /var/lib/vtiger/logs
 service apache2 start
 response=$(curl -Is "http://localhost/index.php?module=Install&view=Index" | head -n 1 | tr -d "\r\n")
 if [[ "${response}" != "HTTP/1.1 200 OK" ]]; then exit 64; fi
+
+ls -l /usr/src/vtiger/
 php /usr/src/vtiger/vtiger-install.php
+
+echo "====[ LOG ]===="
+ls -la /var/www/html/logs/
+#cat /var/www/html/log4php.properties
+
+#exit 1
 if [[ $? -ne 0 ]]; then exit 66; fi
 
 ## Export fresh database

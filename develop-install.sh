@@ -10,8 +10,11 @@ echo "${DATABASE_PACKAGE} mysql-server/root_password_again password root" | debc
 
 apt-get install -y --no-install-recommends ${DATABASE_PACKAGE}
 
+echo "==> Database start..."
 service mysql start
 
+echo "==> Database preparation..."
+export MYSQL_PWD=root
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS vtiger; \
                  ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci; \
                  CREATE USER 'vtiger'@'%' IDENTIFIED BY 'vtiger'; \
@@ -19,6 +22,7 @@ mysql -uroot -e "CREATE DATABASE IF NOT EXISTS vtiger; \
                  GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
                  FLUSH PRIVILEGES;"
 
+echo "==> Database restart..."
 service mysql stop
 echo "[mysqld]" >> /etc/mysql/my.cnf
 echo "sql_mode = ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/my.cnf

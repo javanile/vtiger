@@ -76,4 +76,7 @@ loading "Waiting for patch database..."
 ## run cron and apache
 echo "[vtiger] Run main process..."
 [[ -f .vtiger.lock ]] && rm .vtiger.lock
+
+service mysql start
+
 apache2-foreground

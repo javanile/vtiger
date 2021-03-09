@@ -1,17 +1,19 @@
-FROM php:5.6.40-apache
-LABEL maintainer='Francesco Bianco <info@javanile.org>'
+FROM php:5.6.40-apache-jessie
+LABEL maintainer='Francesco Bianco <bianco@javanile.org>'
 
+ENV LAYER_BREAK=true
 ENV VT_INSTALL=1 \
     VT_VERSION=6.0.0 \
     VT_DOWNLOAD=https://github.com/javanile/vtiger-core/archive/6.0.0.tar.gz \
-    DATABASE_PACKAGE=mariadb-server-10.1 \
+    DATABASE_PACKAGE=mysql-server \
     COMPOSER_ALLOW_SUPERUSER=1 \
-    PATH=/root/.composer/vendor/bin:$PATH
+    COMPOSER_HOME=/usr/src/vtiger \
+    PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
 WORKDIR /usr/src/vtiger
 
 COPY php.ini /usr/local/etc/php/
-COPY .symvol /usr/src/vtiger/
+COPY .symvol vtiger.json /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
 
@@ -26,22 +28,40 @@ RUN curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     curl -o vtiger.tar.gz -sL "$VT_DOWNLOAD" && tar -xzf vtiger.tar.gz && rm vtiger.tar.gz && \
     rm -fr /var/www/html && mv "vtiger-core-6.0.0" /var/www/html && \
-    vtiger permissions --fix && \
+    echo vtiger permissions --fix && \
     a2enmod ssl && a2enmod rewrite && \
-    apt-get clean && php composer.phar clearcache && ${LAYER_BREAK}
-RUN mv .symvol /var/www/html && \
+    apt-get clean && echo php composer.phar clearcache && ${LAYER_BREAK}
+RUN mv /usr/src/vtiger/.symvol /var/www/html && \
     mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
+RUN chmod 777 -R /var/www/html && ${LAYER_BREAK}
 RUN rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
-COPY vtiger-*.sh /usr/local/bin/
-COPY vtiger-*.php /usr/src/vtiger/
+COPY develop-install.sh /usr/local/bin/
+RUN develop-install.sh
+COPY vtiger-install.sh /usr/local/bin/
+COPY vtiger-install.php /usr/src/vtiger/
+COPY vtiger-functions.php /usr/src/vtiger/
+COPY health.php /var/www/html/
 COPY crontab /etc/cron.d/crontab
 
+RUN sed -i 's/^error_reporting = .*$/error_reporting = E_WARNING \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_STRICT/' /usr/local/etc/php/php.ini
+RUN sed -i 's/^log4php\.rootLogger=.*$/log4php.rootLogger=ALL,A1/' /var/www/html/log4php.properties
+RUN sed -i 's/^log4php\.logger\.INSTALL=.*$/log4php.logger.INSTALL=ALL,A3/' /var/www/html/log4php.properties
+
+
+RUN chmod +x /usr/local/bin/vtiger-*.sh
+RUN chmod +x /usr/local/bin/vtiger-*.sh
+RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
+COPY vtiger-foreground.sh /usr/local/bin/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY vtiger.json config.inc.php /usr/src/vtiger/
+COPY config.inc.php /usr/src/vtiger/
 COPY config.performance.php loading.php /var/www/html/
 
-RUN sed -i 's/^error_reporting = .*$/error_reporting = E_ALL \& ~E_WARNING \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_STRICT/' /usr/local/etc/php/php.ini
+RUN cd /var/www/html/vtlib/Vtiger/ && \
+    sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
+    symvol move /var/www/html /usr/src/vtiger/volume
+
+RUN echo "<?php phpinfo();" > /var/www/html/phpinfo.php
 
 VOLUME ["/var/lib/vtiger"]
 
