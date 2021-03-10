@@ -48,16 +48,15 @@ RUN sed -i 's/^log4php\.rootLogger=.*$/log4php.rootLogger=ALL,A1/' /var/www/html
 RUN sed -i 's/^log4php\.logger\.INSTALL=.*$/log4php.logger.INSTALL=ALL,A3/' /var/www/html/log4php.properties
 
 
-RUN chmod +x /usr/local/bin/vtiger-*.sh
-RUN chmod +x /usr/local/bin/vtiger-*.sh
 RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
-COPY vtiger-foreground.sh /usr/local/bin/
+COPY vtiger-foreground.sh vtiger-schedule.sh /usr/local/bin/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php /usr/src/vtiger/
 COPY config.performance.php loading.php /var/www/html/
 
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
+    mv /usr/local/bin/vtiger-schedule.sh /usr/local/bin/schedule && \
     symvol move /var/www/html /usr/src/vtiger/volume
 
 RUN echo "<?php phpinfo();" > /var/www/html/phpinfo.php

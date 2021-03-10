@@ -12,8 +12,8 @@ case "$1" in
     ;;
   vtiger)
     echo "====[ vtiger cron ]===="
-    /var/www/html/cron/vtigercron.sh >> ${log_dir}/${log_file} 2>&1
-    find "${log_dir}/" -iname "${log_file}" -size +1M -exec mv {} {}.$(date +%s) \;
+    [[ -n "${VT_SCHEDULER}" ]] && /var/www/html/cron/vtigercron.sh >> ${log_dir}/${log_file} 2>&1
+    find "${log_dir}/" -iname "${log_file}" -size +5M -exec mv {} {}.$(date +%s) \;
     ;;
   localhost_proxy)
     echo "====[ localhost proxy ]===="

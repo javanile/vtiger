@@ -20,6 +20,7 @@ files=(
     vtiger-ssl.pem
     vtiger-foreground.sh
     vtiger-cron.sh
+    vtiger-schedule.sh
     vtiger-install.php
     vtiger-install.sh
     vtiger-autoload.php
