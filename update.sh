@@ -59,3 +59,5 @@ for version in "${!versions[@]}"; do
     chmod +x ${version}/vtiger-*.sh
     chmod 600 ${version}/crontab
 done
+
+echo "Update completed."

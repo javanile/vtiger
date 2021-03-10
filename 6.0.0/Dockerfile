@@ -2,20 +2,19 @@ FROM php:5.6.40-apache-jessie
 LABEL maintainer='Francesco Bianco <bianco@javanile.org>'
 
 ENV LAYER_BREAK=true
-ENV VT_INSTALL=1 \
-    VT_VERSION=6.0.0 \
+ENV VT_VERSION=6.0.0 \
     VT_DOWNLOAD=https://github.com/javanile/vtiger-core/archive/6.0.0.tar.gz \
     DATABASE_PACKAGE=mysql-server \
     COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/usr/src/vtiger \
     PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
-WORKDIR /usr/src/vtiger
-
 COPY php.ini /usr/local/etc/php/
 COPY .symvol vtiger.json /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
+
+WORKDIR /usr/src/vtiger
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
@@ -71,6 +70,8 @@ ENV VT_ADMIN_USER='admin' \
     VT_ADMIN_PASSWORD='admin' \
     VT_ADMIN_EMAIL='admin@localhost.lan' \
     VT_CURRENCY_NAME='USA, Dollars' \
+    VT_INSTALL=1 \
+    VT_SCHEDULER=1 \
     MYSQL_HOST='mysql' \
     MYSQL_DATABASE='vtiger'
 
