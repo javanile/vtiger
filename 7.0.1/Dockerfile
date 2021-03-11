@@ -3,7 +3,8 @@ LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV VT_VERSION="7.0.1" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
-    PATH="/root/.composer/vendor/bin:$PATH"
+    COMPOSER_HOME=/usr/src/vtiger \
+    PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
 COPY php.ini /usr/local/etc/php/
 COPY vtiger.json .symvol /usr/src/vtiger/
