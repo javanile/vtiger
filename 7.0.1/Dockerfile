@@ -1,8 +1,7 @@
 FROM php:7.0.33-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
-ENV VT_INSTALL=1 \
-    VT_VERSION="7.0.1" \
+ENV VT_VERSION="7.0.1" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
@@ -43,8 +42,9 @@ RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
     symvol move /var/www/html /usr/src/vtiger/volume
 
+COPY config.inc.php /usr/src/vtiger/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY config.inc.php config.performance.php loading.php /var/www/html/
+COPY config.performance.php loading.php /var/www/html/
 COPY crontab /etc/
 
 VOLUME ["/var/lib/vtiger"]
@@ -55,6 +55,8 @@ ENV VT_ADMIN_USER="admin" \
     VT_ADMIN_PASSWORD="admin" \
     VT_ADMIN_EMAIL="admin@localhost.lan" \
     VT_CURRENCY_NAME="USA, Dollars" \
+    VT_SCHEDULER=1 \
+    VT_INSTALL=1 \
     MYSQL_HOST="mysql" \
     MYSQL_DATABASE="vtiger"
 

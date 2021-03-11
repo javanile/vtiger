@@ -1,7 +1,6 @@
 FROM php:5.6.40-apache-jessie
 LABEL maintainer='Francesco Bianco <bianco@javanile.org>'
 
-ENV LAYER_BREAK=true
 ENV VT_VERSION=6.0.0 \
     VT_DOWNLOAD=https://github.com/javanile/vtiger-core/archive/6.0.0.tar.gz \
     DATABASE_PACKAGE=mysql-server \
@@ -19,9 +18,9 @@ WORKDIR /usr/src/vtiger
 RUN apt-get update && \
     apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog unzip && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-    docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip && ${LAYER_BREAK}
-RUN curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && ${LAYER_BREAK}
-RUN curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
+    docker-php-ext-install imap exif mysql mysqli pdo pdo_mysql zip && \
+    curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && \
+    curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
     php composer.phar --ansi global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.11 javanile/vtiger-cli:0.0.3 && \
     usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
@@ -29,11 +28,11 @@ RUN curl -o composer.phar -sL https://getcomposer.org/composer.phar && \
     rm -fr /var/www/html && mv "vtiger-core-6.0.0" /var/www/html && \
     echo vtiger permissions --fix && \
     a2enmod ssl && a2enmod rewrite && \
-    apt-get clean && echo php composer.phar clearcache && ${LAYER_BREAK}
-RUN mv /usr/src/vtiger/.symvol /var/www/html && \
-    mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
-RUN chmod 777 -R /var/www/html && ${LAYER_BREAK}
-RUN rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+    apt-get clean && echo php composer.phar clearcache && \
+    mv /usr/src/vtiger/.symvol /var/www/html && \
+    mkdir -p volume /var/lib/vtiger && \
+    chmod 777 -R /var/www/html && \
+    rm -rf composer.phar /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
 
 COPY develop-install.sh /usr/local/bin/
 RUN develop-install.sh
