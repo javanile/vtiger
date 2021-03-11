@@ -11,7 +11,7 @@ define('VT_VERSION', getenv('VT_VERSION'));
 
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
     define('DB_TYPE', 'mysqli');
-    define('DB_HOST', 'localhost');
+    define('DB_HOST', '127.0.0.1');
     define('DB_PORT', '3306');
     define('DB_NAME', 'vtiger');
     define('DB_USER', 'vtiger');
