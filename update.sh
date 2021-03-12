@@ -3,6 +3,8 @@ set -e
 
 source versions.sh
 
+develop_version=${1:-nope}
+
 files=(
     .symvol
     000-default.conf
@@ -47,7 +49,12 @@ for version in "${!versions[@]}"; do
         -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
         -ri ${version}/Dockerfile
 
-    if [[ "$1" != "${version}" ]]; then
+    if [[ "${version}" == "${develop_version}" ]]; then
+        sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!!g' -ri ${version}/Dockerfile
+        sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!## RELEASE LAYER: !g' -ri ${version}/Dockerfile
+    else
+        sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!!g' -ri ${version}/Dockerfile
+        sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!## DEVELOP LAYER: !g' -ri ${version}/Dockerfile
         sed -e ':a;N;$!ba;s!ENV LAYER_BREAK=true\n!!g' -ri ${version}/Dockerfile
         sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\\n   !g' -ri ${version}/Dockerfile
     fi

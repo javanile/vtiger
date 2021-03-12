@@ -45,7 +45,7 @@ RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && \
 
 COPY config.inc.php /usr/src/vtiger/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
-COPY config.performance.php loading.php /var/www/html/
+COPY config.performance.php health.php loading.php  /var/www/html/
 COPY crontab /etc/
 
 VOLUME ["/var/lib/vtiger"]
