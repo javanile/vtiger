@@ -1,10 +1,5 @@
 title: Vtiger Package Manager (alpha)
 
-plugins:
-  - jekyll-remote-theme
-
 remote_theme: javanile/package-manager@main
 
 primary_color: "#1d9156"
-
-
