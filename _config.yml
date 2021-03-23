@@ -5,4 +5,6 @@ plugins:
 
 remote_theme: javanile/package-manager@main
 
-theme: jekyll-theme-cayman
+primary_color: "#1d9156"
+
+
