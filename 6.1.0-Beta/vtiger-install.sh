@@ -54,6 +54,25 @@ if [[ $@ == *'--assert-mysql'* ]]; then
     fi
 fi
 
+## Fix PHP problems on codebase
+if [[ $@ == *'--fix-php'* ]]; then
+    sed -i "s#{'\([a-z]*\)'}#['\1']#g" /var/www/html/include/database/PearDatabase.php
+    sed -i "s#\$\([a-z][a-z]*\){\$\([a-z][a-z]*\)}#$\1[$\2]#g" /var/www/html/include/database/PearDatabase.php /var/www/html/libraries/htmlpurifier/library/HTMLPurifier/Encoder.php
+    sed -i "s#matchAny(\$input)#matchAny(\$input=null)#g" /var/www/html/libraries/antlr/BaseRecognizer.php
+    sed -i "s#matchAny()#matchAny(\$input=null)#g" /var/www/html/libraries/antlr/AntlrLexer.php
+    sed -i "s#function recover(\$re)#function recover(\$input,\$re=null)#g" /var/www/html/libraries/antlr/AntlrLexer.php
+    sed -i "s#traceIn(\$ruleName, \$ruleIndex)#traceIn(\$ruleName, \$ruleIndex, \$inputSymbol=null)#g" /var/www/html/libraries/antlr/AntlrLexer.php /var/www/html/libraries/antlr/AntlrParser.php
+    sed -i "s#traceOut(\$ruleName, \$ruleIndex)#traceOut(\$ruleName, \$ruleIndex, \$inputSymbol=null)#g" /var/www/html/libraries/antlr/AntlrLexer.php /var/www/html/libraries/antlr/AntlrParser.php
+    sed -i "s#get_magic_quotes_gpc()#true#g" /var/www/html/includes/http/Request.php
+    sed -i "s#function __autoload(\$class)#function __autoload2(\$class)#g" /var/www/html/libraries/htmlpurifier/library/HTMLPurifier.autoload.php
+    sed -i "s#{0}#[0]#g" /var/www/html/libraries/htmlpurifier/library/HTMLPurifier/TagTransform/Font.php
+    sed -i "s#include_once 'config.php';#include_once 'polyfill.php'; include_once 'config.php';#g" /var/www/html/index.php
+    #sed -n 614p /var/www/html/include/database/PearDatabase.php
+    #sed -n 71p /var/www/html/libraries/antlr/BaseRecognizer.php
+    #sed -n 283p /var/www/html/libraries/antlr/AntlrLexer.php
+    #exit 1
+fi
+
 ## Execute Wizard
 mkdir -p /var/lib/vtiger/logs
 service apache2 start

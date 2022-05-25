@@ -14,6 +14,7 @@ files=(
     extends.sh
     loading.php
     health.php
+    polyfill.php
     php.ini
     vtiger-startup.php
     vtiger

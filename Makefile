@@ -3,6 +3,10 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
+start: build
+	@echo "Start vtiger ${version}..."
+	@docker-compose up --build --force-recreate vtiger
+
 update:
 	@bash update.sh $${version}
 
