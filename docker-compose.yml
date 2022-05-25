@@ -7,7 +7,7 @@ services:
     environment:
       - VT_DEBUG=false
       - VT_INSTALL=${install}
-      - LOG4PHP_DEBUG=true
+      - LOG4PHP_DEBUG=false
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - 20080:80

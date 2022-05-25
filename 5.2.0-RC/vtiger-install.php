@@ -95,12 +95,8 @@ $values = $robot->post(
         'dateformat'       => 'dd-mm-yyyy',
         'timezone'         => 'America/Los_Angeles',
     ],
-    //['__vtrftk', 'auth_key', '@text']
-    ['@html']
+    ['__vtrftk', 'auth_key', '@text']
 );
-var_dump($values);
-exit(0);
-
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 echo "[vtiger] (#3) Confirm installation parameters";

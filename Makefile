@@ -30,8 +30,5 @@ push: build
 lint:
 	@docker run --rm -i hadolint/hadolint < $${version}/Dockerfile
 
-bash:
-	@docker-compose exec vtiger bash
-
 schedule:
 	@docker-compose exec vtiger schedule
