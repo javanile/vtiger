@@ -21,25 +21,32 @@ if [[ $@ == *'--install-mysql'* ]]; then
 
     apt-get install -y --no-install-recommends ${DATABASE_PACKAGE}
 
-    service mysql start
+    service mysql start && true
+    service mariadb start && true
 
     export MYSQL_PWD=root
     mysql -uroot -e "CREATE DATABASE IF NOT EXISTS vtiger; \
-                     ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci; \
-                     CREATE USER 'vtiger'@'%' IDENTIFIED BY 'vtiger'; \
-                     UPDATE mysql.user SET password = PASSWORD('vtiger') WHERE user = 'vtiger'; \
-                     GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
+                     ALTER DATABASE vtiger CHARACTER SET utf8 COLLATE utf8_general_ci;"
+
+    mysql -uroot -e "CREATE USER 'vtiger'@'%' IDENTIFIED BY 'vtiger';" && true
+
+    mysql -uroot -e "UPDATE mysql.user SET password = PASSWORD('vtiger') WHERE user = 'vtiger';" && true
+
+    mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'vtiger'@'%' WITH GRANT OPTION; \
                      FLUSH PRIVILEGES;"
 
-    service mysql stop >/dev/null 2>&1
+    service mysql stop >/dev/null 2>&1 && true
+    service mariadb stop >/dev/null 2>&1 && true
     echo "[mysqld]" >> /etc/mysql/my.cnf
     echo "sql_mode = ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/my.cnf
-    service mysql start
+    service mysql start && true
+    service mariadb start && true
 fi
 
 ## Assert MySQL
 if [[ $@ == *'--assert-mysql'* ]]; then
-    service mysql start
+    service mysql start && true
+    service mariadb start && true
     database=$(mysqlshow -uvtiger -pvtiger -hlocalhost vtiger | grep -v Wildcard | grep -o vtiger)
     if [[ "${database}" != "vtiger" ]]; then
         echo "[vtiger] install error '--install-mysql' database not found.";
@@ -71,7 +78,8 @@ fi
 
 ## Uninstall MySQL
 if [[ $@ == *'--remove-mysql'* ]]; then
-    service mysql stop
+    service mysql stop && true
+    service mariadb stop && true
     killall -KILL mysql mysqld mysqld_safe && true
     apt-get --yes purge ^mysql.* ^mariadb.* && true
     apt-get --yes autoremove --purge && apt-get autoclean
