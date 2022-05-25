@@ -91,7 +91,7 @@ if [[ $@ == *'--dump'* ]]; then
         echo "---(vtiger.sql START)----"
         cat "${sql_file}"
         echo "---(vtiger.sql END)----"
-        exit 67;
+#        exit 67;
     fi
 fi
 

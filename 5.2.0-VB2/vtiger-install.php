@@ -57,10 +57,7 @@ $data = $robot->get('health.php', ['@html']);
  * Get session token
  */
 echo "[vtiger] (#1) Get session token";
-#$values = $robot->get('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk', '@text']);
-$values = $robot->get('index.php?module=Install&view=Index&mode=Step4', ['@html']);
-var_dump($values);
-exit(1);
+$values = $robot->get('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk', '@text']);
 echo " -> token: '{$values['__vtrftk']}'\n";
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
     if (empty($values['__vtrftk'])) {
@@ -98,8 +95,12 @@ $values = $robot->post(
         'dateformat'       => 'dd-mm-yyyy',
         'timezone'         => 'America/Los_Angeles',
     ],
-    ['__vtrftk', 'auth_key', '@text']
+    //['__vtrftk', 'auth_key', '@text']
+    ['@html']
 );
+var_dump($values);
+exit(0);
+
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 echo "[vtiger] (#3) Confirm installation parameters";

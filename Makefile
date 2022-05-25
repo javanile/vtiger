@@ -7,6 +7,9 @@ start: build
 	@echo "Start vtiger ${version}..."
 	@docker-compose up --build --force-recreate vtiger
 
+bash:
+	@docker-compose exec vtiger bash
+
 update:
 	@bash update.sh $${version}
 
