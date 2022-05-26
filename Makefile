@@ -29,7 +29,7 @@ push: build
 	@git add .
 	@git commit -am "Update images" && true
 	@git push
-	@docker login
+	@docker login --user=javanile
 	@docker push javanile/vtiger:$${version}
 
 lint:
