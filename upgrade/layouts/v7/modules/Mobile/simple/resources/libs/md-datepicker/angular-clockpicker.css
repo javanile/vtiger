@@ -1,0 +1,328 @@
+.ui-clockpicker {
+    width: 280px;
+    box-shadow:0px 1px 1px 2px lightgrey;
+    border-radius: 2px;
+    font-family: Helvetica, sans-serif;
+    position: absolute;
+    top: 32px;
+    background-color: #fff;
+    z-index: 100;
+    margin-bottom: 40px;
+}
+.ui-clockpicker-hour .selected,
+.ui-clockpicker-hour li:hover{
+    background: #0088cc;
+    color: #fff;
+    text-shadow: 0 0 1px #333;
+    border-radius: 30px;
+}
+.ui-clockpicker-min .selected,
+.ui-clockpicker-min li:hover{
+    background: green;
+    color: #fff;
+    text-shadow: 0 0 1px #333;
+    border-radius: 30px;
+}
+.ui-clockpicker a {
+    cursor: pointer;
+}
+.ui-clockpicker-selection {
+    display: block;
+    padding: 10px 0 7px;
+    font-size: 35px;
+    color: white;
+    font-size: 35px;
+    text-align: center;
+    text-transform: uppercase;
+    /*background: #8BC34A;*/
+}
+.ui-clockpicker-selector {
+    position: relative;
+    display: block;
+    padding: 5px;
+    background: white;
+    height: 240px;
+    width: 270px;
+}
+.ui-clockpicker-selector li {
+    cursor: pointer;
+    color: #555;
+}
+.clock-wrap{
+    height: 220px;
+    width: 220px;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 24px;
+    border-radius: 250px;
+    background: #eee;
+}
+.ui-clockpicker-origin {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: grey;
+    border-radius: 20px;
+    position: absolute;
+    left: 103px;
+    top: 103px;
+    z-index: 100;
+}
+.ui-clockpicker-hourline {
+    position: absolute;
+    top: 110px;
+    left: 110px;
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    transform-origin: top left;
+    -webkit-transform-origin: top left;
+    transform-style: preserve-3D;
+}
+
+.ui-clockpicker-hourline .lineH {
+    width: 80px;
+    height: 2px;
+    background: #0088cc;
+    position: absolute;
+    -webkit-transform: rotate(90deg);
+    position: absolute;
+    left: 0;
+    transform-origin: 0 1px;
+}
+
+.ui-clockpicker-minline {
+    position: absolute;
+    top: 110px;
+    left: 110px;
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    transform-origin: top left;
+    -webkit-transform-origin: top left;
+    transform-style: preserve-3D;
+}
+.ui-clockpicker-minline .lineM {
+    width: 50px;
+    height: 2px;
+    background: green;
+    position: absolute;
+    -webkit-transform: rotate(90deg);
+    position: absolute;
+    left: 0;
+    transform-origin: 0 1px;
+}
+
+
+.ui-clockpicker-min {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-radius: 250px;
+    top: 40px;
+    left: 40px;
+    z-index: 30;
+}
+.ui-clockpicker-min li {
+    position: absolute;
+    font-size: 14px;
+    padding-top: 3px;
+    border-radius: 30px;
+    min-width: 23px;
+    text-align: center;
+    min-height: 20px;
+}
+
+.ui-clockpicker-hour {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: solid #000 1px;
+    border:none;
+    z-index: 20;
+}
+.ui-clockpicker-hour li {
+    position: absolute;
+    font-size: 15px;
+    height: 27px;
+    text-align: center;
+    border-radius: 30px;
+    width: 26px;
+    padding-right: 2px;
+    line-height: 27px;
+    text-align: center;
+}
+.ui-clockpicker-hour li:nth-child(1) {
+    top: 4px;
+    left: 96px;
+}
+
+.ui-clockpicker-hour li:nth-child(2) {
+    top: 16px;
+    right: 50px;
+}
+
+.ui-clockpicker-hour li:nth-child(3) {
+    top: 50px;
+    right: 17px;
+}
+
+.ui-clockpicker-hour li:nth-child(4) {
+    top: 96px;
+    right: 4px;
+}
+
+.ui-clockpicker-hour li:nth-child(5) {
+    top: 142px;
+    right: 15px;
+}
+
+.ui-clockpicker-hour li:nth-child(6) {
+    top: 176px;
+    right: 50px;
+}
+
+.ui-clockpicker-hour li:nth-child(7) {
+    bottom: 4px;
+    left: 96px;
+}
+
+.ui-clockpicker-hour li:nth-child(8) {
+    top: 176px;
+    left: 50px;
+}
+
+.ui-clockpicker-hour li:nth-child(9) {
+    top: 142px;
+    left: 16px;
+}
+.ui-clockpicker-hour li:nth-child(10) {
+    top: 96px;
+    left: 4px;
+}
+.ui-clockpicker-hour li:nth-child(11) {
+    top: 50px;
+    left: 17px;
+}
+.ui-clockpicker-hour li:nth-child(12) {
+    top: 16px;
+    left: 50px;
+}
+
+
+.ui-clockpicker-min li:nth-child(1) {
+    top:5px;
+    left: 57px;
+}
+.ui-clockpicker-min li:nth-child(2) {
+    top: 15px;
+    right: 32px;
+}
+
+.ui-clockpicker-min li:nth-child(3) {
+    top: 33px;
+    right: 13px;
+}
+
+.ui-clockpicker-min li:nth-child(4) {
+    top: 58px;
+    right: 5px;
+}
+
+.ui-clockpicker-min li:nth-child(5) {
+    bottom: 33px;
+    right: 13px;
+}
+
+.ui-clockpicker-min li:nth-child(6) {
+    bottom: 15px;
+    right: 32px;
+}
+
+.ui-clockpicker-min li:nth-child(7) {
+    bottom: 5px;
+    left: 57px;
+}
+
+.ui-clockpicker-min li:nth-child(8) {
+    bottom: 15px;
+    left: 32px;
+}
+
+.ui-clockpicker-min li:nth-child(9) {
+    bottom: 33px;
+    left: 13px;
+}
+.ui-clockpicker-min li:nth-child(10) {
+    top: 58px;
+    left: 5px;
+}
+.ui-clockpicker-min li:nth-child(11) {
+    top: 33px;
+    left: 13px;
+}
+.ui-clockpicker-min li:nth-child(12) {
+    top: 15px;
+    left: 32px;
+}
+.ui-clockpicker-period {
+    position: relative;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 5px;;
+}
+.ui-clockpicker-period li {
+    position: absolute;
+    text-transform: uppercase;
+    top: 6px;
+}
+.ui-clockpicker-period li.selected{
+    background:#689F38;
+    border: 1px solid green;
+    color: #fff;
+    text-shadow: 0 0 1px #333; 
+}
+.ui-clockpicker-period li:nth-child(1) {
+    left: 20px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    width: 20px;
+    height: 20px;
+    font-size:12px;
+    padding: 4px 5px;
+    line-height:20px;
+    cursor: pointer;
+}
+.ui-clockpicker-period li:nth-child(2) {
+    right: 20px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    width: 19px;
+    height: 20px;
+    font-size:12px;
+    padding: 4px 5px;
+    line-height: 20px;
+    cursor: pointer;
+}
+li.set-current{
+    left: 30%;
+    top: 9px;
+    font-size: 20px;
+}
+li.set-current button{
+    margin: 0;
+    min-height: 26px;
+    line-height: 10px;
+}
+.time-input-shadow {
+    padding: 4px 0;
+    border-bottom: 1px solid #ddd;
+}

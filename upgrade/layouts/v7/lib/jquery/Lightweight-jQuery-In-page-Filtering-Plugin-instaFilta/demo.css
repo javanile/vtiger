@@ -1,0 +1,255 @@
+@charset "UTF-8";
+
+html { box-sizing: border-box; }
+
+*, *:before, *:after { box-sizing: inherit; }
+
+section, main, header, footer { display: block; }
+
+body { 
+    margin: 0; 
+    padding: 0; 
+    color: #102e37; 
+    font-size: 1em; 
+    font-weight: 300; 
+    line-height: 1.4em; 
+}
+
+::selection {
+  background: #1babc8;
+  color: #fff;
+}
+
+body, input, select, textarea { 
+    font-family: Roboto, sans-serif;
+}
+
+input, select, textarea { 
+    margin-right: 1em;
+    padding: .4em .6em; 
+    font-weight: 300;
+    font-size: .9em;
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+}
+
+input[type="checkbox"] { margin-right: .5em; }
+
+table { 
+    margin: 1em 0; 
+    background: ;
+}
+
+th { 
+    font-weight: 300;
+    font-size: .9em;
+    text-align: left; 
+}
+
+td { 
+    padding: .2em .5em; 
+}
+
+p { margin: 0 0 1em; }
+
+label { margin-right: 1em; }
+
+a { color: #f78d3f; }
+a:hover, a:active { color: #fcd271; }
+
+.btn {
+    display: inline-block;
+    padding: 6px 18px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    background: #2bbbd8;
+    border-radius: 2px;
+    transition: background 480ms;
+}
+
+.btn:hover, .btn:active {
+    color: #fff;
+    background: #1babc8;
+}
+
+.site-title { 
+    margin: 0; 
+    color: #102e37;
+    font-family: 'Lily Script One'; 
+    font-size: 3.5em;
+    font-weight: normal;
+    line-height: 1.1em;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, .6);
+}
+
+.header, .footer {
+    text-align: center;
+    color: #fff;
+    background: #2bbbd8;     
+}
+
+.header a, .footer a { color: #102e37; }
+
+.header { 
+    border-bottom: 4px solid #fcd271;
+}
+
+.header-description {
+    font-size: 1.1em;
+}
+
+.footer {
+    font-size: .9em;
+    border-top: 4px solid #fcd271;    
+}
+
+.main { 
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1em; 
+}
+
+.section {
+    padding: 1em;
+    margin: 2em;
+    clear: left;
+    overflow-y: hidden;
+}
+
+.section-title,
+.lesser-title {
+    margin: 0 0 .5em;
+    font-size: 1.8em;
+    font-weight: normal;
+    line-height: 1em;
+}
+
+.lesser-title { 
+    margin-top: 1.5em; 
+    font-size: 1em; 
+}
+
+.padded-content,
+.box {
+    padding: 2em;
+}
+
+.padded-content-h {
+    padding-right: 3em;
+    padding-left: 3em;
+}
+
+.box {
+    max-width: 100%;
+    overflow: auto;
+    background: #f5f5f5;
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;    
+}
+
+.box-code {
+    padding: 1em;
+    clear: left;
+    font-family: monospace;
+    line-height: 1.2em;
+    color: #fcd271;
+    background: #102e37;
+}
+
+.controls {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.example-list {
+    padding: 0;
+    margin: .5em 0 1em;
+    list-style: none;
+    overflow-y: hidden;
+}
+
+.example-list-quad li {
+    float: left; 
+    width: 100%;
+    max-width: 25%;
+}
+
+.example-section-title {
+    display: inline-block;
+    padding: 2px 14px 1px 10px;
+    margin: .8em 0 0;
+    background: #ddd;
+    border-radius: 0 9em 9em 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+}
+
+.l-1-2 {
+    display: block;
+    float: left;
+    width: 100%;
+    max-width: 50%;
+}
+
+.instafilta-target, .planet-name { 
+    padding: .2em .5em;
+    color: #1babc8;
+    font-size: .9em;
+    background-color: #fff;
+    border-bottom: 1px solid #e8ede0;
+}
+
+span.instafilta-target, .planet-name { display: block; }
+
+.instafilta-match { 
+    color: #102e37; 
+    font-weight: bold;
+}
+
+#ex8f, #ex9f, #ex10f { display: none; }
+
+@media all and (max-width: 960px) {
+
+    body {
+        font-size: .9em;
+    }
+
+    .btn-prominent {
+        width: 100%;
+    }
+
+    .padded-content, 
+    .box {
+        padding: 1em;
+    }
+
+    .padded-content-h {
+        padding-right: 1em;
+        padding-left: 1em;
+    }
+
+    .site-title {
+        font-size: 2.8em;
+    }
+
+    .header-description {
+        font-size: .9em;
+    }
+
+    .section {
+        margin: 2em 0;
+        padding: 1em .2em;
+    }
+
+    .l-1-2 {
+        max-width: 100%;
+    }
+
+}
+
+@media all and (min-width: 1600px) {
+
+    body { font-size: 1.2em; }
+}

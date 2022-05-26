@@ -1,0 +1,470 @@
+body{ 
+   overflow: hidden;
+}
+#page{
+    height: 100%;
+}
+.list-content{
+    height: 100%;
+    overflow-y: scroll;
+}
+.md-toolbar-tools.actionbar .md-button.md-icon-button{
+    font-size: 1.2em;
+    width:32px;
+    margin: 0 3px;
+    height: 32px;
+}
+.md-toolbar-tools.actionbar .md-button.md-icon-button .mdi{
+    vertical-align: top;
+    margin: 7px 0;
+}
+.md-toolbar-tools.actionbar>.md-button:first-child{
+    margin-left: -8px;
+}
+.md-toolbar-tools.actionbar>.md-button:last-child{
+    margin-right: -8px;
+}
+md-backdrop{
+    overflow-y: hidden;
+    height: 100%;
+    margin-top: -65px;
+}
+.content-section{
+    height: 100%;
+    padding-top: 56px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+.user-details h5{
+    font-weight: 100;
+}
+.app-menu{
+    max-height: 200px;
+    height: 130px;
+}
+.app-menu md-input-container{
+    padding-bottom: 10px;
+}
+
+md-input-container.app-dropdown  > md-select .md-select-label,
+md-input-container.app-dropdown  > md-select:focus .md-select-label{
+    padding-bottom: 10px;
+}
+.app-dropdown md-select .md-select-label{
+    border-bottom-width: 0;
+    color: rgba(255,255,255,1);
+    padding: 10px 16px;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+
+}
+.app-dropdown md-select:not([disabled]):focus .md-select-label,
+.app-dropdown md-select.md-default-theme:not([disabled]):focus .md-select-label{
+    color: rgba(255,255,255,1);
+}
+.logout-link{
+    text-decoration: none;
+    color: inherit;
+}
+
+.login-background{
+    min-height: 100%;
+    background: url("../images/bk1.jpg");
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+.logo-container{
+    padding-top: 12%;
+    text-align: center;
+} 
+.logo-container img{
+    max-height: 10%;
+    width: 40%;
+}
+.login-form{
+    padding: 10% 10% 0 10%;
+    width: 80%;
+    text-align: center;
+}
+.login-form a, .login-form a:active, .login-form a:focus{
+    color: rgba(255,255,255,1);
+    text-decoration: none;
+}
+.login-form md-input-container{
+    text-align: left;
+}
+.login-form md-input-container.md-default-theme.md-hue-1 label, 
+.login-form md-input-container.md-default-theme.md-hue-1 .md-placeholder{
+    color: rgba(255,255,255,0.90); 
+    text-shadow: none;
+    font-size: 1.4em;
+}
+.login-form md-input-container .md-input,
+.login-form md-input-container.md-default-theme.md-hue-1 .md-input,
+.login-form md-input-container.md-default-theme.md-hue-1:not(.md-input-invalid).md-input-focused .ng-pristine.md-input,
+.login-form md-input-container.md-default-theme.md-hue-1 .ng-pristine.md-input{
+    border-bottom: 1px solid #fff; 
+    color: rgba(255,255,255,0.90);
+    border-color: rgba(255,255,255,0.90);
+    font-size: 1.5em;
+}
+.login-form md-input-container.md-default-theme.md-hue-1:not(.md-input-invalid).md-input-has-value label,
+.login-form md-input-container.md-default-theme.md-hue-1.md-input-has-value label{ 
+    color: rgba(255,255,255,1);
+}
+.login-form md-input-container.md-default-theme.md-hue-1.md-input-invalid .md-input.ng-invalid{
+    border-color: rgb(244,67,54);
+    border-bottom: 1px solid rgb(244,67,54); 
+}
+.login-form md-input-container.md-default-theme.md-hue-1.md-input-invalid label{
+    color: rgb(244,67,54);
+    text-shadow: none;
+}
+.login-form md-input-container.md-default-theme.md-hue-1:not(.md-input-invalid).md-input-focused .md-input{
+    color: rgba(255,255,255,1);
+    border-color: rgba(255,255,255,1);
+}
+
+.login-form md-input-container.md-default-theme.md-hue-1:not(.md-input-invalid).md-input-focused label{
+    color: rgba(255,255,255,1);
+}
+.form-errors{
+    bottom: 0;
+}
+
+/* Sidebar Stylings */
+.sidenav-module-list .vmodule-name{
+    margin-bottom: -3px;
+    margin-left: 6px;
+    display: inline-block;
+    font-size: 14px;
+}
+.md-list-item-text span[class^='vicon'],span[class*='vicon']{
+    color: #777777;
+}
+/*Common rewrites */
+
+md-tooltip{
+    right: 8px;
+    white-space: normal;
+    word-break: break-all;
+    text-overflow:url;
+}
+[fixed-top] {
+    position:fixed;
+    top:0;
+    width: 100%;
+    z-index: 20;
+}
+[content-with-fixed-top]{
+    margin-top: 64px;
+}
+/* List View */
+.list-content md-list{
+    padding: 0;
+    padding-top: 34px;
+}
+.list-content md-list md-list-item .md-list-item-text{
+    padding-bottom: 10px;
+    min-height: 60px;
+}
+.list-actions{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+.list-actions.show-actions{
+    background: red;
+    z-index: 10;
+}
+.list-filters{
+    height: 34px;
+    background: #eeeeee;
+    position: fixed;
+    width: 100%;
+    z-index: 30;
+    margin-top: -1px;
+    padding: 0px 10px;
+}
+.list-filters .change-filter{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.list-filters .change-filter  md-select,
+.list-filters .change-filter md-select:focus,
+.list-filters .sort-filter  md-select,
+.list-filters .sort-filter md-select:focus{
+    margin: 0;
+    width: 100%;
+    font-size: 0.75em;
+}
+.list-filters .change-filter .md-select-label,
+.list-filters .change-filter md-select:not([disabled]):focus .md-select-label,
+.list-filters .sort-filter .md-select-label,
+.list-filters .sort-filter md-select:not([disabled]):focus .md-select-label
+{
+    padding: 0;
+    height: 30px;
+    border-bottom: 0;
+}
+.list-filters .sort-filter{
+    border-left: 1px solid #ddd;
+}
+.list-filters .filter-btn{
+    min-height: 30px;
+    min-width: 14%;
+    margin: 0;
+    line-height: 0;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    font-size: 0.8em;
+    text-align: left;
+    padding: 0 3%;
+    vertical-align: middle;
+    border-radius: 0;
+}
+.list-filters .filter-btn .mdi{
+    font-size: 1.2em;
+}
+.current-filter,.current-sort-field{
+    width: 80%;
+    display: inline-block;
+    padding-bottom: 0;
+}
+.current-filter .md-select-label .md-select-icon,
+.current-sort-field .md-select-label .md-select-icon{
+    width: 15px;
+    margin: -4px 4px 0;
+}
+.records-list md-list-item.md-3-line .md-list-item-text p{
+    font-size: 0.9em;
+    font-weight: normal;
+    color: black;
+}
+.records-list md-list-item.md-3-line .md-list-item-text p.header-fields{
+    font-size: 0.8em;
+}
+.load-more-link,
+md-list-item.md-no-proxy.load-more-link{
+    text-align: center;
+    color: #3399ff;
+    background: #f3f3f3;
+    padding: 7px 0;
+    min-height: 20px;
+    font-size: 0.8em;
+}
+.load-more-link div,
+.load-more-link div:active, 
+.load-more-link div:focus{
+    width:100%;
+    outline:none;
+}
+.load-more-link .thats-all{
+    color: #777777;
+}
+.no-records-message{
+    height: 80vh;
+    padding-top: 34px;
+    text-align: center;
+    display: table;
+    width: 100%;
+}
+.no-records-message .no-records{
+    display: table-cell;
+    vertical-align: middle;
+    color: #777;
+    font-size: 1.2em;
+}
+
+.float-button{ 
+    font-size: 1.5em;
+}
+.value-empty{
+    opacity: 0.4;
+    font-size: 0.7em !important;
+}
+
+
+.actions-slider{
+    background: #4e664e;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+}
+.actions-slider .button-wrap{
+    height: 48px;
+    margin-top: -24px;
+    top:50%;
+    position: relative;
+}
+.actions-slider .md-icon-button{
+    background: transparent;
+    color: #ffffff !important;
+    font-size: 1.5em;
+    visibility: visible;
+    opacity: 1;
+    z-index: 30;
+    width: 100%;
+}
+
+/* Slider animation */
+.actions-slider.animate-show {
+    left: 0;
+    opacity:1;
+}
+.actions-slider.animate-show.ng-hide {
+    left: 100%;
+    opacity:0;
+}
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 200ms;
+    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 200ms;
+    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 200ms;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 200ms;
+}
+
+/* Detail View styles */
+.detail-content{
+    overflow-y: scroll;
+}
+.detail-content-wrapper{
+    height: 100%;
+}
+.detail-content .fields-list .field-row {
+    padding: 8px 5px;
+    position: relative;
+}
+.detail-content .fields-list .field-row .field-label{
+    font-size: 0.8em;
+}
+.detail-content .fields-list .field-row .field-value{
+    margin-top: 6px;
+}
+
+/*-------------------------
+    The edit tooltip WIP
+--------------------------*/
+
+.tooltip{
+    background-color:#5c9bb7;
+    top:0;
+    box-shadow: 0 1px 1px #ccc;
+    border-radius:3px;
+    width: 96%;
+    padding: 1px;
+    position: absolute;
+    vertical-align: middle;
+}
+
+.tooltip input{
+    border: none;
+    width: 100%;
+    line-height: 34px;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px #bbb inset;
+    text-align: center;
+    font-size: 16px;
+    font-family: inherit;
+    color: #8d9395;
+    font-weight: bold;
+    outline: none;
+}
+
+
+/* Edit View Styles */
+.edit-content{
+    max-height: 100%;
+    overflow-y: scroll;
+}
+form, .edit-content .md-list-item-text.field-row{
+    width: 100%;
+    height: 100%;
+}
+.edit-content md-input-container{
+    padding: 16px 0px;
+}
+
+md-list-item, md-list-item .md-list-item-inner{
+    min-height: 41px;
+}
+.letter-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #B7AAAA;
+    display: block;
+    text-align: center;
+    margin-right: 10px;
+    line-height: 2em;
+    font-size: 20px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+md-input-container md-select{
+    width: 100%;
+}
+md-select md-select-label.md-select-label{
+    padding-top : 0px;
+}
+.app-dropdown md-select{
+    width: 100%;
+}
+md-backdrop{
+    margin-top: 0px;
+}
+.editIcon{
+    font-size: 1.5em;
+    opacity: 0.5;
+    margin: 10px 5px;
+}
+
+md-autocomplete[md-floating-label]{
+    padding-bottom: 0px;
+}
+md-checkbox{
+    margin: 0px;
+}
+md-input-container .md-input{
+    width: 100%;
+}
+
+md-autocomplete input:not(.md-input){
+    padding: 0 2px;
+    border-bottom : 1px solid #f1f1f1;
+}
+md-autocomplete{
+    background: #ffffff !important;
+    box-shadow: none;
+}
+.toolbar-title{
+    margin-left: 10px;
+}
+.detail-header-label{
+    opacity: 0.6;
+    margin: 15px;
+}
+
+.lineItem-summaryBlock .lineItem-value{
+    text-align: right;
+    color:#006400;
+}
+.lineItem-summaryBlock{
+    font-size: 0.9em;
+}
+.lineItem-summaryBlock .lineItem-label{
+    text-align: left;
+}
+md-tabs md-tab-item.md-tab{
+    text-transform: none;
+}
+md-ink-bar{
+    background: gray !important;
+}

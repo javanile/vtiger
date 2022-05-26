@@ -7,6 +7,11 @@ start: build
 	@echo "Start vtiger ${version}..."
 	@docker-compose up --build --force-recreate vtiger
 
+restart: build
+	@echo "Restart vtiger ${version}..."
+	@docker-compose down -v
+	@docker-compose up --build --force-recreate vtiger
+
 bash:
 	@docker-compose exec vtiger bash
 

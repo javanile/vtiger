@@ -30,7 +30,7 @@ services:
       - mysql
 
   mysql:
-    image: mysql:5.5
+    image: ${database}
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     volumes:

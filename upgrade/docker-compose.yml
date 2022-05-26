@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+
+  vtiger:
+    build: .
+    environment:
+      - VT_DEBUG=false
+      - VT_INSTALL=${install}
+      - LOG4PHP_DEBUG=false
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 21080:80
+      - 21443:443
+    volumes:
+      - ./:/var/www/html
+    links:
+      - mysql
+      - adminer
+
+  adminer:
+    image: javanile/adminer
+    environment:
+      - MYSQL_DATABASE=vtiger
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 21081:8080
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - mysql:/var/lib/mysql:rw
+      - ./:/vtiger:rw
+
+volumes:
+  mysql:

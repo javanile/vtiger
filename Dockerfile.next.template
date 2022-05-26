@@ -48,7 +48,7 @@ COPY vtiger-*.php /usr/src/vtiger/
 ## @endblock
 
 ## @block: develop
-RUN vtiger-install.sh --assert-mysql --fix-php --dump --remove-mysql
+RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
 #COPY vtiger-foreground.sh /usr/local/bin/
 #COPY vtiger-functions.php /usr/src/vtiger/
 ## @block: release

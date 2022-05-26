@@ -1,0 +1,52 @@
+/* 
+    Created on : 18 May, 2015, 11:39:07 PM
+    Author     : lohith
+*/
+
+.fc-center h2 {
+    font-size: 165%;
+    margin-top: 5%;
+    font-weight: bold;
+    color: grey;
+}
+
+.fc-day-header {
+    background-color: #2c3b49;
+    height: 25px;
+    vertical-align: middle !important;
+    color: white;
+}
+
+.fc-state-highlight {
+    background-color: #E3F2FD !important;
+}
+
+.fc-button.fc-state-default {
+  border-radius: 0;
+  position:relative;
+  display:inline-block;
+  margin-bottom:0;
+  font-size:13px;
+  line-height:18px;
+  *line-height:20px;
+  color:grey;
+  text-align:center;
+  text-shadow:0 1px 1px rgba(255,255,255,0.75);
+  vertical-align:middle;
+  cursor:pointer;
+  border:1px solid #ccc;
+  *border:0;
+  border-bottom-color:#b3b3b3;
+  border-color:#ccc;
+  border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  background-image: none;
+}
+
+.fc-button.fc-state-active {
+     background-color: #2c3b49;
+    color: white;
+}
+
+.fc-event {
+    border-radius: 0 !important;
+}

@@ -1,0 +1,13 @@
+{
+  "name": "instaFilta",
+  "description": "jQuery plugin for performing in-page filtering",
+  "version": "1.0.0",
+  "homepage": "https://github.com/chromawoods/instaFilta",
+  "author": "Andreas Larsson <andreas@chromawoods.com> (http://chromawoods.com)",
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "gulp-jshint": "~1.8.4",
+    "gulp-uglify": "~0.3.1",
+    "gulp-rename": "~1.2.0"
+  }
+}

@@ -1,0 +1,1165 @@
+/*
+ Copyright 2013 Uniclau S.L. (www.uniclau.com)
+
+ This file is part of jbPivot.
+
+ jbPivot is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ jbPivot is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with jbPivot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+$.unc = {
+   plugins: {
+      agregates: {},
+      addAgregate: function(agregateName, factory) {
+         "use strict";
+         this.agregates[agregateName] = factory;
+      },
+      groupers: {},
+      addGrouper: function(grouperName, factory) {
+         "use strict";
+         this.groupers[grouperName] = factory;
+      },
+      formatters: {},
+      addFormatter: function(formatterName, factory) {
+         "use strict";
+         this.formatters[formatterName] = factory;
+      }
+   }
+};
+
+
+$(function() {
+   "use strict";
+   $.widget("unc.jbPivot", {
+      options: {
+         fields: {},
+         summary: true,
+         copyright: true,
+         formatter: "default",
+         l_all: "All",
+         l_unused_fields: "Unused fields"
+      },
+      _create: function() {
+         this.CollapsedNodes = {};
+         this.renderPending = false;
+         this.reset();
+         if (typeof this.options.data !== "undefined") {
+            this.insertRecords(this.options.data);
+         }
+         var self = this;
+         $(this.element).on('click', ".collapse_button", function(event) {
+            event.preventDefault();
+            self._togleCollapse(this.rel);
+         });
+
+         $(this.element).on('dragstart', '.draggable', function(event) {
+            self.pre_post = "";
+            self.dragcls = "";
+            self.dragdata = $(this).attr("rel");
+            event.originalEvent.dataTransfer.effectAllowed = 'move';
+            event.originalEvent.dataTransfer.setData("Text", $(this).attr("rel"));
+            $(".pivot").addClass("drag_in_progress");
+         });
+
+
+
+         $(this.element).on('dragleave', '.dropable', function(event) {
+
+            //			var target=$(event.originalEvent.target);
+            var target = $(this);
+            var arr = target.attr('class').match(/\s+(target(X|Y|Z|U)[\d]+)($|\s)/);
+            var cls = "." + arr[1];
+            var el = self.element;
+            setTimeout(function() {
+               $(cls, el).removeClass("dropping_pre");
+               $(cls, el).removeClass("dropping_post");
+               self.pre_post = "";
+               self.dragcls = "";
+            }, 0);
+
+            event.stopPropagation();
+            event.preventDefault();
+            return false;
+         });
+
+         $(this.element).on('dragover', '.dropable', function(event) {
+            var target = $(this);
+            var parentOffset = $(this).offset();
+            //or $(this).offset(); if you really just want the current element's offset
+            var offsetX = event.originalEvent.pageX - parentOffset.left;
+            var offsetY = event.originalEvent.pageY - parentOffset.top;
+
+            var arr = target.attr('class').match(/\s+(target(X|Y|Z|U)([\d]+))($|\s)/);
+            arr[3] = parseInt(arr[3], 10);
+            var cls = "." + arr[1];
+
+            var pre_post;
+            var oldpp = self.pre_post;
+            var oldcls = self.dragcls;
+            if ((arr[2] === "Y") || (arr[2] === "U")) {
+               pre_post = offsetY > target.height() / 2 ? "post" : "pre";
+            } else {
+               pre_post = offsetX > target.width() / 2 ? "post" : "pre";
+            }
+            if (arr[3] === 0) {
+               pre_post = "post";
+            }
+
+            var from = self.dragdata;
+            var to = $(this).attr("rel");
+            if (self._canMove(from, to, pre_post)) {
+
+               var el = self.element;
+
+               if ((oldpp !== pre_post) || (cls !== oldcls)) {
+                  $(cls, el).removeClass("dropping_pre");
+                  $(cls, el).removeClass("dropping_post");
+                  setTimeout(function() {
+                     $(cls, el).addClass("dropping_" + pre_post);
+                     self.pre_post = pre_post;
+                     self.dragcls = cls;
+                  }, 0);
+               }
+
+
+               event.originalEvent.dataTransfer.dropEffect = 'move';
+               event.stopPropagation();
+               event.preventDefault();
+               return false;
+            }
+         });
+
+         $(this.element).on('drop', '.dropable', function(event) {
+            var target = $(this);
+
+            var parentOffset = $(this).offset();
+            //or $(this).offset(); if you really just want the current element's offset
+            var offsetX = event.originalEvent.pageX - parentOffset.left;
+            var offsetY = event.originalEvent.pageY - parentOffset.top;
+
+            var arr = target.attr('class').match(/\s+(target(X|Y|Z|U)([\d]+))($|\s)/);
+            arr[3] = parseInt(arr[3], 10);
+
+            var pre_pos;
+            if ((arr[2] === "Y") || (arr[2] === "U")) {
+               pre_pos = offsetY > target.height() / 2 ? "post" : "pre";
+            } else {
+               pre_pos = offsetX > target.width() / 2 ? "post" : "pre";
+            }
+            if (arr[3] === 0) {
+               pre_pos = "post";
+            }
+            var from = event.originalEvent.dataTransfer.getData("Text");
+            var to = $(this).attr("rel");
+            self._moveField(from, to, pre_pos);
+            event.preventDefault();
+            return false;
+         });
+
+         $(this.element).on('dragend', '.dropable', function() {
+            var el = self.element;
+            $(".pivot", el).removeClass("drag_in_progress");
+         });
+
+      },
+      reset: function() {
+         this.fields = [];
+         this.afields = [];
+         this.xfields = [];
+         this.yfields = [];
+         this.zfields = [];
+         this.ufields = [];
+         this.fieldNames = [];
+         this.fieldLabels = [];
+         this.formatters = [];
+
+         if ((typeof this.options.formatter === "undefined") || (this.options.formatter === null)) {
+            this.options.formatter = "default";
+         }
+         if (typeof this.options.formatter === "string") {
+            if (typeof $.unc.plugins.formatters[this.options.formatter] !== "function") {
+               throw ("Formatter: " + this.options.formatter + " is not defined");
+            }
+            this.defaultFormatter = $.unc.plugins.formatters[this.options.formatter](this.options);
+         } else if (typeof this.options.formatter === "function") {
+            this.defaultFormatter = {
+               format: this.options.formatter
+            };
+         } else {
+            throw ("Invalid formatter");
+         }
+
+         if (this.options.formatter === null) {
+            throw ("Formatter not defined");
+         }
+
+         var f;
+         var k = 0;
+         var indexbyname = {};
+
+         for (f in this.options.fields) {
+            if (this.options.fields.hasOwnProperty(f)) {
+               var fo = $.extend({
+                  agregateType: "distinct",
+                  groupType: "distinct",
+                  label: f,
+                  formatter: null
+               }, this.options.fields[f]);
+
+               if (fo.groupType !== "none") {
+                  if (typeof $.unc.plugins.groupers[fo.groupType] !== "function") {
+                     throw ("Grouper: " + fo.groupType + " is not defined");
+                  }
+                  this.fields.push($.unc.plugins.groupers[fo.groupType](fo));
+               } else {
+                  this.fields.push(null);
+               }
+
+               if (fo.agregateType !== "none") {
+                  if (typeof $.unc.plugins.agregates[fo.agregateType] !== "function") {
+                     throw ("Grouper: " + fo.agregateType + " is not defined");
+                  }
+                  this.afields.push($.unc.plugins.agregates[fo.agregateType](fo));
+               } else {
+                  this.afields.push(null);
+               }
+
+               if (typeof fo.formatter === "string") {
+                  if (typeof $.unc.plugins.formatters[fo.formatter] !== "function") {
+                     throw ("Formatter" + fo.formatter + " is not defined");
+                  }
+                  this.formatters.push($.unc.plugins.formatters[fo.formatter](fo));
+               } else if (typeof fo.formatter === "function") {
+                  this.formatters.push({
+                     format: fo.formatter
+                  });
+               } else {
+                  this.formatters.push(null);
+               }
+
+               indexbyname[f] = k;
+               k++;
+
+               this.fieldNames.push(f);
+               this.fieldLabels.push(fo.label);
+            }
+         }
+
+         var i, fn;
+
+         for (i = 0; i < this.options.xfields.length; i++) {
+            fn = this.options.xfields[i];
+            if (typeof indexbyname[fn] === "undefined") {
+               throw ("Field " + fn + " in xfields not defined");
+            }
+            if (typeof this.fields[indexbyname[fn]] === null) {
+               throw ("Field " + fn + "is not groupable ans is ispecified in xfields");
+            }
+            this.xfields.push(indexbyname[fn]);
+            delete indexbyname[fn];
+         }
+         for (i = 0; i < this.options.yfields.length; i++) {
+            fn = this.options.yfields[i];
+            if (typeof indexbyname[fn] === "undefined") {
+               throw ("Field " + fn + " in yfields not defined");
+            }
+            if (typeof this.fields[indexbyname[fn]] === null) {
+               throw ("Field " + fn + "is not groupable ans is ispecified in yfields");
+            }
+            this.yfields.push(indexbyname[fn]);
+            delete indexbyname[fn];
+         }
+         for (i = 0; i < this.options.zfields.length; i++) {
+            fn = this.options.zfields[i];
+            if (typeof indexbyname[fn] === "undefined") {
+               throw ("Field " + fn + " in zfields not defined");
+            }
+            if (typeof this.afields[indexbyname[fn]] === null) {
+               throw ("Field " + fn + "is not agregatable ans is ispecified in zfields");
+            }
+            this.zfields.push(indexbyname[fn]);
+            delete indexbyname[fn];
+         }
+         for (fn in indexbyname) {
+            if (indexbyname.hasOwnProperty(fn)) {
+               this.ufields.push(indexbyname[fn]);
+            }
+         }
+
+
+         var mask = (1 << this.fields.length) - 1;
+         this.indexes = {};
+         this.indexes_len = {};
+         this.indexes[mask] = {};
+         this.indexes_len[mask] = 0;
+         this._generate_trees();
+
+         this._forceRender();
+      },
+      insertRecords: function(records) {
+         var i, f;
+         for (i = 0; i < records.length; i++) {
+            var R = records[i];
+
+            var mindex = [];
+            for (f = 0; f < this.fields.length; f++) {
+               if (this.fields[f] !== null) {
+                  mindex.push(this.fields[f].CalculateValue(R));
+               } else {
+                  mindex.push(0);
+               }
+            }
+
+
+            for (var mask in this.indexes) {
+               if (this.indexes.hasOwnProperty(mask)) {
+
+                  var mindex2 = mindex.slice(0);
+                  for (var k = 0; k < this.fields.length; k++) {
+                     if (((1 << k) & mask) === 0) {
+                        mindex2[k] = 0;
+                     }
+                  }
+
+                  var groupidx = this._arr2idx(mindex2);
+
+                  if (typeof this.indexes[mask][groupidx] === "undefined") {
+                     this.indexes[mask][groupidx] = [];
+                     this.indexes_len[mask]++;
+                  }
+                  for (f = 0; f < this.afields.length; f++) {
+                     if (this.afields[f] !== null) {
+                        this.indexes[mask][groupidx][f] = this.afields[f].agregate(this.indexes[mask][groupidx][f], R);
+                     }
+                  }
+               }
+            }
+         }
+
+         this._generate_trees();
+         this._forceRender();
+      },
+      _forceRender: function() {
+         if (this.renderPending) {
+            return;
+         }
+         this.renderPending = true;
+         var self = this;
+         setTimeout(function() {
+            self.renderPending = false;
+            self._renderHtml();
+         }, 100);
+      },
+      _arr2idx: function(arr) {
+         return arr.join(",");
+      },
+      _idx2arr: function(S) {
+         var i;
+         var arr = S.split(",");
+         var res = [];
+         for (i = 0; i < arr.length; i++) {
+            res.push(parseInt(arr[i], 10));
+         }
+         return res;
+      },
+      // Returns an array of with all agregated fields from a vector (-1 means any).
+      _getValues: function(mindex) {
+         var groupidx;
+         var mask = 0;
+         for (var i = 0; i < this.fields.length; i++) {
+            if (mindex[i] === -1) {
+               mindex[i] = 0;
+            } else {
+               mask = mask | (1 << i);
+            }
+         }
+
+         if (typeof this.indexes[mask] === "undefined") {
+            this._generate_index(mask);
+         }
+
+         groupidx = this._arr2idx(mindex);
+
+         var V = this.indexes[mask][groupidx];
+         if ((typeof V === "undefined") || (V === null)) {
+            V = new Array(this.afields.length);
+         }
+
+         return V;
+      },
+      _generate_index: function(mask) {
+         var m;
+         var smask = null;
+
+         for (m in this.indexes) {
+            if ((mask & m) === mask) {
+               if ((smask === null) || (this.indexes_len[m] < this.indexes_len[smask])) {
+                  smask = m;
+               }
+            }
+         }
+
+         this.indexes[mask] = {};
+         this.indexes_len[mask] = 0;
+
+         for (var v in this.indexes[smask]) {
+            if (this.indexes[smask].hasOwnProperty(v)) {
+               var mindex = this._idx2arr(v);
+               for (m = 0; m < this.fields.length; m++) {
+                  if (((1 << m) & mask) === 0) {
+                     mindex[m] = 0;
+                  }
+               }
+               var groupidx = this._arr2idx(mindex);
+
+               if (typeof this.indexes[mask][groupidx] === "undefined") {
+                  this.indexes[mask][groupidx] = [];
+                  this.indexes_len[mask]++;
+               }
+               for (var f = 0; f < this.afields.length; f++) {
+                  if (this.afields[f] !== null) {
+                     this.indexes[mask][groupidx][f] = this.afields[f].agregate(this.indexes[mask][groupidx][f],
+                             this.indexes[smask][v][f]);
+                  }
+               }
+            }
+         }
+      },
+      _generate_trees: function() {
+         var node, i;
+         var mask = (1 << this.fields.length) - 1;
+         this.xtree = {
+            childs: {}
+         };
+         this.ytree = {
+            childs: {}
+         };
+         for (var k in this.indexes[mask]) {
+            if (this.indexes[mask].hasOwnProperty(k)) {
+               var mindex = this._idx2arr(k);
+
+               node = this.xtree;
+
+               for (i = 0; i < this.xfields.length; i++) {
+                  if (typeof node.childs[mindex[this.xfields[i]]] === "undefined") {
+                     node.childs[mindex[this.xfields[i]]] = {
+                        childs: {}
+                     };
+                  }
+                  node = node.childs[mindex[this.xfields[i]]];
+
+               }
+
+               node = this.ytree;
+
+               for (i = 0; i < this.yfields.length; i++) {
+                  if (typeof node.childs[mindex[this.yfields[i]]] === "undefined") {
+                     node.childs[mindex[this.yfields[i]]] = {
+                        childs: {}
+                     };
+                  }
+                  node = node.childs[mindex[this.yfields[i]]];
+               }
+            }
+         }
+      },
+      _tree2table: function(axis, node, table) {
+
+         var x, y, c;
+
+         var w = axis === "y" ? this.yfields.length : this.xfields.length;
+
+         y = table.length - 1;
+         x = table[y].index.length;
+
+
+         var m;
+
+         if (this._isCollapsed(axis, table[y].index)) {
+            table[y].cells[x] = {};
+            table[y].cells[x].spanx = w - x + 1;
+            table[y].cells[x].spany = 1;
+            m = 1;
+         } else {
+            var baseindex = table[y].index.slice(0);
+            var newline = false;
+            m = 0;
+
+
+            var displayvalues;
+            if (x < w) {
+               var usedvalues = [];
+               for (c in node.childs) {
+                  if (node.childs.hasOwnProperty(c)) {
+                     usedvalues.push(c);
+                  }
+               }
+
+               var fd = axis === "y" ? this.fields[this.yfields[x]] : this.fields[this.xfields[x]];
+               displayvalues = fd.DisplayValues(usedvalues);
+            } else {
+               displayvalues = [];
+            }
+            for (c = 0; c < displayvalues.length; c++) {
+
+               if (newline) {
+                  table.push({
+                     index: baseindex.slice(0),
+                     cells: {}
+                  });
+               }
+
+               table[table.length - 1].index.push(displayvalues[c]);
+
+               var nextNode;
+               if (typeof node.childs[displayvalues[c]] === "undefined") {
+                  nextNode = {
+                     childs: {},
+                     collapsed: false
+                  };
+               } else {
+                  nextNode = node.childs[displayvalues[c]];
+               }
+
+               m += this._tree2table(axis, nextNode, table);
+               newline = true;
+            }
+
+            if (m === 0) {
+               table[y].cells[x] = {};
+               table[y].cells[x].spanx = w - x + 1;
+               table[y].cells[x].spany = 1;
+               m = 1;
+            } else {
+               table[y].cells[x] = {};
+               table[y].cells[x].spanx = 1;
+               table[y].cells[x].spany = m;
+            }
+         }
+
+         return m;
+      },
+      _collapseLink: function(axis, mindex) {
+         var S = "<A href=\"#\" class=\"collapse_button\" rel=\"" + this._treeNode2str(axis, mindex) + "\">";
+
+         S += this._isCollapsed(axis, mindex) ? "+" : "-";
+
+         S += "</A>";
+         return S;
+
+      },
+      _renderHtml: function() {
+         var colspan, cls, i, x, y, z, mindex;
+
+         var cmax = this.xfields.length > this.yfields.length ? this.xfields.length : this.yfields.length;
+         cmax++;
+
+         var tablex = [{
+               index: [],
+               cells: {}
+            }];
+         this._tree2table("x", this.xtree, tablex);
+
+         var tabley = [{
+               index: [],
+               cells: {}
+            }];
+         this._tree2table("y", this.ytree, tabley);
+
+         var S = "";
+
+         for (i = 0; i < this.ufields.length; i++) {
+            S += "<tr><td draggable='true'";
+            cls = "unused_field draggable dropable";
+            cls += " targetU" + (i + 1);
+
+            S += " class=\"" + cls + "\"";
+
+            S += " rel= 'U," + (i + 1) + "'";
+
+            S += ">";
+            S += this.fieldLabels[this.ufields[i]];
+            S += "</td></tr>";
+         }
+         S += "</table>";
+
+
+         S += "<table border=\"0px\" cellspacing=\"0\" cellpadding=\"0\" class=\"pivot\">";
+
+
+
+
+         S += "<tr>";
+
+         S += "<th colspan=\"" + (this.xfields.length + 1) + "\" rowspan=\"" + (this.yfields.length + 2) + "\"";
+
+         cls = "";
+
+         cls += " line_bottom_" + cmax;
+         cls += " line_right_" + cmax;
+
+         S += " class=\"" + cls + "\"";
+         S += ">";
+
+         // Top left space -  Put buttons here
+
+         S += "</th>";
+
+         colspan = tabley.length * (this.zfields.length > 0 ? this.zfields.length : 1);
+         S += "<th colspan=" + colspan + "\"";
+
+         cls = "dropable toptitle targetY0 line_top_" + cmax;
+         cls += " line_left_" + cmax;
+         cls += " line_right_" + cmax;
+
+         S += " class=\"" + cls + "\"";
+         S += " rel=\"Y,0\"";
+
+         S += ">";
+
+         if (this.yfields.length > 0) {
+            S += this._collapseLink("y", []);
+         }
+
+         S += this.options.l_all;
+
+         S += "</th>";
+         S += "</tr>\n";
+
+         for (y = 1; y <= this.yfields.length; y++) {
+            S += "<tr>";
+            for (x = 0; x < tabley.length; x++) {
+               if (tabley[x].cells[y]) {
+                  S += "<th draggable=\"true\"";
+
+                  cls = "draggable dropable toptitle";
+
+                  cls += this._clsLeftLine(tabley, x, tabley[x].cells[y].spany);
+                  cls += this._clsRightLine(tabley, x, tabley[x].cells[y].spany);
+                  cls += " targetY" + y;
+
+                  S += " class=\"" + cls + "\"";
+
+                  S += " rel= \"Y," + y + "\"";
+
+                  colspan = tabley[x].cells[y].spany * (this.zfields.length > 0 ? this.zfields.length : 1);
+
+                  S += " colspan=\"" + colspan + "\"";
+                  S += " rowspan=\"" + tabley[x].cells[y].spanx + "\"";
+                  S += ">";
+
+
+                  if (y < this.yfields.length) {
+                     S += this._collapseLink("y", tabley[x].index.slice(0, y));
+                  }
+
+                  S += this.fields[this.yfields[y - 1]].getStringValue(tabley[x].index[y - 1]);
+
+
+                  S += "</th>";
+               }
+            }
+            S += "</tr>\n";
+         }
+
+         S += "<tr>";
+         for (x = 0; x < tabley.length; x++) {
+            for (z = 0; z < this.zfields.length; z++) {
+               S += "<th draggable=\"true\"";
+
+               cls = "draggable dropable ztitle";
+
+               cls += " line_top_0";
+
+               cls += " targetZ" + (z + 1);
+
+
+               cls += " line_top_" + cmax;
+               if (z === 0) {
+                  cls += this._clsLeftLine(tabley, x);
+               } else {
+                  cls += " line_left_0";
+               }
+               if (z === this.zfields.length - 1) {
+                  cls += this._clsRightLine(tabley, x);
+               } else {
+                  cls += " line_right_0";
+               }
+
+               //                  cls += this._clsGroupX(tablex, tabley, x, y);
+               //                  cls += this._clsGroupY(tablex, tabley, x, y);
+
+               S += " class=\"" + cls + "\"";
+
+               S += " rel= \"Z," + (z + 1) + "\"";
+
+               S += ">";
+
+               S += this.fieldLabels[this.zfields[z]];
+
+               S += "</th>";
+            }
+            if (this.zfields.length === 0) {
+               S += "<th";
+
+               cls = "dropable ztitle";
+
+               cls += " line_top_0";
+
+               cls += " targetZ0";
+
+               cls += " line_top_" + cmax;
+               cls += this._clsLeftLine(tabley, x);
+               cls += this._clsRightLine(tabley, x);
+
+               //                  cls += this._clsGroupX(tablex, tabley, x, y);
+               //                  cls += this._clsGroupY(tablex, tabley, x, y);
+
+               S += " class='" + cls + "'";
+
+               S += " rel= 'Z,0'";
+
+               S += ">";
+
+               S += "&nbsp;";
+
+               S += "</th>";
+
+            }
+         }
+         S += "<tr>";
+         for (y = 0; y < tablex.length; y++) {
+            for (x = 0; x <= this.xfields.length; x++) {
+               if (tablex[y].cells[x]) {
+                  S += "<th";
+
+                  S += tablex[y].cells[x].spanx > 1 ? " colspan=\"" + tablex[y].cells[x].spanx + "\"" : "";
+                  S += tablex[y].cells[x].spany > 1 ? " rowspan=\"" + tablex[y].cells[x].spany + "\"" : "";
+
+                  cls = "lefttitle dropable";
+                  if (x > 0) {
+                     cls += " draggable";
+                  }
+                  if (x === 0) {
+                     cls += " line_left_" + cmax;
+                  }
+
+                  cls += this._clsTopLine(tablex, y, tablex[y].cells[x].spany);
+                  cls += this._clsBottomLine(tablex, y, tablex[y].cells[x].spany);
+                  cls += " targetX" + x;
+
+                  S += " class=\"" + cls + "\"";
+
+                  S += "\"";
+                  S += " rel=\"X," + x + "\"";
+
+                  if (x > 0) {
+                     S += " draggable=\"true\"";
+                  }
+
+                  S += ">";
+                  if (x < this.xfields.length) {
+                     S += this._collapseLink("x", tablex[y].index.slice(0, x));
+                  }
+
+                  if (x === 0) {
+                     S += this.options.l_all;
+                  } else {
+                     S += this.fields[this.xfields[x - 1]].getStringValue(tablex[y].index[x - 1]);
+                  }
+                  S += "</th>";
+               }
+            }
+
+            for (x = 0; x < tabley.length; x++) {
+
+               mindex = [];
+               for (i = 0; i < this.fields.length; i++) {
+                  mindex.push(-1);
+               }
+
+               for (i = 0; i < tablex[y].index.length; i++) {
+                  mindex[this.xfields[i]] = tablex[y].index[i];
+               }
+
+               for (i = 0; i < tabley[x].index.length; i++) {
+                  mindex[this.yfields[i]] = tabley[x].index[i];
+               }
+
+               V = this._getValues(mindex);
+
+               for (z = 0; z < this.zfields.length; z++) {
+                  S += "<td";
+
+                  cls = "";
+
+                  cls += this._clsTopLine(tablex, y);
+                  cls += this._clsBottomLine(tablex, y);
+
+                  if (z === 0) {
+                     cls += this._clsLeftLine(tabley, x);
+                  } else {
+                     cls += " line_left_0";
+                  }
+                  if (z === this.zfields.length - 1) {
+                     cls += this._clsRightLine(tabley, x);
+                  } else {
+                     cls += " line_right_0";
+                  }
+
+                  //                       cls += this._clsGroupX(tablex, tabley, x, y);
+                  //                       cls += this._clsGroupY(tablex, tabley, x, y);
+
+                  S += " class=\"" + cls + "\"";
+                  S += ">";
+                  S += this._format(
+                          this.afields[this.zfields[z]].getValue(V[this.zfields[z]]),
+                          this.zfields[z]);
+                  S += "</td>";
+               }
+               if (this.zfields.length === 0) {
+                  S += "<td";
+
+                  cls = "";
+
+                  cls += this._clsTopLine(tablex, y);
+                  cls += this._clsBottomLine(tablex, y);
+                  cls += this._clsLeftLine(tabley, x);
+                  cls += this._clsRightLine(tabley, x);
+
+                  //                       cls += this._clsGroupX(tablex, tabley, x, y);
+                  //                       cls += this._clsGroupY(tablex, tabley, x, y);
+
+                  S += " class='" + cls + "'";
+                  S += ">";
+                  S += "&nbsp;";
+                  S += "</td>";
+               }
+            }
+            S += "</tr>";
+         }
+
+         if ((this.options.summary) && (this.zfields.length > 0)) {
+            S += "<tr>";
+            S += "<td colspan='" + (this.xfields.length + 1) + "'";
+            S += " >";
+            S += "</td>";
+
+
+            for (x = 0; x < tabley.length; x++) {
+               mindex = [];
+               for (i = 0; i < this.fields.length; i++) {
+                  mindex.push(-1);
+               }
+
+               for (i = 0; i < tabley[x].index.length; i++) {
+                  mindex[this.yfields[i]] = tabley[x].index[i];
+               }
+
+               var V = this._getValues(mindex);
+
+               for (z = 0; z < this.zfields.length; z++) {
+                  S += "<td";
+
+                  cls = "summary";
+
+                  cls += " line_top_" + cmax;
+                  cls += " line_bottom_" + cmax;
+
+                  if (z === 0) {
+                     cls += this._clsLeftLine(tabley, x);
+                  } else {
+                     cls += " line_left_0";
+                  }
+                  if (z === this.zfields.length - 1) {
+                     cls += this._clsRightLine(tabley, x);
+                  } else {
+                     cls += " line_right_0";
+                  }
+
+                  S += " class=\"" + cls + "\"";
+                  S += ">";
+                  S += this._format(this.afields[this.zfields[z]].getValue(V[this.zfields[z]]),
+                          this.zfields[z]);
+                  S += "</td>";
+               }
+            }
+
+            S += "</tr>";
+         }
+         var totcol = 1 + this.xfields.length + tabley.length * this.zfields.length;
+         S += "<tr><td colspan='" + totcol;
+         cls = "";
+         cls += " line_right_" + cmax;
+         cls += " line_left_" + cmax;
+         cls += " line_top_" + cmax;
+
+         S += " class='" + cls + "'";
+         S += ">";
+
+         S += "<tr>";
+         for (i = 0; i < totcol; i++) {
+            S += "<td ";
+            cls = "bordermark";
+
+            S += " class='" + cls + "'";
+            S += ">";
+            S += "</td>";
+         }
+         S += "</tr>";
+
+         if (this.options.copyright) {
+            S += "<tr><td colspan='" + totcol + "'";
+            cls = "copyright";
+
+            S += " class='" + cls + "'";
+            S += ">";
+
+            S += "<a href='http://www.jbPivot.org'>jbPivot</a> by <a href='http://www.uniclau.org'> Uniclau S.L. &copy; 2013 </a> <a href='http://www.gnu.org/licenses/gpl.html'><img src='http://www.gnu.org/graphics/gplv3-88x31.png'></a>";
+
+            S += "</tr>";
+         }
+
+         S += "</table>";
+
+         this.element[0].innerHTML = S;
+      },
+      _treeNode2str: function(axis, mindex) {
+         var i;
+         var arr = [];
+
+         if (mindex.length === 0) {
+            return axis;
+         }
+         for (i = 0; i < this.fields.length; i++) {
+            arr.push(-1);
+         }
+
+         for (i = 0; i < mindex.length; i++) {
+            if (axis === "y") {
+               arr[this.yfields[i]] = mindex[i];
+            } else {
+               arr[this.xfields[i]] = mindex[i];
+            }
+         }
+
+         return arr.join(",");
+      },
+      _isCollapsed: function(axis, mindex) {
+         var S = this._treeNode2str(axis, mindex);
+         return (typeof this.CollapsedNodes[S] !== "undefined");
+      },
+      _togleCollapse: function(S) {
+         if (typeof this.CollapsedNodes[S] === "undefined") {
+            this.CollapsedNodes[S] = true;
+         } else {
+            delete this.CollapsedNodes[S];
+         }
+         this._forceRender();
+      },
+      _canMove: function(from, to, prepos) {
+         var f = from.split(",");
+         f[1] = parseInt(f[1], 10);
+         var t = to.split(",");
+         t[1] = parseInt(t[1], 10);
+
+         if (prepos === "pre") {
+            t[1]--;
+         }
+         f[1]--;
+
+         var res = false;
+         if (t[0] === "Z") {
+            if (f[0] === "X") {
+               res = (this.afields[this.xfields[f[1]]] !== null);
+            } else if (f[0] === "Y") {
+               res = (this.afields[this.yfields[f[1]]] !== null);
+            } else if (f[0] === "Z") {
+               res = (this.afields[this.zfields[f[1]]] !== null);
+            } else if (f[0] === "U") {
+               res = (this.afields[this.ufields[f[1]]] !== null);
+            }
+         } else if ((t[0] === "X") || (t[0] === "Y")) {
+            if (f[0] === "X") {
+               res = (this.fields[this.xfields[f[1]]] !== null);
+            } else if (f[0] === "Y") {
+               res = (this.fields[this.yfields[f[1]]] !== null);
+            } else if (f[0] === "Z") {
+               res = (this.fields[this.zfields[f[1]]] !== null);
+            } else if (f[0] === "U") {
+               res = (this.fields[this.ufields[f[1]]] !== null);
+            }
+         } else if (t[0] === "U") {
+            res = true;
+         }
+         return res;
+
+      },
+      _moveField: function(from, to, prepos) {
+         var f = from.split(",");
+         f[1] = parseInt(f[1], 10);
+         var t = to.split(",");
+         t[1] = parseInt(t[1], 10);
+
+         if (prepos === "pre") {
+            t[1]--;
+         }
+
+         var field = -1;
+         if (f[0] === "X") {
+            field = this.xfields[f[1] - 1];
+            this.xfields.splice(f[1] - 1, 1);
+         } else if (f[0] === "Y") {
+            field = this.yfields[f[1] - 1];
+            this.yfields.splice(f[1] - 1, 1);
+         } else if (f[0] === "Z") {
+            field = this.zfields[f[1] - 1];
+            this.zfields.splice(f[1] - 1, 1);
+         } else if (f[0] === "U") {
+            field = this.ufields[f[1] - 1];
+            this.ufields.splice(f[1] - 1, 1);
+         }
+
+         if (field === -1) {
+            throw "Assert: " + f[0] + " is an invalid axis";
+         }
+
+         if ((f[0] === t[0]) && (f[1] < t[1])) {
+            t[1]--;
+         }
+         if (t[0] === "X") {
+            this.xfields.splice(t[1], 0, field);
+         } else if (t[0] === "Y") {
+            this.yfields.splice(t[1], 0, field);
+         } else if (t[0] === "Z") {
+            this.zfields.splice(t[1], 0, field);
+         } else if (t[0] === "U") {
+            this.ufields.splice(t[1], 0, field);
+         }
+
+         this._generate_trees();
+         this._forceRender();
+      },
+      _clsLeftLine: function(tabley, x, span) {
+         if (typeof span === "undefined") {
+            span = 1;
+         }
+
+         var cls = " ";
+         var m;
+
+         if (x > 0) {
+            m = 0;
+            while ((m < this.yfields.length) && (m < tabley[x].index.length) && (m < tabley[x - 1].index.length) && (tabley[x].index[m] === tabley[x - 1].index[m])) {
+               m++;
+            }
+            m = this.yfields.length - m;
+         } else {
+            m = this.xfields.length > this.yfields.length ? this.xfields.length : this.yfields.length;
+            m++;
+         }
+
+         cls += " line_left_" + m;
+         return cls;
+      },
+      _clsRightLine: function(tabley, x, span) {
+         if (typeof span === "undefined") {
+            span = 1;
+         }
+
+         var cls = " ";
+         var m;
+
+         if (x + span < tabley.length) {
+            m = 0;
+            while ((m < this.yfields.length) && (m < tabley[x].index.length) && (m < tabley[x + span].index.length) && (tabley[x].index[m] === tabley[x + span].index[m])) {
+               m++;
+            }
+            m = this.yfields.length - m;
+         } else {
+            m = this.xfields.length > this.yfields.length ? this.xfields.length : this.yfields.length;
+            m++;
+         }
+
+         cls += " line_right_" + m;
+
+         return cls;
+      },
+      _clsTopLine: function(tablex, y, span) {
+         if (typeof span === "undefined") {
+            span = 1;
+         }
+
+         var cls = " ";
+         var m;
+
+         if (y > 0) {
+            m = 0;
+            while ((m < this.xfields.length) && (m < tablex[y].index.length) && (m < tablex[y - 1].index.length) && (tablex[y].index[m] === tablex[y - 1].index[m])) {
+               m++;
+            }
+            m = this.xfields.length - m;
+         } else {
+            m = this.xfields.length > this.yfields.length ? this.xfields.length : this.yfields.length;
+            m++;
+         }
+
+         cls += " line_top_" + m;
+         return cls;
+      },
+      _clsBottomLine: function(tablex, y, span) {
+         if (typeof span === "undefined") {
+            span = 1;
+         }
+
+         var cls = " ";
+         var m;
+         if (y + span < tablex.length) {
+            m = 0;
+            while ((m < this.xfields.length) && (m < tablex[y].index.length) && (m < tablex[y + span].index.length) && (tablex[y].index[m] === tablex[y + span].index[m])) {
+               m++;
+            }
+            m = this.xfields.length - m;
+         } else {
+            m = this.xfields.length > this.yfields.length ? this.xfields.length : this.yfields.length;
+            m++;
+         }
+
+         cls += " line_bottom_" + m;
+
+         return cls;
+      },
+      /*        _clsGroupX: function (tablex, tabley, x, y) {
+       var cls = " ";
+
+       return cls;
+       },
+       _clsGroupY: function (tablex, tabley, x, y) {
+       var cls = " ";
+
+       return cls;
+       },
+       */
+      _format: function(value, field) {
+         var V = null;
+         if (this.formatters[field] !== null) {
+            V = this.formatters[field].format(value, this.fieldNames[field]);
+         }
+         if ((typeof V === "undefined") || (V === null)) {
+            V = this.defaultFormatter.format(value, this.fieldNames[field]);
+         }
+         return V;
+      }
+   });
+});

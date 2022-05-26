@@ -1,0 +1,51 @@
+pre {border:1px solid grey; background:#EFE4B0; padding:10px;}
+
+span.em { font-style:italic; text-decoration:underline;}
+
+#res, #res2 {margin-top:20px}
+
+table.pivot ul {list-style-image:none; list-style-type:none; }
+
+table.pivot {border-collapse : collapse;border : solid 1px black;text-align : right;}
+
+table.pivot td.resultcell, table.pivot .foldunfold{text-decoration : underline; cursor:pointer;  white-space:nowrap;}
+
+table.pivot th, table.pivot td{padding :5px;}
+
+table.pivot tr.head{font-size : larger;text-align : center;}
+
+table.pivot .total{background-color : #E7F4FE;  white-space:nowrap;}
+
+table.pivot tr.total th{text-align : left;}
+
+table.pivot tr.total td, table.pivot tr.total th{border-top : solid 1px black;}
+
+table.pivot td.total{border-left : solid 1px black;}
+
+table.pivot tr.head th.groupby{background-color : #E7F4FE;}
+
+table.pivot tr.head th.pivotcol{background-color : #E7F4FE;font-size : smaller;border : solid 1px black;font-weight: bold;}
+
+table.pivot th.groupby{text-align:left;font-weight : bold;}
+
+table.pivot .foldunfold
+{
+    color : Black;
+	background-image : url('images/navigate_minus.png');
+	background-repeat : no-repeat;
+	background-position:left;
+	padding-left:18px;
+}
+
+table.pivot .foldunfold.collapsed{background-image : url('images/navigate_plus.png');}
+
+th, th a, th:hover, th a:hover {
+    color: #000 !important;
+    text-decoration: none;
+}
+
+#reportDetails table tr th {
+    
+}
+
+

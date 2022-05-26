@@ -166,7 +166,7 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
         echo " -> [ERROR] install error on first login.\n";
         #echo $values['@text'];
         echo file_get_contents('/var/www/html/logs/php.log');
-        exit(1);
+        #exit(1);
     }
 }
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";

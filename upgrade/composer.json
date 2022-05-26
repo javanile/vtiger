@@ -1,0 +1,7 @@
+{
+  "name": "javanile/vtiger-core",
+  "version": "7.1.0",
+  "autoload-dev": {
+    "classmap": ["include/database/"]
+  }
+}
