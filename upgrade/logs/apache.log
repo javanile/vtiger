@@ -1,0 +1,4 @@
+[Wed May 25 16:43:52.992832 2022] [ssl:warn] [pid 1] AH01906: localhost:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed May 25 16:43:52.993001 2022] [ssl:warn] [pid 1] AH01909: localhost:443:0 server certificate does NOT include an ID which matches the server name
+[Wed May 25 16:43:53.009894 2022] [ssl:warn] [pid 1] AH01906: localhost:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed May 25 16:43:53.009924 2022] [ssl:warn] [pid 1] AH01909: localhost:443:0 server certificate does NOT include an ID which matches the server name

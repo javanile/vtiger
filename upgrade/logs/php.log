@@ -1,0 +1,23 @@
+[25-May-2022 16:44:01 UTC] PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in /var/www/html/include/database/PearDatabase.php on line 551
+[25-May-2022 17:45:20 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function each() in /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_compilebase.php:75
+Stack trace:
+#0 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_compile_foreach.php(53): Smarty_Internal_CompileBase->getAttributes(Object(Smarty_Internal_SmartyTemplateCompiler), Array)
+#1 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templatecompilerbase.php(435): Smarty_Internal_Compile_Foreach->compile(Array, Object(Smarty_Internal_SmartyTemplateCompiler), Array, NULL, NULL)
+#2 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templatecompilerbase.php(223): Smarty_Internal_TemplateCompilerBase->callTagCompiler('foreach', Array, Array)
+#3 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templateparser.php(2478): Smarty_Internal_TemplateCompilerBase->compileTag('foreach', Array)
+#4 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templateparser.php(3111): Smarty_Internal_Templateparser->yy_r50()
+#5 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templateparser.php(3211): Smarty_Internal_Templateparser->yy_reduce(50)
+#6 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_smartytemplatecompiler.php(105): Smarty_Internal_Templateparser->doParse(10, '\r\n\t\t\t\t<link typ...')
+#7 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templatecompilerbase.php(171): Smarty_Internal_SmartyTemplateCompiler->doCompile('{*+************...')
+#8 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_template.php(187): Smarty_Internal_TemplateCompilerBase->compileTemplate(Object(Smarty_Internal_Template))
+#9 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#10 /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_templatebase.php(374): Smarty_Internal_TemplateBase->fetch('modules/Install...', NULL, NULL, Object(Vtiger_Viewer), true)
+#11 /var/www/html/includes/runtime/Viewer.php(177): Smarty_Internal_TemplateBase->display('modules/Install...')
+#12 /var/www/html/includes/runtime/Controller.php(187): Vtiger_Viewer->view('Header.tpl', 'Install')
+#13 /var/www/html/includes/runtime/Controller.php(170): Vtiger_View_Controller->preProcessDisplay(Object(Vtiger_Request))
+#14 /var/www/html/modules/Install/views/Index.php(51): Vtiger_View_Controller->preProcess(Object(Vtiger_Request))
+#15 /var/www/html/includes/main/WebUI.php(76): Install_Index_view->preProcess(Object(Vtiger_Request))
+#16 /var/www/html/includes/main/WebUI.php(214): Vtiger_WebUI->triggerPreProcess(Object(Install_Index_view), Object(Vtiger_Request))
+#17 /var/www/html/index.php(20): Vtiger_WebUI->process(Object(Vtiger_Request))
+#18 {main}
+  thrown in /var/www/html/libraries/Smarty/libs/sysplugins/smarty_internal_compilebase.php on line 75
