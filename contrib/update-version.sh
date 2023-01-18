@@ -3,15 +3,11 @@
 source contrib/versions.sh
 
 version=$1
-version_info=${versions[$version]}
 version_dir=$(echo "${versions[$version]}" | cut -d, -f1)
-
-echo "Info: $version_dir"
 
 exit
 
-
-[[ -d "$version" ]] || mkdir ${version}
+#[[ -d "$version" ]] || mkdir ${version}
 #rm -fr ${version}/* && true
 
 template=Dockerfile.$(echo ${versions[$version]} | cut -d, -f1).template
