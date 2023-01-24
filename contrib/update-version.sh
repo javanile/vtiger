@@ -7,7 +7,7 @@ version_dir=$(echo "${versions[$version]}" | cut -d, -f1)
 
 for dir in ${version_dir//\// } ; do
    parent_dir="$parent_dir$dir/"
-   find "$parent_dir" -maxdepth 1 -type f -exec cp -vf {} "$version_dir/$version/" \;
+   echo find "$parent_dir" -maxdepth 1 -type f -exec cp -vf {} "$version_dir/$version/" \;
 done
 
 exit
