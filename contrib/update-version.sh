@@ -12,8 +12,10 @@ source contrib/versions.sh
 version=${1:-7.1.0}
 version_mode=${2:-prod}
 version_dir=$(echo "${versions[$version]}" | cut -d, -f1)
+dockerfile=${version_dir}/${version}/Dockerfile
+dockerfile_template=${dockerfile}.template
 
-echo "Build $version to '$version_dir' ($version_mode)"
+echo -n "Update $version to '$version_dir' ($version_mode) ... "
 
 ## Clean-up target dir
 [[ -d "$version_dir/$version" ]] || mkdir -p "${version_dir}/$version"
@@ -37,25 +39,21 @@ sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
     -e 's!%%VT_DIRECTORY%%!'"${directory}"'!' \
     -e 's!%%DATABASE_PACKAGE%%!'"${database_package}"'!' \
     -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
-    -r "${version_dir}/${version}/${template}" > "${version_dir}/${version}/Dockerfile"
+    -r "${dockerfile_template}" > "${dockerfile}"
 
 if [[ "${version_mode}" == "dev" ]]; then
-    sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!!g' -ri ${version}/Dockerfile
-    sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!## RELEASE LAYER: !g' -ri ${version}/Dockerfile
+    sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!!g' -ri "${dockerfile}"
+    sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!## RELEASE LAYER: !g' -ri "${dockerfile}"
 else
-    sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!!g' -ri ${version}/Dockerfile
-    sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!## DEVELOP LAYER: !g' -ri ${version}/Dockerfile
-    sed -e ':a;N;$!ba;s!ENV LAYER_BREAK=true\n!!g' -ri ${version}/Dockerfile
-    sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\\n   !g' -ri ${version}/Dockerfile
-    rm -f "${version_dir}/${version}/${template}"
+    sed -e ':a;N;$!ba;s!\#\${RELEASE_LAYER}\n\#!!g' -ri "${dockerfile}"
+    sed -e ':a;N;$!ba;s!\#\${DEVELOP_LAYER}\n!## DEVELOP LAYER: !g' -ri "${dockerfile}"
+    sed -e ':a;N;$!ba;s!ENV LAYER_BREAK=true\n!!g' -ri "${dockerfile}"
+    sed -e ':a;N;$!ba;s!\${LAYER_BREAK}\nRUN!\\\n   !g' -ri "${dockerfile}"
+    sed /^##/d -i "${dockerfile}"
+    rm -f "${dockerfile_template}"
 fi
 
-sed /^##/d -i ${version}/Dockerfile
+chmod +x "${version_dir}/${version}"/docker-vtiger-*.sh
+chmod 600 "${version_dir}/${version}"/crontab
 
-for file in "${files[@]}"; do
-    [[ -f "$file" ]] || continue
-    cat ${file} > ${version}/${file}
-done
-
-chmod +x ${version}/docker-vtiger-*.sh
-chmod 600 ${version}/crontab
+echo "OK!"
