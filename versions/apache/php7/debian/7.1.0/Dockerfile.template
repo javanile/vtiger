@@ -1,8 +1,8 @@
-## -------------------------------------------------------------- ##
+## ============================================================== ##
 ## Vtiger CRM for Docker                                          ##
-## Copyright (c) 2018-2020 Francesco Bianco <bianco@javanile.org> ##
+## Copyright (c) 2018-2023 Francesco Bianco <bianco@javanile.org> ##
 ## MIT License <https://git.io/docker-vtiger-license>             ##
-## -------------------------------------------------------------- ##
+## ============================================================== ##
 
 FROM php:%%PHP_VERSION%%-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
@@ -42,7 +42,7 @@ RUN apt-get update && \
 RUN curl -o composer -sL https://github.com/composer/composer/releases/download/2.2.21/composer.phar && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.16 javanile/vtiger-cli:0.0.4 && \
     php composer clearcache && rm composer && ${LAYER_BREAK}
-RUN curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && ${LAYER_BREAK}
+RUN curl -kLo /usr/local/bin/symvol https://javanile.github.io/symvol/symvol.sh && chmod +x /usr/local/bin/symvol && symvol help && ${LAYER_BREAK}
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     a2enmod ssl && a2enmod rewrite && ${LAYER_BREAK}
@@ -61,6 +61,8 @@ RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 COPY develop-install.sh /usr/local/bin/
 #${DEVELOP_LAYER}
 RUN develop-install.sh
+#${DEVELOP_LAYER}
+COPY health.php polyfill.php /var/www/html/
 #${DEVELOP_LAYER}
 COPY docker-vtiger-install.sh /usr/local/bin/
 #${DEVELOP_LAYER}
