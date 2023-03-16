@@ -31,11 +31,12 @@ RUN apt-get update && \
         cron \
         rsyslog \
         zip \
+    	libzip-dev \
         unzip \
         socat \
         vim \
-        nano && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+        nano && ${LAYER_BREAK}
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
     echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && ${LAYER_BREAK}
