@@ -1,3 +1,4 @@
-* * * * * root docker-vtiger-cron.sh timestamp
-* * * * * root docker-vtiger-cron.sh scheduler
-* * * * * root docker-vtiger-cron.sh localhost-proxy
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root vtiger-cron.sh ts
+* * * * * root vtiger-cron.sh vtiger
+* * * * * root vtiger-cron.sh localhost_proxy
