@@ -27,12 +27,11 @@ for dir in ${version_dir//\// } ; do
    find "$parent_dir" -maxdepth 1 -type f -exec cp -f {} "$version_dir/$version/" \;
 done
 
-#template=Dockerfile.$(echo ${versions[$version]} | cut -d, -f1).template
-#php_version=$(echo ${versions[$version]} | cut -d, -f2)
-#database_package=$(echo ${versions[$version]} | cut -d, -f3)
-#hosting=$(echo ${versions[$version]} | cut -d, -f4)
-#directory=$(echo ${versions[$version]} | cut -d, -f5)
-#download=${source_code_hosting[$hosting]}$(echo ${versions[$version]} | cut -d, -f6)
+php_version=$(echo "${versions[$version]}" | cut -d, -f2)
+database_package=$(echo "${versions[$version]}" | cut -d, -f3)
+hosting=$(echo "${versions[$version]}" | cut -d, -f4)
+directory=$(echo "${versions[$version]}" | cut -d, -f5)
+download=${source_code_hosting[$hosting]}$(echo "${versions[$version]}" | cut -d, -f6)
 
 sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
     -e 's!%%VT_DOWNLOAD%%!'"${download}"'!' \

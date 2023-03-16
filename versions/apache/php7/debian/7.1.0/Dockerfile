@@ -4,12 +4,12 @@
 ## MIT License <https://git.io/docker-vtiger-license>             ##
 ## -------------------------------------------------------------- ##
 
-FROM php:-apache
+FROM php:7.0.33-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV LAYER_BREAK=true
 ENV VT_VERSION="7.1.0" \
-    DATABASE_PACKAGE="" \
+    DATABASE_PACKAGE="mariadb-server-10.1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
 ## RELEASE LAYER: COPY php.ini /usr/local/etc/php/
@@ -37,7 +37,7 @@ RUN apt-get update && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
     echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && ${LAYER_BREAK}
-RUN curl -o composer -sL https://getcomposer.org/composer.phar && \
+RUN curl -o composer -sL https://github.com/composer/composer/releases/download/2.2.21/composer.phar && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.16 javanile/vtiger-cli:0.0.4 && \
     php composer clearcache && rm composer && ${LAYER_BREAK}
 RUN curl -sL https://javanile.github.io/symvol/setup.sh?v=0.0.2 | bash - && ${LAYER_BREAK}
@@ -45,11 +45,11 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     a2enmod ssl && a2enmod rewrite && ${LAYER_BREAK}
 RUN cd /usr/src/vtiger && \
-    curl -o vtiger.tar.gz -L "" && \
+    curl -o vtiger.tar.gz -L "https://github.com/javanile/vtiger-core/archive/7.1.0.tar.gz" && \
     tar -xzf vtiger.tar.gz && \
     rm vtiger.tar.gz && \
     rm -fr /var/www/html && \
-    mv "" /var/www/html && \
+    mv "vtiger-core-7.1.0" /var/www/html && \
     vtiger permissions --fix && \
     mv .symvol /var/www/html && \
     mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
