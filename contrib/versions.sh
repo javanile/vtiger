@@ -3,7 +3,7 @@ set -e
 
 ##
 # Vtiger CRM for Docker
-# Copyright (c) 2018-2020 Francesco Bianco <bianco@javanile.org>
+# Copyright (c) 2018-2023 Francesco Bianco <bianco@javanile.org>
 # MIT License <https://git.io/docker-vtiger-license>
 ##
 

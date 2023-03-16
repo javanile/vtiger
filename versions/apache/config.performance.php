@@ -7,6 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
+
+require_once '/usr/src/vtiger/vtiger-functions.php';
+
 /* Performance parameters can be configured to fine tune vtiger CRM runtime */
 $PERFORMANCE_CONFIG = [
     // Enable log4php debugging only if required

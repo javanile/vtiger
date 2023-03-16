@@ -1,0 +1,5 @@
+title: Vtiger Package Manager (alpha)
+
+remote_theme: javanile/package-manager@main
+
+primary_color: "#1d9156"

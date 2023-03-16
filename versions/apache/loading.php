@@ -18,7 +18,7 @@
         </p>
     </div>
     <div style="position:absolute;bottom:0;right:0;color:#eee;margin-right:4px;font-size:12px;">
-        Powered by Javanile
+        Javanile
     </div>
     <script>
         setTimeout(function() {
