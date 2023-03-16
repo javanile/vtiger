@@ -1,0 +1,3 @@
+* * * * * root docker-vtiger-cron.sh timestamp
+* * * * * root docker-vtiger-cron.sh scheduler
+* * * * * root docker-vtiger-cron.sh localhost-proxy

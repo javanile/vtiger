@@ -17,6 +17,20 @@ services:
       - mysql
       - adminer
 
+  vtiger-debug:
+    build: ${VERSION_DIR}/${VERSION}
+    environment:
+      - VT_DEBUG=true
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 8081:80
+    volumes:
+      - ./:/app
+      - ./tests/volume:/var/lib/vtiger:rw
+    links:
+      - mysql
+      - adminer
+
   mysql:
     image: mysql:5.5
     environment:
@@ -31,7 +45,7 @@ services:
       - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - 8081:8080
+      - 8082:8080
     links:
       - mysql
 

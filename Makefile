@@ -1,16 +1,23 @@
 
-include .env
-export VERSION
+
+
+
+build:
+
+## ======
+## Docker
+## ======
+
+up:
+	@docker-compose up -d
+
 
 ## ====
 ## Test
 ## ====
 
-test-build-dev:
-	@bash contrib/update-version.sh $${VERSION} dev
-
-test-build-prod:
-	@bash contrib/update-version.sh $${VERSION} prod
-
 test-update-version:
 	@bash contrib/update-version.sh 7.1.0
+
+test-debug-mode:
+	@docker-compose
