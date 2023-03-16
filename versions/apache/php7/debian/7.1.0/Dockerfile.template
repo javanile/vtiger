@@ -11,7 +11,7 @@ ENV LAYER_BREAK=true
 ENV VT_VERSION="%%VT_VERSION%%" \
     DATABASE_PACKAGE="%%DATABASE_PACKAGE%%" \
     COMPOSER_HOME=/usr/src/vtiger \
-    PATH="/root/.composer/vendor/bin:$PATH"
+    PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
 #${RELEASE_LAYER}
 #COPY php.ini /usr/local/etc/php/

@@ -11,7 +11,7 @@ ENV LAYER_BREAK=true
 ENV VT_VERSION="7.1.0" \
     DATABASE_PACKAGE="mariadb-server-10.1" \
     COMPOSER_HOME=/usr/src/vtiger \
-    PATH="/root/.composer/vendor/bin:$PATH"
+    PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
 ## RELEASE LAYER: COPY php.ini /usr/local/etc/php/
 COPY vtiger.json .symvol /usr/src/vtiger/
