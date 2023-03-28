@@ -3,6 +3,6 @@
 vtiger/
 node_modules/
 mysql/
-temp/
+tmp/
 npm-debug.log
 build.log

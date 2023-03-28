@@ -12,7 +12,7 @@ services:
       - 8443:443
     volumes:
       - ./:/app
-      - ./temp/volume:/var/lib/vtiger:rw
+      - ./tmp/volume:/var/lib/vtiger:rw
     links:
       - mysql
       - adminer

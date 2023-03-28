@@ -28,7 +28,7 @@ test-update-version:
 	@bash contrib/update-version.sh 7.1.0
 
 test-dev: update-dev up
-	@echo " => Visit <http://localhost:8080> or <http://localhost:8443>"
+	@echo "==> Visit <http://localhost:8080> or <http://localhost:8443>"
 
 test-build-dev:
 	@bash contrib/update-version.sh $${VERSION} dev
