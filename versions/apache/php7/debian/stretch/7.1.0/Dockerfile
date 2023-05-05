@@ -4,7 +4,7 @@
 ## MIT License <https://git.io/docker-vtiger-license>             ##
 ## ============================================================== ##
 
-FROM php:7.0.33-apache
+FROM php:7.0.33-apache-stretch
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV LAYER_BREAK=true
@@ -17,6 +17,8 @@ ENV VT_VERSION="7.1.0" \
 COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
+
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \

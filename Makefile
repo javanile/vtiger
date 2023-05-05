@@ -49,3 +49,6 @@ test-build-prod:
 
 test-debug-mode:
 	@docker-compose
+
+test-php-base-image:
+	@bash tests/php-base-image-test.sh
