@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+##
+# Vtiger CRM for Docker
+# Copyright (c) 2018-2023 Francesco Bianco <bianco@javanile.org>
+# MIT License <https://git.io/docker-vtiger-license>
+##
+
 source contrib/versions.sh
 
 version=$1
