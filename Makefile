@@ -15,10 +15,10 @@ update-dev:
 ## ======
 
 up:
-	@docker-compose up -d --remove-orphans
+	@docker-compose up -d --force-recreate --remove-orphans
 
 build:
-	#@docker compose build vtiger
+	@docker compose build vtiger
 
 release: fix-permissions
 	@bash contrib/release.sh $${VERSION}
@@ -37,8 +37,8 @@ fix-permissions:
 test-update-version:
 	@bash contrib/update-version.sh 7.1.0
 
-test-dev: update-dev up
-	@echo "==> Visit <http://localhost:8080> or <http://localhost:8443>"
+test-dev: update-dev build up
+	@docker compose logs -f vtiger
 
 test-build-dev:
 	@bash contrib/update-version.sh $${VERSION} dev

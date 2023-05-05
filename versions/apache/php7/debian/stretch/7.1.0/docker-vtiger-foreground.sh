@@ -63,7 +63,7 @@ service apache2 stop >/dev/null 2>&1
 
 ## Return to working directory
 echo "[vtiger] Set working directory: ${workdir}"
-cd ${workdir}
+cd "${workdir}"
 
 ## Run main foreground process
 echo "[vtiger] Run foreground process..."
