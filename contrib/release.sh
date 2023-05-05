@@ -26,5 +26,5 @@ git push
 
 echo "Push new image on Docker Hub"
 docker login
-docker build -t "javanile/vtiger:${version}" "${version_dir}/${version}"
+docker build --no-cache -t "javanile/vtiger:${version}" "${version_dir}/${version}"
 docker push "javanile/vtiger:${version}"
