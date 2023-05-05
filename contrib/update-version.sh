@@ -11,6 +11,7 @@ source contrib/versions.sh
 
 version=${1:-7.1.0}
 version_mode=${2:-prod}
+
 version_dir=$(echo "${versions[$version]}" | cut -d, -f1)
 dockerfile=${version_dir}/${version}/Dockerfile
 dockerfile_template=${dockerfile}.template

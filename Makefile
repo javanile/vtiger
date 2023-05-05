@@ -20,6 +20,16 @@ up:
 build:
 	#@docker compose build vtiger
 
+release: fix-permissions
+	@bash contrib/release.sh $${VERSION}
+
+## ===
+## Fix
+## ===
+
+fix-permissions:
+	chmod +x contrib/update-version.sh contrib/release.sh
+
 ## ====
 ## Test
 ## ====

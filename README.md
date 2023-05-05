@@ -48,14 +48,25 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 
 ## Development
  
-```bash
-./develop.sh
+Follow this instruction to develop or update Vtiger images
+
+Change into `.env` file the these values based on image you want upgrade
+
+```
+VERSION=7.1.0
+VERSION_DIR=versions/apache/php7/debian
 ```
 
-## Shorturls
+Change or update files on te codebase, then test and push on Docker Hub with the following commands:
 
-```bash
-curl -i "https://git.io" \
-     -d "url=https://github.com/javanile/vtiger/blob/master/LICENSE" \
-     -d "code=docker-vtiger-license"
 ```
+make test-dev
+```
+
+If your image is ok the release 
+
+```
+make release
+```
+
+
