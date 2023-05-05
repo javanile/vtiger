@@ -54,7 +54,7 @@ Change into `.env` file the these values based on image you want upgrade
 
 ```
 VERSION=7.1.0
-VERSION_DIR=versions/apache/php7/debian
+VERSION_DIR=versions/apache/php7/debian/stretch
 ```
 
 Change or update files on te codebase, then test and push on Docker Hub with the following commands:
