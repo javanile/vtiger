@@ -4,12 +4,12 @@
 ## MIT License <https://git.io/docker-vtiger-license>             ##
 ## ============================================================== ##
 
-FROM php:7.0.33-apache-stretch
+FROM javanile/php:7.0.33-apache-buster
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV LAYER_BREAK=true
 ENV VT_VERSION="7.1.0" \
-    DATABASE_PACKAGE="mariadb-server-10.1" \
+    DATABASE_PACKAGE="mariadb-server-10.3" \
     COMPOSER_HOME=/usr/src/vtiger \
     PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
@@ -17,8 +17,6 @@ ENV VT_VERSION="7.1.0" \
 COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
-
-RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
@@ -37,10 +35,18 @@ RUN apt-get update && \
         socat \
         vim \
         nano && ${LAYER_BREAK}
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-    docker-php-ext-install imap exif mysqli pdo pdo_mysql zip gd xml && \
-    echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && ${LAYER_BREAK}
+RUN docker-php-ext-install gd
+#RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-install imap
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install xml
+RUN echo "cron.* /var/log/cron.log" >> /etc/rsyslog.conf && rm -fr /etc/cron.* && mkdir /etc/cron.d && ${LAYER_BREAK}
 RUN curl -o composer -sL https://github.com/composer/composer/releases/download/2.2.21/composer.phar && \
     php composer global require javanile/http-robot:0.0.2 javanile/mysql-import:0.0.16 javanile/vtiger-cli:0.0.4 && \
     php composer clearcache && rm composer && ${LAYER_BREAK}
