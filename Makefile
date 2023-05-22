@@ -28,7 +28,7 @@ release: fix-permissions
 ## ===
 
 fix-permissions:
-	chmod +x contrib/update-version.sh contrib/release.sh
+	@chmod +x contrib/update-version.sh contrib/release.sh
 
 ## ====
 ## Test

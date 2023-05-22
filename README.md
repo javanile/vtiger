@@ -68,5 +68,3 @@ If your image is ok the release
 ```
 make release
 ```
-
-
