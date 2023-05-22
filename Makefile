@@ -52,3 +52,6 @@ test-debug-mode:
 
 test-php-base-image:
 	@bash tests/php-base-image-test.sh
+
+test-curl-ssl:
+	@bash tests/curl-ssl-test.sh
