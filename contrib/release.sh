@@ -29,7 +29,7 @@ echo "Push changes on git repo."
 last_update=$(date)
 #sed -i 's/Last update:.*/Last update: '"${last_update}"'/g' CHANGELOG.md
 git add . > /dev/null
-git commit -am "Release updates"
+git commit -am "Release updates" && true
 git push
 
 echo "Push new image on Docker Hub"
