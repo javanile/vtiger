@@ -59,6 +59,7 @@ cron
 
 ## Dispose courtesy screen
 service apache2 stop >/dev/null 2>&1
+pgrep apache2 | xargs kill -9 >/dev/null 2>&1
 [[ -f "${index}.0" ]] && mv -f "${index}.0" "${index}"
 
 ## Return to working directory

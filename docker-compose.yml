@@ -18,12 +18,13 @@ services:
       - adminer
 
   mysql:
-    image: mysql:5.5
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     volumes:
-      - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
+      - mysql:/var/lib/mysql:rw
 
   adminer:
     image: javanile/adminer

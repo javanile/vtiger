@@ -30,6 +30,17 @@ release: fix-permissions
 fix-permissions:
 	@chmod +x contrib/update-version.sh contrib/release.sh
 
+## ===
+## Dev
+## ===
+
+reset:
+	@docker compose down -v
+
+mysql-reset:
+	@docker compose stop mysql
+	@docker compose rm -f mysql
+
 ## ====
 ## Test
 ## ====
