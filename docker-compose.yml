@@ -35,5 +35,10 @@ services:
     links:
       - mysql
 
+  contrib:
+    build: ./contrib
+    volumes:
+      - ./:/vtiger
+
 volumes:
   mysql:

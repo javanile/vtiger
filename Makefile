@@ -8,7 +8,7 @@ export VERSION
 ## ========
 
 update-dev:
-	@bash contrib/update-version.sh $${VERSION} dev
+	@docker compose run contrib bash contrib/update-version.sh $${VERSION} dev
 
 ## ======
 ## Docker
@@ -35,13 +35,13 @@ fix-permissions:
 ## ====
 
 test-update-version:
-	@bash contrib/update-version.sh 7.1.0
+	@docker compose run contrib bash contrib/update-version.sh 7.1.0
 
 test-dev: update-dev build up
 	@docker compose logs -f vtiger
 
 test-build-dev:
-	@bash contrib/update-version.sh $${VERSION} dev
+	@docker compose run contrib bash $${VERSION} dev
 	@docker compose build vtiger
 
 test-build-prod:
