@@ -13,8 +13,7 @@ ENV VT_VERSION="7.1.0" \
     COMPOSER_HOME=/usr/src/vtiger \
     PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
-#${RELEASE_LAYER}
-#COPY php.ini /usr/local/etc/php/
+## RELEASE LAYER: COPY php.ini /usr/local/etc/php/
 COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
 COPY 000-default.conf /etc/apache2/sites-available/
@@ -66,38 +65,24 @@ RUN cd /usr/src/vtiger && \
     mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
-#${DEVELOP_LAYER}
 COPY develop-install.sh /usr/local/bin/
-#${DEVELOP_LAYER}
 RUN develop-install.sh
-#${DEVELOP_LAYER}
 COPY health.php polyfill.php /var/www/html/
-#${DEVELOP_LAYER}
 COPY docker-vtiger-install.sh /usr/local/bin/
-#${DEVELOP_LAYER}
 COPY vtiger-install.php /usr/src/vtiger/
-#${RELEASE_LAYER}
-#COPY docker-vtiger-*.sh /usr/local/bin/
-#${RELEASE_LAYER}
-#COPY vtiger-*.php /usr/src/vtiger/
+## RELEASE LAYER: COPY docker-vtiger-*.sh /usr/local/bin/
+## RELEASE LAYER: COPY vtiger-*.php /usr/src/vtiger/
 
-#${DEVELOP_LAYER}
 RUN docker-vtiger-install.sh --assert-mysql --dump --remove-mysql
-#${DEVELOP_LAYER}
 COPY docker-vtiger-foreground.sh /usr/local/bin/
-#${DEVELOP_LAYER}
 COPY docker-vtiger-hook.sh /usr/local/bin/
-#${DEVELOP_LAYER}
 COPY docker-vtiger-cron.sh /usr/local/bin/
-#${DEVELOP_LAYER}
 COPY vtiger-functions.php /usr/src/vtiger/
-#${RELEASE_LAYER}
-#RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
+## RELEASE LAYER: RUN docker-vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
     symvol move /var/www/html /usr/src/vtiger/volume
 
-#${DEVELOP_LAYER}
 COPY php.ini /usr/local/etc/php/
 COPY LoggerManager.php /var/www/html/libraries/log4php/
 COPY config.inc.php config.performance.php index.php.boot /var/www/html/
