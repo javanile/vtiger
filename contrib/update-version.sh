@@ -15,8 +15,9 @@ version_mode=${2:-prod}
 version_dir=$(echo "${versions[$version]}" | cut -d, -f1)
 dockerfile=${version_dir}/${version}/Dockerfile
 dockerfile_template=${dockerfile}.template
+image_release=$(grep .env -e '^IMAGE_RELEASE=' | sed -r 's/IMAGE_RELEASE=(.*)/\1/')
 
-echo -n "Update $version to '$version_dir' ($version_mode) ... "
+echo -n "Update $version to '$version_dir' ($version_mode r$image_release) ... "
 
 ## Clean-up target dir
 [[ -d "$version_dir/$version" ]] || mkdir -p "${version_dir}/$version"
@@ -28,6 +29,7 @@ for dir in ${version_dir//\// } ; do
    find "$parent_dir" -maxdepth 1 -type f -exec cp -f {} "$version_dir/$version/" \;
 done
 
+## Prepare Dockerfile variables
 php_version=$(echo "${versions[$version]}" | cut -d, -f2)
 database_package=$(echo "${versions[$version]}" | cut -d, -f3)
 hosting=$(echo "${versions[$version]}" | cut -d, -f4)
@@ -38,6 +40,7 @@ sed -e 's!%%VT_VERSION%%!'"${version}"'!' \
     -e 's!%%VT_DOWNLOAD%%!'"${download}"'!' \
     -e 's!%%VT_DIRECTORY%%!'"${directory}"'!' \
     -e 's!%%DATABASE_PACKAGE%%!'"${database_package}"'!' \
+    -e 's!%%IMAGE_RELEASE%%!'"${image_release}"'!' \
     -e 's!%%PHP_VERSION%%!'"${php_version}"'!' \
     -r "${dockerfile_template}" > "${dockerfile}"
 

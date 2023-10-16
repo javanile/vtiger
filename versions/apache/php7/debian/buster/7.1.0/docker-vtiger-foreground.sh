@@ -20,8 +20,8 @@ docker-vtiger-hook.sh init
 touch .vtiger.lock
 
 ## Welcome message
-line="===========${VT_VERSION//?/=}"
-echo -e "${line}\n> vtiger ${VT_VERSION} <\n${line}"
+line="${VT_VERSION//?/=}${IMAGE_RELEASE//?/=}==============="
+echo -e "${line}\n> vtiger ${VT_VERSION} (r${IMAGE_RELEASE}) <\n${line}"
 
 ## Init log files
 echo "[vtiger] Init log files..."
@@ -33,7 +33,7 @@ chmod 777 *.log .
 ## Prepare the courtesy screen
 echo "[vtiger] Start courtesy screen..."
 [[ ! -f "${index}.0" ]] && cp -f "${index}" "${index}.0"
-service apache2 start >/dev/null 2>&1
+service apache2 start >/dev/null 2>&1 || true
 
 ## Store environment variables
 printenv | sed 's/^\(.*\)$/export \1/g' | grep -E '^export MYSQL_|^export VT_' > /run/crond.env
@@ -58,7 +58,7 @@ rsyslogd
 cron
 
 ## Dispose courtesy screen
-service apache2 stop >/dev/null 2>&1
+service apache2 stop >/dev/null 2>&1 || true
 pgrep apache2 | xargs kill -9 >/dev/null 2>&1 || true
 [[ -f "${index}.0" ]] && mv -f "${index}.0" "${index}"
 

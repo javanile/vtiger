@@ -22,24 +22,28 @@ if [[ ! -d "${version_dir}/${version}" ]]; then
     exit 1
 fi
 
-#./contrib/update-version.sh "${version}" dev
+image_release=$(date +%y.%W).$(printf "%02d" $(($(grep 'IMAGE_RELEASE=' .env | sed -r 's/.*\.0*([0-9]*)/\1/')+1)))
+sed -i 's/IMAGE_RELEASE=.*/IMAGE_RELEASE='"${image_release}"'/g' .env
+
+./contrib/update-version.sh "${version}" dev
 #rm -fr ./tmp
 
 echo "Push changes on git repo."
 last_update=$(date)
 #sed -i 's/Last update:.*/Last update: '"${last_update}"'/g' CHANGELOG.md
 git add . > /dev/null
-git commit -am "Release updates" && true
+git commit -am "Release updates r${image_release}" && true
 git push
 
 echo "Push new image on Docker Hub"
 docker login
-docker pull php:7.0.33-apache
+#docker pull php:7.0.33-apache
 
-
+echo "Classical build"
 docker build --no-cache -t "javanile/vtiger:${version}" "${version_dir}/${version}"
 docker push "javanile/vtiger:${version}"
 
+# Multiplatform build
 #docker buildx build --push \
 #    --tag "javanile/vtiger:${version}-1" \
 #    --platform linux/amd64,linux/arm/v7,linux/arm64 \
