@@ -37,10 +37,10 @@ docker login
 docker pull php:7.0.33-apache
 
 
-#docker build --no-cache -t "javanile/vtiger:${version}" "${version_dir}/${version}"
-#docker push "javanile/vtiger:${version}"
+docker build --no-cache -t "javanile/vtiger:${version}" "${version_dir}/${version}"
+docker push "javanile/vtiger:${version}"
 
-docker buildx build --push \
-    --tag "javanile/vtiger:${version}-1" \
-    --platform linux/amd64,linux/arm/v7,linux/arm64 \
-    "${version_dir}/${version}"
+#docker buildx build --push \
+#    --tag "javanile/vtiger:${version}-1" \
+#    --platform linux/amd64,linux/arm/v7,linux/arm64 \
+#    "${version_dir}/${version}"
