@@ -55,3 +55,7 @@ test-php-base-image:
 
 test-curl-ssl:
 	@bash tests/curl-ssl-test.sh
+
+test-foreground:
+	@bash contrib/update-version.sh $${VERSION} dev
+	@docker compose up --build --force-recreate vtiger
