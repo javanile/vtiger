@@ -1,4 +1,4 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-* * * * * root docker-vtiger-cron.sh ts
-* * * * * root docker-vtiger-cron.sh vtiger
+* * * * * root docker-vtiger-cron.sh timestamp
+* * * * * root docker-vtiger-cron.sh scheduler
 * * * * * root docker-vtiger-cron.sh localhost-proxy

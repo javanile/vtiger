@@ -6,11 +6,11 @@
 
 FROM javanile/php:7.0.33-apache-buster
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
-LABEL release="23.49.09"
+LABEL release="23.49.10"
 
 ENV LAYER_BREAK=true
 ENV VT_VERSION="7.1.0" \
-	IMAGE_RELEASE="23.49.09" \
+	IMAGE_RELEASE="23.49.10" \
     DATABASE_PACKAGE="mariadb-server-10.3" \
     COMPOSER_HOME=/usr/src/vtiger \
     PATH="/usr/src/vtiger/vendor/bin:$PATH"
