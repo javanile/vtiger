@@ -18,6 +18,7 @@ improve marketing reach, and deliver great customer service. Try it free with Do
 [![StyleCI](https://github.styleci.io/repos/118489407/shield?branch=master)](https://github.styleci.io/repos/118489407)
 
 ## Supported tags and respective `Dockerfile` links
+* [`8.3.0`, `8.3`, `8`, `latest` (8.3.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/8.3.0/Dockerfile)
 * [`7.2.0`, `7.2`, `7`, `latest` (7.2.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.2.0/Dockerfile)
 * [`7.1.0`, `7.1` (7.1.0/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0/Dockerfile)
 * [`7.1.0-RC` (7.1.0-RC/Dockerfile)](https://github.com/javanile/vtiger/blob/master/7.1.0-RC/Dockerfile)
