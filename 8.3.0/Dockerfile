@@ -1,9 +1,9 @@
-FROM php:%%PHP_VERSION%%-apache
+FROM php:8.2.24-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV LAYER_BREAK=true
-ENV VT_VERSION="%%VT_VERSION%%" \
-    DATABASE_PACKAGE="%%DATABASE_PACKAGE%%" \
+ENV VT_VERSION="8.3.0" \
+    DATABASE_PACKAGE="mariadb-server-10.5" \
     COMPOSER_HOME=/usr/src/vtiger \
     PATH="/usr/src/vtiger/vendor/bin:$PATH"
 
@@ -26,34 +26,23 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     a2enmod ssl && a2enmod rewrite && ${LAYER_BREAK}
 RUN cd /usr/src/vtiger && \
-    curl -o vtiger.tar.gz -L "%%VT_DOWNLOAD%%" && \
+    curl -o vtiger.tar.gz -L "http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%208.3.0/Core%20Product/vtigercrm8.3.0.tar.gz" && \
     tar -xzf vtiger.tar.gz && \
     rm vtiger.tar.gz && \
     rm -fr /var/www/html && \
-    mv "%%VT_DIRECTORY%%" /var/www/html && \
+    mv "vtigercrm" /var/www/html && \
     vtiger permissions --fix && \
     mv .symvol /var/www/html && \
     mkdir -p volume /var/lib/vtiger && ${LAYER_BREAK}
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
-## @block: develop
 COPY develop-install.sh /usr/local/bin/
 RUN develop-install.sh
-#COPY vtiger-install.sh /usr/local/bin/
-#COPY vtiger-install.php /usr/src/vtiger/
-## @block: release
 COPY health.php polyfill.php /var/www/html/
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
-## @endblock
 
-## @block: develop
 RUN vtiger-install.sh --assert-mysql --dump --remove-mysql
-#COPY vtiger-foreground.sh /usr/local/bin/
-#COPY vtiger-functions.php /usr/src/vtiger/
-## @block: release
-#RUN vtiger-install.sh --install-mysql --assert-mysql --dump --remove-mysql && ${LAYER_BREAK}
-## @endblock
 RUN cd /var/www/html/vtlib/Vtiger/ && \
     sed -e 's!realpath(!__realpath__(!' -ri Utils.php Deprecated.php && \
     symvol move /var/www/html /usr/src/vtiger/volume

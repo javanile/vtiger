@@ -7,8 +7,12 @@ source_code_hosting=(
   ["github_javanile"]=https://github.com/javanile/vtiger-core/archive/
 )
 
+## dependency notes:
+# 8.2.0 - PHP Version 7.0+,8.0+; Composer dependencies require a PHP version ">= 8.1.0"
+
 declare -A versions
 versions=(
+     ["8.3.0"]=next,8.2.24,mariadb-server-10.5,sourceforge_vtiger,vtigercrm,vtiger%20CRM%208.3.0/Core%20Product/vtigercrm8.3.0.tar.gz
      ["7.2.0"]=main,7.3.12,mariadb-server-10.3,sourceforge_vtiger,vtigercrm,vtiger%20CRM%207.2.0/Core%20Product/vtigercrm7.2.0.tar.gz
      ["7.1.0-php8.0"]=next,8.0.19,mariadb-server-10.5,github_javanile,vtiger-core-7.1.0,7.1.0.tar.gz
      ["7.1.0-php7.4"]=next,7.4.29,mariadb-server-10.5,github_javanile,vtiger-core-7.1.0,7.1.0.tar.gz

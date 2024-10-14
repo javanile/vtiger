@@ -1,0 +1,4 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root vtiger-cron.sh ts
+* * * * * root vtiger-cron.sh vtiger
+* * * * * root vtiger-cron.sh localhost_proxy

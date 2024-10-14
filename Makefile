@@ -23,7 +23,7 @@ develop:
 
 build: update
 	@cp develop-install.sh $${version}
-	@docker build -t javanile/vtiger:$${version} ./$${version}
+	@docker build --progress=plain -t javanile/vtiger:$${version} ./$${version}
 
 push: build
 	@git add .
