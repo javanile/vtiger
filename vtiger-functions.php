@@ -2,7 +2,7 @@
 /**
  * Retrieve realpath without resolve symbolic link.
  *
- * @param $path
+ * @param      $path
  * @param null $link
  *
  * @return false|string

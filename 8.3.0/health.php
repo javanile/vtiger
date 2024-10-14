@@ -35,13 +35,13 @@ if (function_exists('mysqli_connect')) {
 }
 
 $response = [
-    'status' => 'OK',
-    'cookie' => $_COOKIE,
+    'status'   => 'OK',
+    'cookie'   => $_COOKIE,
     'database' => [
-        'user' => DB_USER,
-        'mysql' => $mysql ?: 'OK',
+        'user'   => DB_USER,
+        'mysql'  => $mysql ?: 'OK',
         'mysqli' => $mysqli ?: 'OK',
-    ]
+    ],
 ];
 
 echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n";

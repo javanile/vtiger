@@ -13,6 +13,6 @@ if (!function_exists('each')) {
         // Move pointer.
         next($array);
 
-        return array(1 => $value, 'value' => $value, 0 => $key, 'key' => $key);
+        return [1 => $value, 'value' => $value, 0 => $key, 'key' => $key];
     }
 }

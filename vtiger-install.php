@@ -4,7 +4,6 @@
  *
  * @author Francesco Bianco <bianco@javanile.org>
  */
-
 date_default_timezone_set('America/Los_Angeles');
 
 define('VT_VERSION', getenv('VT_VERSION'));
@@ -26,7 +25,7 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
     define('DB_PASS', 'root');
     define('DB_ROOT', 'root');
 } else {
-    echo "[vtiger] Error unsupported version.";
+    echo '[vtiger] Error unsupported version.';
     exit(1);
 }
 
@@ -54,9 +53,9 @@ $data = $robot->post('health.php?setcookie=yes', ['cookie_name' => 'test', 'cook
 $data = $robot->get('health.php', ['@html']);
 
 /**
- * Get session token
+ * Get session token.
  */
-echo "[vtiger] (#1) Get session token";
+echo '[vtiger] (#1) Get session token';
 $values = $robot->get('index.php?module=Install&view=Index&mode=Step4', ['__vtrftk', '@text']);
 echo " -> token: '{$values['__vtrftk']}'\n";
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
@@ -68,9 +67,9 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
 }
 
 /**
- * Submit installation params
+ * Submit installation params.
  */
-echo "[vtiger] (#2) Sending installation parameters";
+echo '[vtiger] (#2) Sending installation parameters';
 $values = $robot->post(
     'index.php',
     [
@@ -101,7 +100,7 @@ $values = $robot->post(
 );
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
-echo "[vtiger] (#3) Confirm installation parameters";
+echo '[vtiger] (#3) Confirm installation parameters';
 $values = $robot->post(
     'index.php',
     [
@@ -116,9 +115,9 @@ $values = $robot->post(
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 /**
- * Selecting industry
+ * Selecting industry.
  */
-echo "[vtiger] (#4) Selecting industry";
+echo '[vtiger] (#4) Selecting industry';
 $values = $robot->post(
     'index.php',
     [
@@ -139,36 +138,35 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
         echo " -> [ERROR] install error on industry selector\n";
         $mysqli = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
         $error = mysqli_connect_error();
-        $result = mysqli_query($mysqli, "SHOW TABLES");
-        while ($table = mysqli_fetch_row($result))  {
+        $result = mysqli_query($mysqli, 'SHOW TABLES');
+        while ($table = mysqli_fetch_row($result)) {
             echo "Table: $table[0]\n";
         }
         echo $values['@text'];
         if (file_exists('/var/lib/vtiger/logs/php.log')) {
             echo file_get_contents('/var/lib/vtiger/logs/php.log');
         }
-        #exit(1);
+        //exit(1);
     }
 }
 
 /**
- * First login seems required only for >7
+ * First login seems required only for >7.
  */
-echo "[vtiger] (#5) First login";
+echo '[vtiger] (#5) First login';
 $values = $robot->post(
     'index.php?module=Users&action=Login',
     [
         '__vtrftk' => $values['__vtrftk'],
         'username' => 'admin',
         'password' => 'admin',
-    ]
-    ,
+    ],
     ['__vtrftk', '@text']
 );
 if (version_compare(VT_VERSION, '7.0.0', '>=')) {
     if (empty($values['__vtrftk'])) {
         echo " -> [ERROR] install error on first login.\n";
-        #echo $values['@text'];
+        //echo $values['@text'];
         echo file_get_contents('/var/www/html/logs/php.log');
         exit(1);
     }
@@ -176,9 +174,9 @@ if (version_compare(VT_VERSION, '7.0.0', '>=')) {
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 /**
- * Select crm modules
+ * Select crm modules.
  */
-echo "[vtiger] (#6) Select modules and packages";
+echo '[vtiger] (#6) Select modules and packages';
 $values = $robot->post(
     'index.php?module=Users&action=SystemSetupSave',
     [
@@ -195,7 +193,7 @@ $values = $robot->post(
 echo " -> form-token: '{$values['__vtrftk']}' auth-key: '{$values['auth_key']}'\n";
 
 // Save user settings
-echo "[vtiger] (#7) Save user settings";
+echo '[vtiger] (#7) Save user settings';
 $values = $robot->post(
     'index.php?module=Users&action=UserSetupSave',
     [

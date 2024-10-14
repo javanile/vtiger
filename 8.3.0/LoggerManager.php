@@ -76,7 +76,7 @@ class Logger
     /**
      * Logger constructor.
      *
-     * @param $name
+     * @param      $name
      * @param bool $configinfo
      */
     public function __construct($name, $configinfo = false)
@@ -207,7 +207,7 @@ class LoggerAppenderFile
     /**
      * LoggerAppenderFile constructor.
      *
-     * @param $filename
+     * @param     $filename
      * @param int $chmod
      */
     public function __construct($filename, $chmod = 0222)
