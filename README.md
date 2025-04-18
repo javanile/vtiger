@@ -2,7 +2,7 @@
 
 
 <a href="https://www.javanile.org/hackathon/">
-<img src="https://raw.githubusercontent.com/javanile/php-imap2/refs/heads/main/docs/banner.svg" />
+<img src="https://raw.githubusercontent.com/javanile/hackathon/refs/heads/main/assets/images/devops-hackathon-banner.svg" />
 </a>
 
 
