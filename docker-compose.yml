@@ -3,6 +3,7 @@ version: '2'
 services:
 
   vtiger:
+    image: javanile/vtiger:${version:-latest}
     build: ${version}
     environment:
       - VT_DEBUG=false
@@ -15,6 +16,9 @@ services:
     volumes:
       - ./:/app
       - ./vtiger:/var/lib/vtiger
+    depends_on:
+      mysql:
+        condition: service_healthy
     links:
       - mysql
       - adminer
@@ -36,6 +40,10 @@ services:
     volumes:
       - mysql:/var/lib/mysql:rw
       - ./:/vtiger:rw
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   script:
     image: debian
